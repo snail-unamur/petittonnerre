@@ -34,11 +34,16 @@ python create_test_data.py
 cd frontend
 npm install
 
-# 2. Lancer le serveur Angular
+# 2. Configurer l'URL du backend (optionnel)
+cp .env.example .env
+# Éditer .env pour changer VITE_API_URL si nécessaire
+
+# 3. Lancer le serveur Angular
 npm start
 ```
 
-🌐 **App** : http://localhost:4200
+🌐 **App** : http://localhost:4200  
+📖 **Config** : Voir `frontend/ENV.md` pour la configuration
 
 ---
 

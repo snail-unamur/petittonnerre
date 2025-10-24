@@ -1,9 +1,9 @@
 __pycache__/*
 bakend/__pycache__/*
 backend/__pycache__/*
+backend/api/__pycache__/*
 frontend/.angular/
 frontend/node_modules/
-frontend/.env
 frontend/dist/
 .venv
 .history

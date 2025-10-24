@@ -1,4 +1,6 @@
+// Ce fichier est généré automatiquement depuis .env
+// Ne pas modifier manuellement
 export const environment = {
   production: true,
-  apiUrl: 'https://api.petit-tonnerre.com'
+  apiUrl: 'http://localhost:8000'
 };
