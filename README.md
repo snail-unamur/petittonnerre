@@ -8,6 +8,23 @@ Application de gestion intelligente et collaborative de l'entretien d'objets et 
 
 ## 🚀 Démarrage Rapide
 
+**🐳 Tout en un avec Docker (recommandé) :**
+
+```bash
+# Démarrer tous les services (PostgreSQL + PgAdmin + Backend + Frontend)
+./start.sh
+```
+
+**Services disponibles :**
+- 🎨 Frontend : http://localhost:4200
+- 🔧 Backend API : http://localhost:8000/docs  
+- 🗄️ PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
+- 📊 PostgreSQL : localhost:5432
+
+---
+
+**OU en mode développement local :**
+
 ### Backend
 
 ```bash
@@ -16,7 +33,7 @@ Application de gestion intelligente et collaborative de l'entretien d'objets et 
 
 # 2. Démarrer PostgreSQL + PgAdmin
 ./start-docker.sh
-# OU : cd pgadmin && docker compose up -d
+# OU : docker compose up -d postgres pgadmin
 
 # 3. Lancer le backend
 cd backend && source .venv/bin/activate
@@ -64,22 +81,41 @@ npm start
 
 ```
 petit-tonnerre/
-├── backend/                 ✅ Backend FastAPI
-│   ├── api/                 # Routes API (users, objects, maintenance, community)
-│   ├── main.py              # Application FastAPI
-│   ├── models.py            # 7 modèles SQLAlchemy
-│   ├── schemas.py           # Schémas Pydantic
-│   ├── database.py          # Configuration PostgreSQL
-│   └── create_test_data.py  # Génération de données
-├── frontend/                ✅ Frontend Angular
-│   ├── src/app/
-│   │   ├── core/            # Services & Models
-│   │   ├── features/        # Dashboard, Objects, Maintenance, Community
-│   │   └── shared/          # Composants réutilisables
-│   └── package.json
-├── docker-compose.yml       # PostgreSQL 15
-├── setup.sh                 # Installation backend
-└── test_api.sh              # Tests API
+├── 🐳 Docker
+│   ├── docker-compose.yml       # Orchestration complète (PostgreSQL, PgAdmin, Backend, Frontend)
+│   ├── start.sh                 # Démarrer tous les services
+│   └── start-docker.sh          # Démarrer uniquement DB + PgAdmin
+│
+├── 🔧 Backend (FastAPI + PostgreSQL)
+│   ├── backend/
+│   │   ├── api/                 # Routes (users, objects, maintenance, community)
+│   │   ├── Dockerfile           # Image Docker backend
+│   │   ├── main.py              # Application FastAPI
+│   │   ├── models.py            # 7 modèles SQLAlchemy
+│   │   ├── schemas.py           # Schémas Pydantic
+│   │   ├── database.py          # Configuration PostgreSQL
+│   │   └── create_test_data.py  # Génération de données
+│   ├── setup.sh                 # Installation locale
+│   └── reset-db.sh              # Réinitialisation base de données
+│
+├── 🎨 Frontend (Angular)
+│   └── frontend/
+│       ├── Dockerfile           # Image Docker frontend
+│       ├── src/app/
+│       │   ├── core/            # Services & Models
+│       │   ├── features/        # Dashboard, Objects, Maintenance, Community
+│       │   └── shared/          # Composants réutilisables
+│       └── .env.example         # Configuration API URL
+│
+├── 🗄️  PgAdmin
+│   └── pgadmin/
+│       ├── servers.json         # Configuration serveur pré-chargé
+│       └── pgpass               # Mot de passe automatique
+│
+└── 📚 Documentation
+    ├── README.md                # Ce fichier
+    ├── COMMANDS.md              # Commandes rapides
+    └── REQUIREMENTS.md          # Spécifications
 ```
 
 ---

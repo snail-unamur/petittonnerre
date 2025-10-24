@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Script pour lancer Docker Compose depuis n'importe où dans le projet
+# Script pour lancer uniquement PostgreSQL + PgAdmin (sans backend ni frontend)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR/pgadmin"
+cd "$SCRIPT_DIR"
 
-echo "🐳 Démarrage de PostgreSQL + PgAdmin..."
-docker compose up -d
+echo "🐳 Démarrage de PostgreSQL + PgAdmin uniquement..."
+docker compose up -d postgres pgadmin
 
 echo ""
 echo "✅ Services démarrés !"
@@ -22,4 +22,4 @@ echo "   Password: admin"
 echo ""
 echo "💡 Le serveur 'Petit Tonnerre DB' est déjà configuré dans PgAdmin !"
 echo ""
-echo "Pour arrêter : cd pgadmin && docker compose down"
+echo "Pour arrêter : docker compose down"

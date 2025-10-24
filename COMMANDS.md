@@ -47,11 +47,12 @@ deactivate
 ## 🐳 Docker (PostgreSQL + PgAdmin)
 
 ```bash
-# Démarrer tous les services (depuis la racine du projet)
-./start-docker.sh
+# Démarrer tous les services
+./start.sh
 
-# OU manuellement
-cd pgadmin && docker compose up -d
+# OU uniquement PostgreSQL + PgAdmin (sans backend/frontend)
+./start-docker.sh
+# OU : docker compose up -d postgres pgadmin
 
 # Voir les conteneurs en cours
 docker ps
@@ -62,20 +63,28 @@ docker logs petit_tonnerre_db
 # Voir les logs PgAdmin
 docker logs petit_tonnerre_pgadmin
 
+# Voir les logs Backend
+docker compose logs -f backend
+
+# Voir les logs Frontend
+docker compose logs -f frontend
+
 # Suivre les logs en temps réel
 docker logs -f petit_tonnerre_db
 
 # Se connecter à PostgreSQL en ligne de commande
 docker exec -it petit_tonnerre_db psql -U petittonnerre -d petittonnerre_db
 
-# Arrêter
-cd pgadmin && docker compose down
+# Arrêter tous les services
+docker compose down
 
 # Arrêter et supprimer les données (⚠️ DESTRUCTIF)
-cd pgadmin && docker compose down -v
+docker compose down -v
 
-# Redémarrer
-cd pgadmin && docker compose restart
+# Redémarrer un service spécifique
+docker compose restart backend
+docker compose restart frontend
+docker compose restart postgres
 ```
 
 ### 🔍 PgAdmin Web

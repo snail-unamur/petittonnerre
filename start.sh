@@ -1,40 +1,47 @@
 #!/bin/bash
 
-# Script de démarrage rapide pour le projet Petit Tonnerre
+# Script pour démarrer tous les services Docker
 
-echo "🚀 Démarrage de Petit Tonnerre..."
-
-# Démarrer PostgreSQL avec Docker
-echo "📦 Démarrage de PostgreSQL..."
-docker-compose up -d
-
-# Attendre que PostgreSQL soit prêt
-echo "⏳ Attente de PostgreSQL..."
-sleep 5
-
-# Démarrer le backend
-echo "🔧 Démarrage du backend FastAPI..."
-cd backend
-source .venv/bin/activate
-uvicorn main:app --reload --host 0.0.0.0 --port 8000 &
-BACKEND_PID=$!
-
-# Attendre un peu
-sleep 2
-
-# Démarrer le frontend (si disponible)
-if [ -d "frontend" ]; then
-    echo "🎨 Démarrage du frontend Angular..."
-    cd ../frontend
-    npm start &
-    FRONTEND_PID=$!
-fi
-
-echo "✅ Projet démarré!"
-echo "📖 API: http://localhost:8000/docs"
-echo "🌐 Frontend: http://localhost:4200"
+echo "� Démarrage de tous les services Docker..."
 echo ""
-echo "Pour arrêter: Ctrl+C"
 
-# Attendre que les processus se terminent
-wait
+# Arrêter les anciens conteneurs si ils existent
+echo "🧹 Nettoyage des anciens conteneurs..."
+docker compose down
+
+echo ""
+echo "� Construction et démarrage des services..."
+docker compose up --build -d
+
+echo ""
+echo "⏳ Attente du démarrage des services..."
+sleep 10
+
+echo ""
+echo "✅ Services démarrés !"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📊 PostgreSQL    : localhost:5432"
+echo "   Database      : petittonnerre_db"
+echo "   User          : petittonnerre"
+echo "   Password      : petittonnerre"
+echo ""
+echo "🗄️  PgAdmin       : http://localhost:5050"
+echo "   Email         : admin@petittonnerre.com"
+echo "   Password      : admin"
+echo ""
+echo "🔧 Backend API   : http://localhost:8000"
+echo "   Docs          : http://localhost:8000/docs"
+echo ""
+echo "🎨 Frontend      : http://localhost:4200"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "💡 Le serveur PostgreSQL est pré-configuré dans PgAdmin !"
+echo ""
+echo "� Commandes utiles :"
+echo "   docker compose logs -f          # Voir tous les logs"
+echo "   docker compose logs -f backend  # Logs du backend"
+echo "   docker compose logs -f frontend # Logs du frontend"
+echo "   docker compose down             # Arrêter tout"
+echo "   docker compose restart          # Redémarrer tout"
+echo ""

@@ -1,0 +1,86 @@
+services:
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: petit_tonnerre_db
+    environment:
+      POSTGRES_USER: petittonnerre
+      POSTGRES_PASSWORD: petittonnerre
+      POSTGRES_DB: petittonnerre_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petittonnerre"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - petit_tonnerre_network
+
+  # PgAdmin - Interface de gestion PostgreSQL
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: petit_tonnerre_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@petittonnerre.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/pgpass:/pgadmin4/pgpass
+    depends_on:
+      - postgres
+    networks:
+      - petit_tonnerre_network
+
+  # Backend FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: petit_tonnerre_backend
+    environment:
+      DATABASE_URL: postgresql://petittonnerre:petittonnerre@postgres:5432/petittonnerre_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - petit_tonnerre_network
+    restart: unless-stopped
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: petit_tonnerre_frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - petit_tonnerre_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  petit_tonnerre_network:
+    driver: bridge
