@@ -6,7 +6,9 @@ echo "🚀 Démarrage de Petit Tonnerre..."
 
 # Démarrer PostgreSQL avec Docker
 echo "📦 Démarrage de PostgreSQL..."
+cd pgadmin
 docker-compose up -d
+cd ..
 
 # Attendre que PostgreSQL soit prêt
 echo "⏳ Attente de PostgreSQL..."
@@ -26,14 +28,14 @@ else
 fi
 uvicorn main:app --reload --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
-
+cd ..
 # Attendre un peu
 sleep 2
 
 # Démarrer le frontend (si disponible)
 if [ -d "frontend" ]; then
     echo "🎨 Démarrage du frontend Angular..."
-    cd ../frontend
+    cd frontend
     npm start &
     FRONTEND_PID=$!
 fi
