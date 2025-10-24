@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ApiService } from '../../core/services/api.service';
-import { ObjectItem, MaintenanceTask } from '../../core/models/models';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ApiService } from "../../core/services/api.service";
+import { ObjectItem, MaintenanceTask } from "../../core/models/models";
 
 @Component({
-  selector: 'app-dashboard',
+  selector: "app-dashboard",
   standalone: true,
   imports: [CommonModule],
   template: `
     <div class="dashboard">
       <h2>📊 Dashboard</h2>
-      
+
       <div class="stats">
         <div class="card">
           <h3>📦 Mes Objets</h3>
@@ -40,42 +40,50 @@ import { ObjectItem, MaintenanceTask } from '../../core/models/models';
       </div>
     </div>
   `,
-  styles: [`
-    .dashboard {
-      padding: 20px;
-    }
-    
-    h2 {
-      margin-bottom: 30px;
-    }
-    
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .number {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #007bff;
-      margin: 10px 0;
-    }
-    
-    .recent-tasks ul {
-      list-style: none;
-    }
-    
-    .recent-tasks li {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .status-pending { color: orange; }
-    .status-completed { color: green; }
-    .status-issue_reported { color: red; }
-  `]
+  styles: [
+    `
+      .dashboard {
+        padding: 20px;
+      }
+
+      h2 {
+        margin-bottom: 30px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #007bff;
+        margin: 10px 0;
+      }
+
+      .recent-tasks ul {
+        list-style: none;
+      }
+
+      .recent-tasks li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .status-pending {
+        color: orange;
+      }
+      .status-completed {
+        color: green;
+      }
+      .status-issue_reported {
+        color: red;
+      }
+    `,
+  ],
 })
 export class DashboardComponent implements OnInit {
   objects: ObjectItem[] = [];
@@ -90,14 +98,14 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData() {
-    this.apiService.getObjects().subscribe(data => {
+    this.apiService.getObjects().subscribe((data) => {
       this.objects = data;
     });
 
-    this.apiService.getMaintenanceTasks().subscribe(data => {
+    this.apiService.getMaintenanceTasks().subscribe((data) => {
       this.tasks = data;
-      this.pendingTasks = data.filter(t => t.status === 'pending');
-      this.completedTasks = data.filter(t => t.status === 'completed');
+      this.pendingTasks = data.filter((t) => t.status === "pending");
+      this.completedTasks = data.filter((t) => t.status === "completed");
     });
   }
 }
