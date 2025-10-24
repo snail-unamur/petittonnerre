@@ -1,0 +1,119 @@
+@startuml Petit-Tonnerre-ERD
+
+' Styling
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+entity "User" {
+    *id : UUID <<PK>>
+    --
+    name : string
+    email : string
+    location : string
+    reputation_score : integer
+    created_at : timestamp
+}
+
+entity "Item" {
+    *id : UUID <<PK>>
+    --
+    *user_id : UUID <<FK>>
+    *category_id : UUID <<FK>>
+    name : string
+    brand : string
+    model : string
+    purchase_date : date
+    manual_url : string
+    notes : text
+    created_at : timestamp
+}
+
+entity "MaintenanceTask" {
+    *id : UUID <<PK>>
+    --
+    *item_id : UUID <<FK>>
+    description : text
+    frequency : string
+    difficulty_level : integer
+    estimated_duration : interval
+    required_tools : text[]
+    instructions : text
+    created_at : timestamp
+}
+
+entity "MaintenanceRecord" {
+    *id : UUID <<PK>>
+    --
+    *task_id : UUID <<FK>>
+    *user_id : UUID <<FK>>
+    date_performed : timestamp
+    status : enum
+    notes : text
+    feedback : text
+    problems_encountered : text
+    created_at : timestamp
+}
+
+entity "CommunityContribution" {
+    *id : UUID <<PK>>
+    --
+    *user_id : UUID <<FK>>
+    *item_id : UUID <<FK>>
+    type : enum
+    content : text
+    status : enum
+    validation_count : integer
+    created_at : timestamp
+}
+
+entity "Problem" {
+    *id : UUID <<PK>>
+    --
+    *item_id : UUID <<FK>>
+    *user_id : UUID <<FK>>
+    description : text
+    status : enum
+    priority_level : integer
+    created_at : timestamp
+}
+
+entity "Category" {
+    *id : UUID <<PK>>
+    --
+    name : string
+    description : text
+    maintenance_requirements : text
+    created_at : timestamp
+}
+
+entity "Notification" {
+    *id : UUID <<PK>>
+    --
+    *user_id : UUID <<FK>>
+    type : enum
+    content : text
+    status : enum
+    priority : integer
+    created_at : timestamp
+}
+
+' Relationships
+User ||--o{ Item : owns
+User ||--o{ MaintenanceRecord : performs
+User ||--o{ CommunityContribution : creates
+User ||--o{ Problem : reports
+User ||--o{ Notification : receives
+
+Item }o--|| Category : belongs_to
+Item ||--o{ MaintenanceTask : requires
+Item ||--o{ Problem : has
+Item ||--o{ CommunityContribution : related_to
+
+MaintenanceTask ||--o{ MaintenanceRecord : tracks
+
+Problem }o--o{ CommunityContribution : solved_by
+
+@enduml
