@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Petit Tonnerre DB",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "petittonnerre_db",
+      "Username": "petittonnerre",
+      "SSLMode": "prefer",
+      "PassFile": "/pgadmin4/pgpass"
+    }
+  }
+}

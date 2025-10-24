@@ -6,8 +6,8 @@
 # Setup initial (une fois)
 ./setup.sh
 
-# Démarrer PostgreSQL
-docker compose up -d
+# Démarrer PostgreSQL + PgAdmin
+./start-docker.sh
 
 # Lancer le backend
 cd backend && source .venv/bin/activate
@@ -16,6 +16,13 @@ uvicorn main:app --reload
 # Données de test
 python create_test_data.py
 ```
+
+**URLs** :
+- API : http://localhost:8000/docs
+- PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
+- Frontend : http://localhost:4200
+
+💡 **Le serveur "Petit Tonnerre DB" est déjà configuré dans PgAdmin !**
 
 ---
 
@@ -37,30 +44,51 @@ deactivate
 
 ---
 
-## 🐳 PostgreSQL
+## 🐳 Docker (PostgreSQL + PgAdmin)
 
 ```bash
-# Démarrer
-docker compose up -d
+# Démarrer tous les services (depuis la racine du projet)
+./start-docker.sh
 
-# Voir les logs
+# OU manuellement
+cd pgadmin && docker compose up -d
+
+# Voir les conteneurs en cours
+docker ps
+
+# Voir les logs PostgreSQL
 docker logs petit_tonnerre_db
+
+# Voir les logs PgAdmin
+docker logs petit_tonnerre_pgadmin
 
 # Suivre les logs en temps réel
 docker logs -f petit_tonnerre_db
 
-# Se connecter à PostgreSQL
+# Se connecter à PostgreSQL en ligne de commande
 docker exec -it petit_tonnerre_db psql -U petittonnerre -d petittonnerre_db
 
 # Arrêter
-docker compose down
+cd pgadmin && docker compose down
 
 # Arrêter et supprimer les données (⚠️ DESTRUCTIF)
-docker compose down -v
+cd pgadmin && docker compose down -v
 
 # Redémarrer
-docker compose restart
+cd pgadmin && docker compose restart
 ```
+
+### 🔍 PgAdmin Web
+
+**URL** : http://localhost:5050  
+**Login** : admin@petittonnerre.com / admin
+
+**Connexion à la DB** :
+- Host : `postgres`
+- Port : `5432`
+- Database : `petittonnerre_db`
+- Username : `petittonnerre`
+- Password : `petittonnerre`
 
 ### Requêtes SQL Utiles
 

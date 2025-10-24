@@ -14,8 +14,9 @@ Application de gestion intelligente et collaborative de l'entretien d'objets et 
 # 1. Setup initial
 ./setup.sh
 
-# 2. Démarrer PostgreSQL
-docker compose up -d
+# 2. Démarrer PostgreSQL + PgAdmin
+./start-docker.sh
+# OU : cd pgadmin && docker compose up -d
 
 # 3. Lancer le backend
 cd backend && source .venv/bin/activate
@@ -25,7 +26,10 @@ uvicorn main:app --reload
 python create_test_data.py
 ```
 
-🌐 **API** : http://localhost:8000/docs
+🌐 **API** : http://localhost:8000/docs  
+🗄️ **PgAdmin** : http://localhost:5050 (admin@petittonnerre.com / admin)  
+💡 **Le serveur "Petit Tonnerre DB" apparaît automatiquement dans PgAdmin !**
+
 
 ### Frontend
 
@@ -161,6 +165,40 @@ POST   /community/contributions/{id}/upvote Vote
 ```
 
 📖 **Documentation** : http://localhost:8000/docs
+
+---
+
+## 🗄️ Accéder à PgAdmin
+
+PgAdmin est une interface web pour gérer PostgreSQL.
+
+### 1. Accéder à PgAdmin
+Ouvrir : **http://localhost:5050**
+
+**Identifiants** :
+- Email : `admin@petittonnerre.com`
+- Mot de passe : `admin`
+
+### 2. Connecter la base de données
+
+1. Clic droit sur **Servers** → **Register** → **Server**
+
+2. **Onglet General** :
+   - Name : `Petit Tonnerre DB`
+
+3. **Onglet Connection** :
+   - Host : `postgres` (nom du service Docker)
+   - Port : `5432`
+   - Database : `petittonnerre_db`
+   - Username : `petittonnerre`
+   - Password : `petittonnerre`
+   - Save password : ✅
+
+4. Cliquer **Save**
+
+Tu peux maintenant explorer les tables, exécuter des requêtes SQL, etc. !
+
+**Note** : La connexion est pré-configurée ! Le serveur "Petit Tonnerre DB" apparaît automatiquement dans la liste des serveurs.
 
 ---
 
