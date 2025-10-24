@@ -1,3 +1,5 @@
 __pycache__/*
 bakend/__pycache__/*
 backend/__pycache__/*
+.venv
+.history
