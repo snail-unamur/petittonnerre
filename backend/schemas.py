@@ -11,13 +11,20 @@ class UserBase(BaseModel):
     location: Optional[str] = None
 
 class UserCreate(UserBase):
-    pass
+    password: str
+    password_confirm: str
 
-class User(UserBase):
+class UserResponse(UserBase):
     id: int
+    role: str
+    is_active: bool
     created_at: datetime
+    last_login: Optional[datetime]
     
     model_config = ConfigDict(from_attributes=True)
+
+class User(UserResponse):
+    hashed_password: str
 
 
 # Object Schemas
