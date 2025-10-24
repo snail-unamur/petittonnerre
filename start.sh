@@ -15,7 +15,15 @@ sleep 5
 # Démarrer le backend
 echo "🔧 Démarrage du backend FastAPI..."
 cd backend
-source .venv/bin/activate
+# Vérifier quel fichier d'activation existe
+if [ -f ".venv/Scripts/activate" ]; then
+    source .venv/Scripts/activate
+elif [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+else
+    echo "❌ Erreur: Environnement virtuel non trouvé!"
+    exit 1
+fi
 uvicorn main:app --reload --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
 
