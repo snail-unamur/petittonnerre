@@ -11,16 +11,14 @@ entity "User" {
     --
     name : string
     email : string
-    location : string
-    reputation_score : integer
+    password_hash : string
     created_at : timestamp
 }
 
 entity "Item" {
     *id : UUID <<PK>>
     --
-    *user_id : UUID <<FK>>
-    *category_id : UUID <<FK>>
+    parent_id : UUID <<FK>>
     name : string
     brand : string
     model : string
@@ -34,6 +32,7 @@ entity "MaintenanceTask" {
     *id : UUID <<PK>>
     --
     *item_id : UUID <<FK>>
+    *MaintenanceRecord_id : UUID <<FK>>
     description : text
     frequency : string
     difficulty_level : integer
@@ -46,20 +45,17 @@ entity "MaintenanceTask" {
 entity "MaintenanceRecord" {
     *id : UUID <<PK>>
     --
-    *task_id : UUID <<FK>>
-    *user_id : UUID <<FK>>
     date_performed : timestamp
     status : enum
     notes : text
-    feedback : text
-    problems_encountered : text
     created_at : timestamp
 }
 
 
 
 ' Relationships
-User ||--o{ Item : owns
+Item }o--o{ Item : has child
+User }o--o{ Item : owns
 User ||--o{ MaintenanceRecord : performs
 
 Item ||--o{ MaintenanceTask : requires
