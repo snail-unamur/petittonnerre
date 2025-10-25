@@ -815,6 +815,24 @@
     border-bottom: 1px solid var(--border-color);
   }
 
+  .time-list {
+    background: var(--bg-primary);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    scrollbar-color: var(--border-color) var(--bg-secondary);
+  }
+
+  .time-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  .time-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+  }
+
+  .time-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+  }
+
   .time-item {
     color: var(--text-primary);
     background: transparent;
