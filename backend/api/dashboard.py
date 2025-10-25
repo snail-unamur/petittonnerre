@@ -15,9 +15,12 @@ def get_dashboard_stats(
 ):
     """Récupérer les statistiques pour le dashboard de l'utilisateur"""
     
-    # Nombre total d'objets de l'utilisateur
-    total_objects = db.query(func.count(models.Object.id)).filter(
-        models.Object.owner_id == user_id
+    # Nombre total d'objets de l'utilisateur (via la relation many-to-many)
+    from models import user_objects
+    total_objects = db.query(func.count(models.Object.id)).join(
+        user_objects, user_objects.c.object_id == models.Object.id
+    ).filter(
+        user_objects.c.user_id == user_id
     ).scalar()
     
     # Nombre de tâches de maintenance en attente
@@ -32,19 +35,23 @@ def get_dashboard_stats(
         models.MaintenanceTask.status == models.MaintenanceStatus.COMPLETED
     ).scalar()
     
-    # Nombre de problèmes ouverts
+    # Nombre de problèmes ouverts (via la relation many-to-many)
     open_problems = db.query(func.count(models.Problem.id)).join(
         models.Object, models.Problem.object_id == models.Object.id
+    ).join(
+        user_objects, user_objects.c.object_id == models.Object.id
     ).filter(
-        models.Object.owner_id == user_id,
+        user_objects.c.user_id == user_id,
         models.Problem.status == models.ProblemStatus.OPEN
     ).scalar()
     
-    # Nombre de problèmes résolus
+    # Nombre de problèmes résolus (via la relation many-to-many)
     resolved_problems = db.query(func.count(models.Problem.id)).join(
         models.Object, models.Problem.object_id == models.Object.id
+    ).join(
+        user_objects, user_objects.c.object_id == models.Object.id
     ).filter(
-        models.Object.owner_id == user_id,
+        user_objects.c.user_id == user_id,
         models.Problem.status == models.ProblemStatus.RESOLVED
     ).scalar()
     
