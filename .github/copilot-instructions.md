@@ -21,3 +21,8 @@
 ## Format des réponses
 
 - Commencer chaque réponse par une petite blague style blague de toto. La blague n'a rien à voir avec la question.
+- quand une user story est finalisée, rajoute une blague en 2-3 phrases, très drole, dont l'un des personnages s'appelle Boris la saucisse, jéjé, ludobite, max5336 ou mathcraft! juste un seul personnage!
+
+## Instructions liées aux tâches:
+
+- Toujours faire le back et le front nécessaire!
