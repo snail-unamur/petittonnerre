@@ -3,6 +3,7 @@
 ## Epic 1: Authentification et Droits d'Accès 🔐
 
 ### US1.1: En tant qu'utilisateur connecté, je ne peux pas accéder aux pages login/register
+
 **Dépendances:** Aucune  
 **Priorité:** Haute
 **Statut:** ✅ Done
@@ -13,6 +14,7 @@
 - [x] 1.1.4 Tester le comportement de redirection
 
 ### US1.2: En tant qu'utilisateur non connecté, je ne vois que login/register dans le menu
+
 **Dépendances:** Aucune  
 **Priorité:** Haute
 **Statut:** ✅ Done
@@ -23,6 +25,7 @@
 - [x] 1.2.4 Tester l'affichage du menu selon l'état de connexion
 
 ### US1.3: En tant qu'administrateur connecté, je vois un lien "Admin" dans le menu
+
 **Dépendances:** US1.2  
 **Priorité:** Haute
 **Statut:** ✅ Done
@@ -35,6 +38,7 @@
 ## Epic 2: Gestion des Objets Partagés 📦
 
 ### US2.1: En tant qu'utilisateur, je peux lier un objet existant à mon compte
+
 **Dépendances:** Aucune  
 **Priorité:** Haute  
 **Statut:** ✅ Done
@@ -47,6 +51,7 @@
 - [x] 2.1.6 Tester les associations multiples
 
 ### US2.2: En tant qu'utilisateur, je vois d'abord les objets existants avant de créer
+
 **Dépendances:** US2.1  
 **Priorité:** Haute  
 **Statut:** ✅ Done
@@ -59,17 +64,20 @@
 - [x] 2.2.6 Tester le workflow complet
 
 ### US2.3: En tant qu'utilisateur, ma création d'objet nécessite une approbation admin
-**Dépendances:** US2.2  
-**Priorité:** Haute
 
-- [ ] 2.3.1 Modifier l'endpoint de création d'objet pour créer un ObjectRequest
-- [ ] 2.3.2 Définir le status par défaut à "pending"
-- [ ] 2.3.3 Afficher un message de confirmation à l'utilisateur
-- [ ] 2.3.4 Mettre à jour l'interface admin pour gérer ces demandes
-- [ ] 2.3.5 Notifier l'utilisateur lors de l'approbation (future US notifications)
-- [ ] 2.3.6 Tester le workflow d'approbation
+**Dépendances:** US2.2  
+**Priorité:** Haute  
+**Statut:** ✅ Done
+
+- [x] 2.3.1 Modifier l'endpoint de création d'objet pour créer un ObjectRequest
+- [x] 2.3.2 Définir le status par défaut à "pending"
+- [x] 2.3.3 Afficher un message de confirmation à l'utilisateur
+- [x] 2.3.4 Mettre à jour l'interface admin pour gérer ces demandes
+- [x] 2.3.5 Notifier l'utilisateur lors de l'approbation (future US notifications)
+- [x] 2.3.6 Tester le workflow d'approbation
 
 ### US2.4: En tant qu'utilisateur, je ne vois que mes objets dans ma liste
+
 **Dépendances:** US2.1  
 **Priorité:** Haute
 
@@ -79,8 +87,9 @@
 - [ ] 2.4.4 Tester que chaque utilisateur voit uniquement ses objets
 
 ### US2.5: En tant qu'utilisateur, je peux rechercher dans tous mes objets
+
 **Dépendances:** US2.4  
-**Priorité:** Moyenne  
+**Priorité:** Moyenne
 **Statut:** ✅ Done
 
 - [x] 2.5.1 Ajouter une barre de recherche en haut de la page "Mes objets"
@@ -90,6 +99,7 @@
 - [x] 2.5.5 Tester la recherche avec divers critères
 
 ### US2.6: En tant qu'utilisateur, mes objets sont triés par catégorie avec lazy loading
+
 **Dépendances:** US2.4  
 **Priorité:** Moyenne
 
@@ -103,6 +113,7 @@
 ## Epic 3: Gestion des Problèmes Partagés 🔧
 
 ### US3.1: En tant qu'utilisateur, je vois les problèmes des autres pour mes objets
+
 **Dépendances:** US2.4  
 **Priorité:** Haute
 
@@ -112,6 +123,7 @@
 - [ ] 3.1.4 Tester l'affichage des problèmes partagés
 
 ### US3.2: En tant qu'utilisateur, je peux répondre aux problèmes des autres
+
 **Dépendances:** US3.1  
 **Priorité:** Haute
 
@@ -121,6 +133,7 @@
 - [ ] 3.2.4 Tester la création de résolutions sur problèmes partagés
 
 ### US3.3: En tant qu'utilisateur, je vois "Mes problèmes" et "Problèmes des autres" séparément
+
 **Dépendances:** US3.1  
 **Priorité:** Moyenne
 
@@ -131,6 +144,7 @@
 - [ ] 3.3.5 Tester l'affichage et le filtrage des onglets
 
 ### US3.4: En tant qu'utilisateur, je peux chatter sur la page d'un problème
+
 **Dépendances:** US3.1  
 **Priorité:** Moyenne
 
@@ -145,6 +159,7 @@
 ## Epic 4: Dashboard et Actions Rapides 📊
 
 ### US4.1: En tant qu'utilisateur, je vois des boutons d'actions rapides sur le dashboard
+
 **Dépendances:** Aucune  
 **Priorité:** Haute
 **Statut:** ✅ Done
@@ -156,6 +171,7 @@
 - [x] 4.1.5 Tester toutes les actions rapides
 
 ### US4.2: En tant qu'utilisateur, quand je change de page, la page scroll en haut
+
 **Dépendances:** Aucune  
 **Priorité:** Basse
 
@@ -166,6 +182,7 @@
 ## Epic 5: Export et Dark Mode 🌙
 
 ### US5.1: En tant qu'utilisateur, je peux exporter mes maintenances en iCal
+
 **Dépendances:** Aucune  
 **Priorité:** Moyenne
 
@@ -176,6 +193,7 @@
 - [ ] 5.1.5 Tester l'import dans différents calendriers (Google, Outlook, etc.)
 
 ### US5.2: En tant qu'utilisateur, je peux activer le mode sombre
+
 **Dépendances:** Aucune  
 **Priorité:** Basse
 **Statut:** ✅ Done
@@ -190,6 +208,7 @@
 ## Epic 6: Administration Avancée 👨‍💼
 
 ### US6.1: En tant qu'admin, je peux supprimer des problèmes (soft delete) ✅
+
 **Dépendances:** US1.3  
 **Priorité:** Moyenne  
 **Statut:** Done
@@ -202,6 +221,7 @@
 - [x] 6.1.6 Tester le soft delete et la restauration
 
 ### US6.2: En tant qu'admin, je peux supprimer des commentaires (soft delete) ✅
+
 **Dépendances:** US6.1  
 **Priorité:** Moyenne  
 **Statut:** Done
@@ -214,6 +234,7 @@
 - [x] 6.2.6 Implémenter l'interface admin frontend pour les résolutions ✅
 
 ### US6.3: En tant qu'admin, je peux supprimer des messages de chat (soft delete)
+
 **Dépendances:** US3.4, US6.1  
 **Priorité:** Basse
 
@@ -224,6 +245,7 @@
 - [ ] 6.3.5 Tester le soft delete des messages
 
 ### US6.4: En tant qu'admin, j'ai un dashboard de modération complet
+
 **Dépendances:** US6.1, US6.2, US6.3  
 **Priorité:** Basse
 
@@ -236,6 +258,7 @@
 ## Epic 7: Système de Notifications 🔔
 
 ### US7.1: En tant qu'utilisateur, je reçois une notif pour un nouveau problème sur mes objets
+
 **Dépendances:** US3.1  
 **Priorité:** Moyenne
 
@@ -248,6 +271,7 @@
 - [ ] 7.1.7 Tester la création et affichage des notifications
 
 ### US7.2: En tant qu'utilisateur, je reçois une notif pour une réponse à mon problème
+
 **Dépendances:** US7.1  
 **Priorité:** Moyenne
 
@@ -257,6 +281,7 @@
 - [ ] 7.2.4 Tester les notifications de réponse
 
 ### US7.3: En tant qu'utilisateur, je reçois une notif pour un nouveau message chat
+
 **Dépendances:** US3.4, US7.1  
 **Priorité:** Basse
 
@@ -266,6 +291,7 @@
 - [ ] 7.3.4 Tester les notifications de chat
 
 ### US7.4: En tant qu'utilisateur, je reçois une notif quand mon objet est approuvé
+
 **Dépendances:** US2.3, US7.1  
 **Priorité:** Moyenne
 
@@ -277,6 +303,7 @@
 ## Epic 8: Navigation et UX 🎯
 
 ### US8.1: Supprimer l'onglet Communauté du menu ✅
+
 **Dépendances:** Aucune  
 **Priorité:** Haute  
 **Statut:** Done
@@ -289,6 +316,7 @@
 ## Epic 9: IoT et Raspberry Pi 🤖
 
 ### US9.1: En tant qu'utilisateur, je reçois une notif quand je passe devant un capteur
+
 **Dépendances:** US7.1  
 **Priorité:** Basse
 
@@ -300,6 +328,7 @@
 - [ ] 9.1.6 Tester le déclenchement par mouvement
 
 ### US9.2: En tant qu'utilisateur, je vois les maintenances de la pièce sur l'écran Raspberry
+
 **Dépendances:** US9.1  
 **Priorité:** Basse
 
@@ -311,6 +340,7 @@
 - [ ] 9.2.6 Tester l'affichage sur la Raspberry
 
 ### US9.3: En tant qu'utilisateur, je peux encoder une maintenance via pavé tactile
+
 **Dépendances:** US9.2  
 **Priorité:** Basse
 
@@ -322,6 +352,7 @@
 - [ ] 9.3.6 Tester l'encodage via pavé tactile
 
 ### US9.4: En tant qu'admin, je peux configurer les associations pièce-capteur
+
 **Dépendances:** US9.1  
 **Priorité:** Basse
 
@@ -337,27 +368,35 @@
 ## Ordre de Développement Recommandé
 
 ### Phase 1: Authentification et Droits (Epic 1)
+
 1. US1.2 → US1.1 → US1.3
 
 ### Phase 2: Objets Partagés (Epic 2)
+
 2. US2.1 → US2.2 → US2.3 → US2.4 → US2.5 → US2.6
 
 ### Phase 3: Problèmes Partagés (Epic 3)
+
 3. US3.1 → US3.2 → US3.3 → US3.4
 
 ### Phase 4: Dashboard et Navigation (Epic 4, 8)
+
 4. US8.1 → US4.1 → US4.2
 
 ### Phase 5: Notifications (Epic 7)
+
 5. US7.1 → US7.4 → US7.2 → US7.3
 
 ### Phase 6: Administration (Epic 6)
+
 6. US6.1 → US6.2 → US6.3 → US6.4
 
 ### Phase 7: Export et Dark Mode (Epic 5)
+
 7. US5.1 → US5.2
 
 ### Phase 8: IoT (Epic 9) - Optionnel
+
 8. US9.1 → US9.2 → US9.3 → US9.4
 
 ---
@@ -365,6 +404,7 @@
 ## Notes Techniques
 
 ### Modifications de Base de Données Majeures
+
 - Table `user_objects` (many-to-many) pour US2.1
 - Champs `deleted_at` pour soft delete (US6.x)
 - Table `notifications` pour US7.x
@@ -372,11 +412,13 @@
 - Table `problem_chats` pour US3.4
 
 ### Dépendances Externes Potentielles
+
 - Bibliothèque iCalendar pour US5.1
 - WebSocket ou polling pour chat temps réel (US3.4)
 - Raspberry Pi SDK/GPIO pour US9.x
 
 ### Tests Prioritaires
+
 - Tests d'intégration pour les objets partagés (Epic 2)
 - Tests de permissions pour les problèmes partagés (Epic 3)
 - Tests de notifications (Epic 7)

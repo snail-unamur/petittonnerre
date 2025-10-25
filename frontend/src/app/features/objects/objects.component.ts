@@ -23,11 +23,6 @@ import { ObjectItem } from "../../core/models/models";
         </button>
       </div>
 
-      <!-- Success Message -->
-      <div class="alert alert-success mb-lg" *ngIf="successMessage">
-        ✅ {{ successMessage }}
-      </div>
-
       <!-- Add/Edit Form avec Recherche -->
       <div class="card mb-xl" *ngIf="showAddForm">
         <h3 class="mb-md">
@@ -122,6 +117,11 @@ import { ObjectItem } from "../../core/models/models";
 
           <!-- Résultats de recherche -->
           <div *ngIf="showSearchResults" class="search-results mt-lg">
+            <!-- Message pour recherche sans résultats -->
+            <div class="alert alert-info mb-md" *ngIf="searchMessage">
+              {{ searchMessage }}
+            </div>
+
             <h5 class="mb-md">
               {{ searchResults.length }} résultat(s) trouvé(s)
             </h5>
@@ -271,6 +271,11 @@ import { ObjectItem } from "../../core/models/models";
             >
               {{ editingObject ? "💾 Enregistrer" : "➕ Ajouter" }}
             </button>
+          </div>
+
+          <!-- Success Message after form submission -->
+          <div class="alert alert-success mt-lg" *ngIf="successMessage">
+            ✅ {{ successMessage }}
           </div>
         </form>
       </div>
@@ -798,6 +803,7 @@ export class ObjectsComponent implements OnInit {
   loading = false;
   error = "";
   successMessage = "";
+  searchMessage = ""; // Message spécifique pour les résultats de recherche
 
   // Tri
   sortBy: "name" | "added_at" | "purchase_date" | "brand" | "model" = "name";
@@ -912,18 +918,25 @@ export class ObjectsComponent implements OnInit {
           },
         });
     } else {
+      // US2.3: Créer une demande d'objet au lieu de créer directement
       this.apiService
-        .createObject(this.formData, this.currentUserId)
+        .createObjectRequest(this.formData, this.currentUserId)
         .subscribe({
-          next: (created) => {
-            this.objects.push(created);
-            this.sortObjects();
-            this.cancelEdit();
+          next: (request) => {
+            this.successMessage =
+              "Votre demande de création d'objet a été envoyée avec succès ! Elle sera examinée par un administrateur.";
             this.loading = false;
+
+            // Masquer le message et fermer le formulaire après 8 secondes
+            setTimeout(() => {
+              this.successMessage = "";
+              this.cancelEdit();
+            }, 8000);
           },
           error: (err: any) => {
-            console.error("Erreur lors de la création:", err);
-            this.error = "Impossible de créer l'objet.";
+            console.error("Erreur lors de la création de la demande:", err);
+            this.error =
+              "Impossible d'envoyer votre demande. Veuillez réessayer.";
             this.loading = false;
           },
         });
@@ -1014,6 +1027,7 @@ export class ObjectsComponent implements OnInit {
     this.loading = true;
     this.error = "";
     this.successMessage = "";
+    this.searchMessage = ""; // Réinitialiser le message de recherche
 
     this.apiService
       .searchObjects(
@@ -1030,8 +1044,10 @@ export class ObjectsComponent implements OnInit {
           this.loading = false;
 
           if (results.length === 0) {
-            this.successMessage =
+            this.searchMessage =
               "Aucun objet trouvé correspondant à vos critères. Vous pouvez créer un nouvel objet en cliquant sur le bouton ci-dessous.";
+          } else {
+            this.searchMessage = ""; // Réinitialiser le message s'il y a des résultats
           }
         },
         error: (err) => {
@@ -1086,10 +1102,12 @@ export class ObjectsComponent implements OnInit {
     this.searchResults = [];
     this.showSearchResults = false;
     this.showCreateForm = false; // Masquer le formulaire de création aussi
+    this.searchMessage = ""; // Réinitialiser le message de recherche
   }
 
   showCreateFormSection() {
     this.showCreateForm = true;
+    this.searchMessage = ""; // Cacher le message de recherche quand on montre le formulaire
     // Faire défiler vers le formulaire de création
     setTimeout(() => {
       const formElement = document.querySelector("form.form");
@@ -1139,7 +1157,7 @@ export class ObjectsComponent implements OnInit {
 
       return this.sortOrder === "asc" ? compareValue : -compareValue;
     });
-    
+
     // Appliquer le filtre après le tri
     this.filterMyObjects();
   }
