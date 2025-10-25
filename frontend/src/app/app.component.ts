@@ -78,42 +78,5 @@ export class AppComponent implements OnInit {
         this.router.navigate(['/auth/login']);
       }
     });
-isMenuOpen;
-    if (this.isMenuOpen) {
-      this.isUserMenuOpen = false;
-    }
-  }
-  
-  closeMenu() {
-    this.isMenuOpen = false;
-  }
-  
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
-  }
-  
-  closeMenus() {
-    this.isMenuOpen = false;
-    this.isUserMenuOpen = false;
-  }
-  
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.isAuthenticated = false;
-        this.username = '';
-        this.currentUser = null;
-        this.closeMenus();
-        this.router.navigate(['/auth/login']);
-      },
-      error: () => {
-        // Même en cas d'erreur, déconnecter localement
-        this.isAuthenticated = false;
-        this.username = '';
-        this.currentUser = null;
-        this.closeMenus();
-        this.router.navigate(['/auth/login']);
-      }
-    });
   }
 }
