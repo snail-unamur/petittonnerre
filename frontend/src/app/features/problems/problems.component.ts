@@ -36,6 +36,7 @@ interface ProblemResolution {
   resolved_by: number;
   created_at: string;
   updated_at: string;
+  deleted_at?: string | null;
 }
 
 @Component({
@@ -56,6 +57,10 @@ export class ProblemsComponent implements OnInit {
   // Vue admin des problèmes supprimés
   showDeletedProblems: boolean = false;
   deletedProblems: Problem[] = [];
+  
+  // Vue admin des résolutions supprimées
+  showDeletedResolutions: boolean = false;
+  deletedResolutions: ProblemResolution[] = [];
   
   // Filtres
   filterStatus: string = 'all';
@@ -405,6 +410,85 @@ export class ProblemsComponent implements OnInit {
       this.deletedProblems = [];
     } else {
       this.loadDeletedProblems();
+    }
+  }
+
+  // === Admin methods - Resolutions ===
+  adminSoftDeleteResolution(resolution: ProblemResolution) {
+    if (!this.isAdmin || !this.currentUserId) {
+      alert('Vous devez être administrateur pour supprimer une résolution.');
+      return;
+    }
+    
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer cette résolution ? Cette action peut être annulée.`)) {
+      return;
+    }
+    
+    this.apiService.adminSoftDeleteResolution(resolution.id, this.currentUserId).subscribe({
+      next: () => {
+        // Recharger les résolutions du problème courant
+        if (this.selectedProblem) {
+          this.loadResolutions(this.selectedProblem.id);
+        }
+        alert('Résolution supprimée avec succès');
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression de la résolution');
+      }
+    });
+  }
+
+  loadDeletedResolutions() {
+    if (!this.isAdmin || !this.currentUserId) return;
+    
+    this.apiService.adminGetDeletedResolutions(this.currentUserId).subscribe({
+      next: (data) => {
+        this.deletedResolutions = data;
+        this.showDeletedResolutions = true;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des résolutions supprimées:', error);
+      }
+    });
+  }
+
+  adminRestoreResolution(resolution: ProblemResolution) {
+    if (!this.isAdmin || !this.currentUserId) {
+      alert('Vous devez être administrateur pour restaurer une résolution.');
+      return;
+    }
+    
+    this.apiService.adminRestoreResolution(resolution.id, this.currentUserId).subscribe({
+      next: () => {
+        // Retirer de la liste des supprimés
+        this.deletedResolutions = this.deletedResolutions.filter(r => r.id !== resolution.id);
+        
+        // Recharger les résolutions du problème courant si c'est le même
+        if (this.selectedProblem && this.selectedProblem.id === resolution.problem_id) {
+          this.loadResolutions(this.selectedProblem.id);
+        }
+        
+        alert('Résolution restaurée avec succès');
+        
+        // Si plus de résolutions supprimées, fermer la vue
+        if (this.deletedResolutions.length === 0) {
+          this.showDeletedResolutions = false;
+        }
+      },
+      error: (error) => {
+        console.error('Erreur lors de la restauration:', error);
+        alert('Erreur lors de la restauration de la résolution');
+      }
+    });
+  }
+
+  toggleDeletedResolutionsView() {
+    if (this.showDeletedResolutions) {
+      this.showDeletedResolutions = false;
+      this.deletedResolutions = [];
+    } else {
+      this.loadDeletedResolutions();
     }
   }
   

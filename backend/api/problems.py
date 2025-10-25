@@ -176,7 +176,7 @@ def get_resolutions(
     limit: int = 100,
     db: Session = Depends(get_db)
 ):
-    """Récupérer toutes les résolutions d'un problème"""
+    """Récupérer toutes les résolutions d'un problème (non supprimées)"""
     # Vérifier que le problème existe
     problem = db.query(models.Problem).filter(models.Problem.id == problem_id).first()
     if not problem:
@@ -186,7 +186,10 @@ def get_resolutions(
         )
     
     resolutions = db.query(models.ProblemResolution)\
-        .filter(models.ProblemResolution.problem_id == problem_id)\
+        .filter(
+            models.ProblemResolution.problem_id == problem_id,
+            models.ProblemResolution.deleted_at == None
+        )\
         .order_by(models.ProblemResolution.helpfulness_score.desc())\
         .offset(skip).limit(limit).all()
     
@@ -469,4 +472,117 @@ def admin_restore_problem(
     return {
         "message": "Problème restauré avec succès",
         "problem_id": problem.id
+    }
+
+
+# ====== ENDPOINTS ADMIN RESOLUTIONS ======
+
+@router.delete("/admin/resolutions/{resolution_id}", status_code=status.HTTP_200_OK)
+def admin_soft_delete_resolution(
+    resolution_id: int,
+    admin_id: int,
+    db: Session = Depends(get_db)
+):
+    """Soft delete d'une résolution (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer la résolution
+    resolution = db.query(models.ProblemResolution).filter(
+        models.ProblemResolution.id == resolution_id
+    ).first()
+    
+    if not resolution:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Résolution non trouvée"
+        )
+    
+    # Vérifier qu'elle n'est pas déjà supprimée
+    if resolution.deleted_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La résolution est déjà supprimée"
+        )
+    
+    # Soft delete : marquer avec la date actuelle
+    resolution.deleted_at = datetime.now(UTC)
+    db.commit()
+    db.refresh(resolution)
+    
+    return {
+        "message": "Résolution supprimée avec succès",
+        "resolution_id": resolution.id,
+        "deleted_at": resolution.deleted_at.isoformat()
+    }
+
+
+@router.get("/admin/resolutions/deleted", response_model=List[schemas.ProblemResolution])
+def admin_get_deleted_resolutions(
+    admin_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Lister toutes les résolutions supprimées (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer uniquement les résolutions supprimées
+    resolutions = db.query(models.ProblemResolution)\
+        .filter(models.ProblemResolution.deleted_at != None)\
+        .order_by(models.ProblemResolution.deleted_at.desc())\
+        .offset(skip).limit(limit).all()
+    
+    return resolutions
+
+
+@router.post("/admin/resolutions/{resolution_id}/restore", status_code=status.HTTP_200_OK)
+def admin_restore_resolution(
+    resolution_id: int,
+    admin_id: int,
+    db: Session = Depends(get_db)
+):
+    """Restaurer une résolution supprimée (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer la résolution supprimée
+    resolution = db.query(models.ProblemResolution).filter(
+        models.ProblemResolution.id == resolution_id
+    ).first()
+    
+    if not resolution:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Résolution non trouvée"
+        )
+    
+    # Vérifier qu'elle est bien supprimée
+    if resolution.deleted_at is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La résolution n'est pas supprimée"
+        )
+    
+    # Restaurer : retirer la date de suppression
+    resolution.deleted_at = None
+    db.commit()
+    db.refresh(resolution)
+    
+    return {
+        "message": "Résolution restaurée avec succès",
+        "resolution_id": resolution.id
     }

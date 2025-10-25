@@ -201,15 +201,17 @@
 - [x] 6.1.5 Ajouter une interface admin pour voir/restaurer les problèmes supprimés
 - [x] 6.1.6 Tester le soft delete et la restauration
 
-### US6.2: En tant qu'admin, je peux supprimer des commentaires (soft delete)
+### US6.2: En tant qu'admin, je peux supprimer des commentaires (soft delete) ✅
 **Dépendances:** US6.1  
-**Priorité:** Moyenne
+**Priorité:** Moyenne  
+**Statut:** Done
 
-- [ ] 6.2.1 Ajouter un champ deleted_at dans le modèle ProblemResolution
-- [ ] 6.2.2 Créer l'endpoint admin DELETE /admin/resolutions/{id}
-- [ ] 6.2.3 Implémenter le soft delete pour les résolutions
-- [ ] 6.2.4 Afficher [supprimé] pour les commentaires soft deleted
-- [ ] 6.2.5 Tester le soft delete des commentaires
+- [x] 6.2.1 Ajouter un champ deleted_at dans le modèle ProblemResolution ✅
+- [x] 6.2.2 Créer l'endpoint admin DELETE /admin/resolutions/{id} ✅
+- [x] 6.2.3 Implémenter le soft delete pour les résolutions ✅
+- [x] 6.2.4 Afficher [supprimé] pour les commentaires soft deleted ✅
+- [x] 6.2.5 Tester le soft delete des commentaires ✅
+- [x] 6.2.6 Implémenter l'interface admin frontend pour les résolutions ✅
 
 ### US6.3: En tant qu'admin, je peux supprimer des messages de chat (soft delete)
 **Dépendances:** US3.4, US6.1  

@@ -257,6 +257,7 @@ class ProblemResolution(Base):
     images = Column(Text)  # URLs des images séparées par des virgules
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
+    deleted_at = Column(DateTime, nullable=True)  # Soft delete
     
     # Clés étrangères
     problem_id = Column(Integer, ForeignKey("problems.id"), nullable=False)

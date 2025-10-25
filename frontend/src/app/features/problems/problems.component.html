@@ -340,13 +340,21 @@
             <h3>Solutions proposées</h3>
             <p class="card-subtitle">{{ resolutions.length }} solution(s) disponible(s)</p>
           </div>
-          <button 
-            class="btn btn-primary btn-sm" 
-            (click)="showResolutionForm = !showResolutionForm"
-            *ngIf="selectedProblem.status !== 'closed'"
-            [disabled]="selectedProblem.status === 'closed'">
-            ➕ Proposer une solution
-          </button>
+          <div class="flex gap-sm">
+            <button 
+              class="btn btn-primary btn-sm" 
+              (click)="showResolutionForm = !showResolutionForm"
+              *ngIf="selectedProblem.status !== 'closed'"
+              [disabled]="selectedProblem.status === 'closed'">
+              ➕ Proposer une solution
+            </button>
+            <button 
+              *ngIf="isAdmin" 
+              class="btn btn-sm btn-ghost"
+              (click)="toggleDeletedResolutionsView()">
+              👁️ Voir les résolutions supprimées ({{ deletedResolutions.length }})
+            </button>
+          </div>
           <span class="badge badge-error" *ngIf="selectedProblem.status === 'closed'">
             🔒 Problème fermé - Aucune nouvelle solution ne peut être ajoutée
           </span>
@@ -454,6 +462,13 @@
                   style="padding: 8px 12px;">
                   ✅ Solution validée
                 </span>
+                <button 
+                  *ngIf="isAdmin" 
+                  class="btn btn-sm btn-error"
+                  (click)="adminSoftDeleteResolution(resolution)"
+                  title="Supprimer cette résolution (admin)">
+                  🗑️
+                </button>
               </div>
             </div>
             
@@ -517,7 +532,56 @@
             ➕ Proposer une solution
           </button>
         </div>
+
+        <!-- Section Admin: Résolutions supprimées -->
+        <div *ngIf="isAdmin && showDeletedResolutions" class="mt-lg">
+          <div class="alert alert-warning mb-md">
+            <div class="alert-icon">👁️</div>
+            <div class="alert-content">
+              <div class="alert-title">Vue administrateur - Résolutions supprimées</div>
+              <p>Vous visualisez {{ deletedResolutions.length }} résolution(s) supprimée(s).</p>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="card card-flat card-deleted mb-md" *ngFor="let resolution of deletedResolutions">
+              <div class="flex flex-between items-start mb-md">
+                <div class="flex gap-sm items-center">
+                  <h4 class="text-lg">💡 Solution proposée <span class="text-error">[supprimé]</span></h4>
+                </div>
+                <button 
+                  class="btn btn-sm btn-success"
+                  (click)="adminRestoreResolution(resolution)"
+                  title="Restaurer cette résolution">
+                  ↩️ Restaurer
+                </button>
+              </div>
+              
+              <div class="mb-md">
+                <p class="text-secondary">{{ resolution.solution }}</p>
+              </div>
+              
+              <div *ngIf="resolution.steps" class="mb-md">
+                <h5 class="mb-xs">Étapes :</h5>
+                <pre class="text-sm text-secondary" style="white-space: pre-wrap;">{{ resolution.steps }}</pre>
+              </div>
+              
+              <div class="flex gap-sm text-xs text-tertiary mt-md">
+                <span>📅 Créée : {{ resolution.created_at | date:'short' }}</span>
+                <span>🗑️ Supprimée : {{ resolution.deleted_at | date:'short' }}</span>
+                <span>👤 Problème ID: {{ resolution.problem_id }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="deletedResolutions.length === 0">
+            <div class="empty-icon">✅</div>
+            <h4 class="empty-title">Aucune résolution supprimée</h4>
+            <p class="empty-description">Toutes les résolutions sont actives.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+

@@ -316,6 +316,26 @@ export class ApiService {
     );
   }
 
+  // Admin endpoints - Resolutions
+  adminSoftDeleteResolution(resolutionId: number, adminId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/problems/admin/resolutions/${resolutionId}?admin_id=${adminId}`
+    );
+  }
+
+  adminGetDeletedResolutions(adminId: number, skip: number = 0, limit: number = 100): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/problems/admin/resolutions/deleted?admin_id=${adminId}&skip=${skip}&limit=${limit}`
+    );
+  }
+
+  adminRestoreResolution(resolutionId: number, adminId: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/problems/admin/resolutions/${resolutionId}/restore?admin_id=${adminId}`,
+      {}
+    );
+  }
+
   // ===== OBJECT REQUESTS =====
   createObjectRequest(
     request: Partial<ObjectRequest>,
