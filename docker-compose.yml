@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: petittonnerre
       POSTGRES_PASSWORD: petittonnerre
-      POSTGRES_DB: petittonnerre
+      POSTGRES_DB: petit_tonnerre_db
     ports:
       - "5432:5432"
     volumes:
