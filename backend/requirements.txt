@@ -1,12 +1,17 @@
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-sqlalchemy==2.0.23
-psycopg2-binary==2.9.11
-pydantic==2.5.0
-pydantic-settings==2.1.0
-email-validator==2.1.0
-python-dotenv==1.0.0
-alembic==1.13.0
-python-multipart==0.0.6
-passlib==1.7.4
-bcrypt==4.0.1
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+sqlalchemy>=2.0.23
+psycopg2-binary>=2.9.11
+pydantic>=2.5.1  # Version plus récente qui supporte mieux Python 3.14
+pydantic-core>=2.14.3  # Version plus récente
+pydantic-settings>=2.1.0
+email-validator>=2.1.0
+python-dotenv>=1.0.0
+alembic>=1.13.0
+python-multipart>=0.0.6
+passlib>=1.7.4  # Pour l'authentification
+bcrypt>=4.0.1   # Pour le hachage des mots de passe
+
+# Dépendances additionnelles pour la compatibilité Python 3.14
+typing-extensions>=4.8.0
+anyio>=4.0.0

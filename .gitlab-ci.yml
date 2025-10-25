@@ -1,4 +1,4 @@
-image: python:3.14
+image: python:3.11
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
@@ -9,10 +9,18 @@ variables:
 
 # Cache les dépendances Python entre les jobs
 cache:
-  paths:
-    - .pip-cache/
-    - backend/.venv/
-    - frontend/node_modules/
+  - key:
+      files:
+        - backend/requirements.txt
+    paths:
+      - .pip-cache/
+      - backend/.venv/
+  - key:
+      files:
+        - frontend/package.json
+        - frontend/package-lock.json
+    paths:
+      - frontend/node_modules/
 
 stages:
   - setup
@@ -28,7 +36,15 @@ backend-setup:
     - python -m venv .venv
     - source .venv/bin/activate
     - pip install --upgrade pip
-    - pip install -r requirements.txt
+    - pip install wheel setuptools
+    - pip install --no-deps pydantic pydantic-core  # Installation sans dépendances d'abord
+    - pip install -r requirements.txt --no-build-isolation  # Installation sans isolation pour éviter les problèmes de compilation
+  variables:
+    PYTHONWARNINGS: "ignore::DeprecationWarning"  # Ignorer les avertissements de dépréciation
+  rules:
+    - changes:
+        - backend/**/*
+        - .gitlab-ci.yml
   artifacts:
     paths:
       - backend/.venv/
