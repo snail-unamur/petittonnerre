@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { Observable, tap, BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 
 export interface UserRegistration {
@@ -11,15 +11,14 @@ export interface UserRegistration {
   location?: string;
 }
 
-export interface UserLogin {
+export interface LoginData {
   email: string;
   password: string;
 }
 
-export interface LoginResponse {
+export interface Token {
   access_token: string;
   token_type: string;
-  user: UserResponse;
 }
 
 export interface UserResponse {
@@ -38,37 +37,70 @@ export interface UserResponse {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  private currentUserSubject = new BehaviorSubject<UserResponse | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Charger l'utilisateur au démarrage si token existe
+    if (this.isAuthenticated()) {
+      this.loadCurrentUser();
+    }
+  }
 
   register(userData: UserRegistration): Observable<UserResponse> {
     return this.http.post<UserResponse>(
-      `${this.apiUrl}/users/register`,
+      `${this.apiUrl}/auth/register`,
       userData
     );
   }
 
-  login(credentials: UserLogin): Observable<LoginResponse> {
+  login(credentials: LoginData): Observable<Token> {
+    // Le backend attend le format OAuth2 (FormData avec username/password)
     const formData = new FormData();
     formData.append('username', credentials.email);
     formData.append('password', credentials.password);
     
-    return this.http.post<LoginResponse>(
-      `${this.apiUrl}/users/login`,
+    return this.http.post<Token>(
+      `${this.apiUrl}/auth/login`,
       formData
     ).pipe(
       tap(response => {
         localStorage.setItem('token', response.access_token);
-        localStorage.setItem('username', response.user.username);
-        localStorage.setItem('userId', response.user.id.toString());
+        // Charger les infos utilisateur après login
+        this.loadCurrentUser();
       })
     );
   }
 
-  logout(): void {
+  logout(): Observable<any> {
+    // Nettoyer immédiatement le localStorage et l'état
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('userId');
+    this.currentUserSubject.next(null);
+    
+    // Appeler le backend (sans bloquer le logout local si ça échoue)
+    return this.http.post(`${this.apiUrl}/auth/logout`, {});
+  }
+
+  getCurrentUser(): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${this.apiUrl}/auth/me`).pipe(
+      tap(user => {
+        this.currentUserSubject.next(user);
+        // Garder en localStorage pour compatibilité
+        localStorage.setItem('username', user.username);
+        localStorage.setItem('userId', user.id.toString());
+      })
+    );
+  }
+
+  private loadCurrentUser(): void {
+    this.getCurrentUser().subscribe({
+      error: () => {
+        // Si erreur (token invalide), nettoyer
+        this.logout().subscribe();
+      }
+    });
   }
 
   isAuthenticated(): boolean {
@@ -86,5 +118,9 @@ export class AuthService {
   getUserId(): number | null {
     const userId = localStorage.getItem('userId');
     return userId ? parseInt(userId, 10) : null;
+  }
+
+  getCurrentUserValue(): UserResponse | null {
+    return this.currentUserSubject.value;
   }
 }

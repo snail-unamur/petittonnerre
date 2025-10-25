@@ -5,22 +5,9 @@ from models import User, UserRole, Object
 import schemas  # Import the entire schemas module
 from schemas import UserCreate, UserResponse
 from database import get_db
-import bcrypt
+from auth import get_password_hash, verify_password
 
 router = APIRouter(prefix="/users", tags=["users"])
-
-def hash_password(password: str) -> str:
-    """Hash a password using bcrypt"""
-    password_bytes = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password_bytes, salt)
-    return hashed.decode('utf-8')
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against a hash"""
-    password_bytes = plain_password.encode('utf-8')
-    hashed_bytes = hashed_password.encode('utf-8')
-    return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 def validate_password(password: str) -> bool:
     """
@@ -61,24 +48,12 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
             detail="Les mots de passe ne correspondent pas"
         )
     
-    # Vérifier la longueur du mot de passe (limite bcrypt)
-    if len(user.password.encode('utf-8')) > 72:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Le mot de passe ne peut pas dépasser 72 octets"
-        )
-    
     # Hasher le mot de passe avec gestion d'erreur détaillée
     try:
-        hashed_password = hash_password(user.password)
+        hashed_password = get_password_hash(user.password)
     except Exception as e:
         error_msg = f"Password hashing error: {str(e)}"
         print(error_msg)  # TODO: Use proper logging
-        if "cannot be longer than 72 bytes" in str(e):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Le mot de passe ne peut pas dépasser 72 octets"
-            )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Une erreur s'est produite lors du traitement de votre demande"

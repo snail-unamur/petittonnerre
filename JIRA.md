@@ -15,9 +15,9 @@
 
 - [x] 1.2.1 Implémenter l'authentification JWT backend (done)
 - [x] 1.2.2 Créer les endpoints de login/logout (done)
-- [ ] 1.2.3 Développer le formulaire de login frontend (todo)
-- [ ] 1.2.4 Implémenter la gestion du token JWT côté frontend (todo)
-- [ ] 1.2.5 Ajouter les guards Angular pour les routes protégées (todo)
+- [x] 1.2.3 Développer le formulaire de login frontend (done)
+- [x] 1.2.4 Implémenter la gestion du token JWT côté frontend (done)
+- [x] 1.2.5 Ajouter les guards Angular pour les routes protégées (done)
 - [x] 1.2.6 Écrire les tests d'authentification backend (done)
 
 ### US1.3: En tant qu'administrateur, je veux pouvoir gérer les utilisateurs

@@ -11,7 +11,7 @@ from datetime import datetime
 from database import Base, get_db
 from main import app
 from models import User, Object, ObjectCategory, UserRole
-import bcrypt
+from auth import get_password_hash
 
 # Configuration de la base de données de test
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -48,13 +48,13 @@ def test_user(setup_database):
     """Créer un utilisateur de test"""
     db = TestingSessionLocal()
     password = "testpass123"
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    hashed_password = get_password_hash(password)
     
     user = User(
         email="test@example.com",
         username="testuser",
         hashed_password=hashed_password,
-        role=UserRole.USER,
+        role=UserRole.user,
         is_active=True
     )
     db.add(user)
@@ -69,13 +69,13 @@ def other_user(setup_database):
     """Créer un second utilisateur de test"""
     db = TestingSessionLocal()
     password = "otherpass123"
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    hashed_password = get_password_hash(password)
     
     user = User(
         email="other@example.com",
         username="otheruser",
         hashed_password=hashed_password,
-        role=UserRole.USER,
+        role=UserRole.user,
         is_active=True
     )
     db.add(user)

@@ -63,23 +63,15 @@ def read_root():
 def create_test_requests():
     """Endpoint temporaire pour créer des demandes d'objets de test"""
     from datetime import datetime, UTC
-    import bcrypt
+    from auth import get_password_hash
     
     db = SessionLocal()
     try:
         # Récupérer les utilisateurs normaux
-        users = db.query(models.User).filter(models.User.role == models.UserRole.USER).limit(3).all()
+        users = db.query(models.User).filter(models.User.role == models.UserRole.user).limit(3).all()
         
         if not users:
             # Créer quelques utilisateurs normaux si nécessaire
-            def hash_password(password: str) -> str:
-                password_bytes = password.encode('utf-8')
-                if len(password_bytes) > 72:
-                    password_bytes = password_bytes[:72]
-                salt = bcrypt.gensalt()
-                hashed = bcrypt.hashpw(password_bytes, salt)
-                return hashed.decode('utf-8')
-            
             for i in range(3):
                 email = f"testuser{i+1}@example.com"
                 user_exists = db.query(models.User).filter(models.User.email == email).first()
@@ -87,8 +79,8 @@ def create_test_requests():
                     user = models.User(
                         email=email,
                         username=f"testuser{i+1}",
-                        hashed_password=hash_password("User1234!"),
-                        role=models.UserRole.USER,
+                        hashed_password=get_password_hash("User1234!"),
+                        role=models.UserRole.user,
                         is_active=True,
                         location="Bruxelles" if i % 2 == 0 else "Liège"
                     )

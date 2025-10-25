@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { adminGuard } from "./core/guards/admin.guard";
+import { authGuard } from "./core/guards/auth.guard";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/auth/login", pathMatch: "full" },
@@ -28,6 +29,7 @@ export const routes: Routes = [
       import("./features/dashboard/dashboard.component").then(
         (m) => m.DashboardComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "objects",
@@ -35,6 +37,7 @@ export const routes: Routes = [
       import("./features/objects/objects.component").then(
         (m) => m.ObjectsComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "maintenance",
@@ -42,6 +45,7 @@ export const routes: Routes = [
       import("./features/maintenance/maintenance.component").then(
         (m) => m.MaintenanceComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "community",
@@ -49,6 +53,7 @@ export const routes: Routes = [
       import("./features/community/community.component").then(
         (m) => m.CommunityComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "problems",
@@ -56,6 +61,7 @@ export const routes: Routes = [
       import("./features/problems/problems.component").then(
         (m) => m.ProblemsComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "admin",

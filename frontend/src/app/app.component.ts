@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './core/services/auth.service';
+import { AuthService, UserResponse } from './core/services/auth.service';
+import { filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,23 +16,22 @@ export class AppComponent implements OnInit {
   title = 'Petit Tonnerre';
   isMenuOpen = false;
   isUserMenuOpen = false;
-  isAuthenticated = false;
-  username = '';
+  currentUser$: Observable<UserResponse | null>;
   
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
   
   ngOnInit() {
-    // Check authentication status
-    const token = localStorage.getItem('token');
-    this.isAuthenticated = !!token;
-    
-    if (this.isAuthenticated) {
-      const user = localStorage.getItem('username');
-      this.username = user || 'Utilisateur';
-    }
+    // Fermer les menus lors de la navigation
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.closeMenus();
+    });
   }
   
   toggleMenu() {
@@ -54,10 +55,16 @@ export class AppComponent implements OnInit {
   }
   
   logout() {
-    this.authService.logout();
-    this.isAuthenticated = false;
-    this.username = '';
-    this.closeMenus();
-    this.router.navigate(['/auth/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.closeMenus();
+        this.router.navigate(['/auth/login']);
+      },
+      error: () => {
+        // Même en cas d'erreur, déconnecter localement
+        this.closeMenus();
+        this.router.navigate(['/auth/login']);
+      }
+    });
   }
 }

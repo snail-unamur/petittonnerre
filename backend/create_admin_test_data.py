@@ -4,18 +4,8 @@ Script pour créer des données de test pour le dashboard admin
 from sqlalchemy.orm import Session
 from database import engine, SessionLocal
 from models import User, UserRole, ObjectRequest, ObjectRequestStatus, ObjectCategory
-import bcrypt
+from auth import get_password_hash
 from datetime import datetime, UTC
-
-def hash_password(password: str) -> str:
-    """Hash un mot de passe avec bcrypt directement"""
-    # Bcrypt a une limite de 72 bytes
-    password_bytes = password.encode('utf-8')
-    if len(password_bytes) > 72:
-        password_bytes = password_bytes[:72]
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password_bytes, salt)
-    return hashed.decode('utf-8')
 
 def create_test_data():
     """Créer des demandes d'objets pour tester le dashboard admin"""
@@ -41,8 +31,8 @@ def create_test_data():
                     user = User(
                         email=email,
                         username=f"testuser{i+1}",
-                        hashed_password=hash_password("User1234!"),
-                        role=UserRole.USER,
+                        hashed_password=get_password_hash("User1234!"),
+                        role=UserRole.user,
                         is_active=True,
                         location="Bruxelles" if i % 2 == 0 else "Liège"
                     )

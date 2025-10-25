@@ -70,20 +70,11 @@
         </ul>
         
         <!-- User Menu -->
-        <div class="user-menu">
-          <div *ngIf="!isAuthenticated" class="auth-buttons">
-            <a routerLink="/auth/login" class="btn btn-ghost btn-sm" (click)="closeMenu()">
-              Connexion
-            </a>
-            <a routerLink="/auth/register" class="btn btn-primary btn-sm" (click)="closeMenu()">
-              S'inscrire
-            </a>
-          </div>
-          
-          <div *ngIf="isAuthenticated" class="user-dropdown">
+        <div class="user-menu" *ngIf="currentUser$ | async as user; else authButtons">
+          <div class="user-dropdown">
             <button class="user-button" (click)="toggleUserMenu()">
               <span class="user-avatar">👤</span>
-              <span class="user-name">{{ username }}</span>
+              <span class="user-name">{{ user.username }}</span>
               <span class="dropdown-icon">▼</span>
             </button>
             
@@ -101,6 +92,19 @@
             </div>
           </div>
         </div>
+        
+        <ng-template #authButtons>
+          <div class="user-menu">
+            <div class="auth-buttons">
+              <a routerLink="/auth/login" class="btn btn-ghost btn-sm" (click)="closeMenu()">
+                Connexion
+              </a>
+              <a routerLink="/auth/register" class="btn btn-primary btn-sm" (click)="closeMenu()">
+                S'inscrire
+              </a>
+            </div>
+          </div>
+        </ng-template>
       </nav>
     </div>
   </header>
