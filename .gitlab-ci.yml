@@ -36,11 +36,7 @@ backend-setup:
     - python -m venv .venv
     - source .venv/bin/activate
     - pip install --upgrade pip
-    - pip install wheel setuptools
-    - pip install --no-deps pydantic pydantic-core  # Installation sans dépendances d'abord
-    - pip install -r requirements.txt --no-build-isolation  # Installation sans isolation pour éviter les problèmes de compilation
-  variables:
-    PYTHONWARNINGS: "ignore::DeprecationWarning"  # Ignorer les avertissements de dépréciation
+    - pip install -r requirements.txt
   rules:
     - changes:
         - backend/**/*
