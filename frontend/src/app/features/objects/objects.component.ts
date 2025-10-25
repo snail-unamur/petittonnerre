@@ -340,61 +340,106 @@ import { ObjectItem } from "../../core/models/models";
         </div>
       </div>
 
-      <!-- Objects Grid -->
-      <div class="grid grid-3" *ngIf="!loading && objects.length > 0">
-        <div class="card" *ngFor="let obj of filteredObjects">
-          <div class="flex flex-between items-start mb-md">
-            <span class="badge badge-primary"
-              >{{ getCategoryIcon(obj.category) }}
-              {{ getCategoryLabel(obj.category) }}</span
-            >
-            <div class="flex gap-xs">
-              <button
-                class="btn btn-sm btn-ghost"
-                (click)="editObject(obj)"
-                title="Modifier"
-              >
-                ✏️
-              </button>
-              <button
-                class="btn btn-sm btn-ghost text-error"
-                (click)="confirmDelete(obj)"
-                title="Supprimer"
-              >
-                🗑️
-              </button>
-            </div>
-          </div>
+      <!-- Expand/Collapse All Categories Button -->
+      <div class="category-controls mb-lg" *ngIf="!loading && objects.length > 0 && getCategories().length > 1">
+        <button class="btn btn-sm btn-ghost" (click)="expandAllCategories()">
+          📂 Tout ouvrir
+        </button>
+        <button class="btn btn-sm btn-ghost" (click)="collapseAllCategories()">
+          📁 Tout fermer
+        </button>
+      </div>
 
-          <h3 class="mb-sm">{{ obj.name }}</h3>
-
-          <div class="divider"></div>
-
-          <div class="flex flex-column gap-xs text-sm">
-            <div *ngIf="obj.brand" class="flex gap-sm items-center">
-              <span class="text-tertiary">🏷️ Marque:</span>
-              <span class="font-medium">{{ obj.brand }}</span>
-            </div>
-            <div *ngIf="obj.model" class="flex gap-sm items-center">
-              <span class="text-tertiary">📋 Modèle:</span>
-              <span class="font-medium">{{ obj.model }}</span>
-            </div>
-            <div *ngIf="obj.purchase_date" class="flex gap-sm items-center">
-              <span class="text-tertiary">📅 Achat:</span>
-              <span class="font-medium">{{
-                formatDate(obj.purchase_date)
-              }}</span>
-            </div>
-          </div>
-
-          <p
-            *ngIf="obj.notes"
-            class="text-sm text-secondary mt-md p-sm rounded-md"
-            style="background: var(--bg-tertiary);"
+      <!-- Objects Grouped by Category with Accordions (US2.6) -->
+      <div class="objects-by-category" *ngIf="!loading && objects.length > 0">
+        <div *ngFor="let category of getCategories()" class="category-section mb-lg">
+          <div 
+            class="category-header" 
+            (click)="toggleCategory(category)"
+            [class.expanded]="expandedCategories[category]"
           >
-            💬 {{ obj.notes }}
-          </p>
+            <div class="category-title">
+              <span class="category-icon">{{ categoryIcons[category] }}</span>
+              <h3>{{ categoryLabels[category] }}</h3>
+              <span class="category-count">({{ getCategoryCount(category) }})</span>
+            </div>
+            <span class="category-toggle">
+              {{ expandedCategories[category] ? '▼' : '▶' }}
+            </span>
+          </div>
+
+          <div class="category-content" *ngIf="expandedCategories[category]">
+            <div class="grid grid-3">
+              <div class="card" *ngFor="let obj of objectsByCategory[category]">
+                <div class="flex flex-between items-start mb-md">
+                  <span class="badge badge-primary"
+                    >{{ getCategoryIcon(obj.category) }}
+                    {{ getCategoryLabel(obj.category) }}</span
+                  >
+                  <div class="flex gap-xs">
+                    <button
+                      class="btn btn-sm btn-ghost"
+                      (click)="editObject(obj)"
+                      title="Modifier"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      class="btn btn-sm btn-ghost text-error"
+                      (click)="confirmDelete(obj)"
+                      title="Supprimer"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+
+                <h3 class="mb-sm">{{ obj.name }}</h3>
+
+                <div class="divider"></div>
+
+                <div class="flex flex-column gap-xs text-sm">
+                  <div *ngIf="obj.brand" class="flex gap-sm items-center">
+                    <span class="text-tertiary">🏷️ Marque:</span>
+                    <span class="font-medium">{{ obj.brand }}</span>
+                  </div>
+                  <div *ngIf="obj.model" class="flex gap-sm items-center">
+                    <span class="text-tertiary">📋 Modèle:</span>
+                    <span class="font-medium">{{ obj.model }}</span>
+                  </div>
+                  <div *ngIf="obj.purchase_date" class="flex gap-sm items-center">
+                    <span class="text-tertiary">📅 Achat:</span>
+                    <span class="font-medium">{{
+                      formatDate(obj.purchase_date)
+                    }}</span>
+                  </div>
+                </div>
+
+                <p
+                  *ngIf="obj.notes"
+                  class="text-sm text-secondary mt-md p-sm rounded-md"
+                  style="background: var(--bg-tertiary);"
+                >
+                  💬 {{ obj.notes }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Load More Button (US2.6) -->
+      <div class="text-center mb-xl" *ngIf="!loading && hasMoreObjects && objects.length > 0">
+        <button 
+          class="btn btn-secondary"
+          (click)="loadMoreObjects()"
+          [disabled]="loadingMore"
+        >
+          <span *ngIf="!loadingMore">📥 Charger plus d'objets</span>
+          <span *ngIf="loadingMore">
+            <span class="spinner-sm"></span> Chargement...
+          </span>
+        </button>
       </div>
 
       <!-- Empty State -->
@@ -782,6 +827,107 @@ import { ObjectItem } from "../../core/models/models";
           width: 100%;
         }
       }
+
+      /* Styles pour les contrôles d'accordéons */
+      .category-controls {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      .category-controls .btn {
+        font-size: 0.875rem;
+      }
+
+      /* Styles pour les accordéons de catégories (US2.6) */
+      .objects-by-category {
+        margin-top: var(--spacing-xl);
+      }
+
+      .category-section {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        background: var(--bg-secondary);
+      }
+
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-lg);
+        background: var(--bg-primary);
+        cursor: pointer;
+        transition: all 0.2s;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .category-header:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .category-header.expanded {
+        background: var(--bg-tertiary);
+        border-bottom-color: var(--primary-color);
+      }
+
+      .category-title {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+      }
+
+      .category-icon {
+        font-size: 1.5rem;
+      }
+
+      .category-title h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .category-count {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .category-toggle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        transition: transform 0.2s;
+      }
+
+      .category-content {
+        padding: var(--spacing-lg);
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Spinner petit pour le bouton "Charger plus" */
+      .spinner-sm {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--border-color);
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        vertical-align: middle;
+        margin-right: var(--spacing-xs);
+      }
     `,
   ],
 })
@@ -801,9 +947,33 @@ export class ObjectsComponent implements OnInit {
   };
   myObjectsSearchTerm = ""; // Pour US2.5 : terme de recherche dans mes objets
   loading = false;
+  loadingMore = false; // Pour le lazy loading
   error = "";
   successMessage = "";
   searchMessage = ""; // Message spécifique pour les résultats de recherche
+
+  // Pagination et lazy loading (US2.6)
+  currentPage = 0;
+  pageSize = 30;
+  hasMoreObjects = true;
+  objectsByCategory: { [key: string]: ObjectItem[] } = {};
+  expandedCategories: { [key: string]: boolean } = {};
+  categoryIcons: { [key: string]: string } = {
+    heating: "🔥",
+    appliance: "🏠",
+    kitchen: "🍳",
+    bathroom: "🚿",
+    flooring: "🪨",
+    other: "📦"
+  };
+  categoryLabels: { [key: string]: string } = {
+    heating: "Chauffage",
+    appliance: "Électroménager",
+    kitchen: "Cuisine",
+    bathroom: "Salle de bain",
+    flooring: "Revêtement sol",
+    other: "Autre"
+  };
 
   // Tri
   sortBy: "name" | "added_at" | "purchase_date" | "brand" | "model" = "name";
@@ -835,25 +1005,92 @@ export class ObjectsComponent implements OnInit {
 
   ngOnInit() {
     this.loadObjects();
+    // Initialiser toutes les catégories comme fermées
+    for (const cat of Object.keys(this.categoryLabels)) {
+      this.expandedCategories[cat] = false;
+    }
   }
 
-  loadObjects() {
-    this.loading = true;
+  loadObjects(append = false) {
+    if (append) {
+      this.loadingMore = true;
+    } else {
+      this.loading = true;
+      this.currentPage = 0;
+      this.objects = [];
+      this.objectsByCategory = {};
+    }
+    
     this.error = "";
+    const skip = this.currentPage * this.pageSize;
 
-    this.apiService.getObjects(this.currentUserId).subscribe({
+    this.apiService.getObjects(this.currentUserId, skip, this.pageSize).subscribe({
       next: (data) => {
-        this.objects = data;
+        if (append) {
+          this.objects = [...this.objects, ...data];
+        } else {
+          this.objects = data;
+        }
+        
+        // Vérifier s'il y a plus d'objets à charger
+        this.hasMoreObjects = data.length === this.pageSize;
+        
+        this.currentPage++;
         this.sortObjects();
         this.filterMyObjects(); // Appliquer le filtre après le chargement
+        this.groupObjectsByCategory();
         this.loading = false;
+        this.loadingMore = false;
       },
       error: (err: any) => {
         console.error("Erreur lors du chargement des objets:", err);
         this.error = "Impossible de charger les objets. Veuillez réessayer.";
         this.loading = false;
+        this.loadingMore = false;
       },
     });
+  }
+
+  loadMoreObjects() {
+    if (!this.loadingMore && this.hasMoreObjects) {
+      this.loadObjects(true);
+    }
+  }
+
+  groupObjectsByCategory() {
+    this.objectsByCategory = {};
+    
+    for (const obj of this.filteredObjects) {
+      const category = obj.category || 'other';
+      if (!this.objectsByCategory[category]) {
+        this.objectsByCategory[category] = [];
+      }
+      this.objectsByCategory[category].push(obj);
+    }
+  }
+
+  toggleCategory(category: string) {
+    this.expandedCategories[category] = !this.expandedCategories[category];
+  }
+
+  expandAllCategories() {
+    for (const category of this.getCategories()) {
+      this.expandedCategories[category] = true;
+    }
+  }
+
+  collapseAllCategories() {
+    for (const category of this.getCategories()) {
+      this.expandedCategories[category] = false;
+    }
+  }
+
+  getCategoryCount(category: string): number {
+    return this.objectsByCategory[category]?.length || 0;
+  }
+
+  getCategories(): string[] {
+    return Object.keys(this.objectsByCategory).sort((a, b) => a.localeCompare(b));
   }
 
   toggleAddForm() {
@@ -1177,23 +1414,25 @@ export class ObjectsComponent implements OnInit {
   // ===== MÉTHODES DE RECHERCHE DANS MES OBJETS (US2.5) =====
 
   filterMyObjects() {
-    if (!this.myObjectsSearchTerm.trim()) {
+    if (this.myObjectsSearchTerm.trim()) {
+      const searchLower = this.myObjectsSearchTerm.toLowerCase().trim();
+      this.filteredObjects = this.sortedObjects.filter((obj) => {
+        const nameMatch = obj.name?.toLowerCase().includes(searchLower);
+        const brandMatch = obj.brand?.toLowerCase().includes(searchLower);
+        const modelMatch = obj.model?.toLowerCase().includes(searchLower);
+        const categoryMatch = this.getCategoryLabel(obj.category)
+          .toLowerCase()
+          .includes(searchLower);
+
+        return nameMatch || brandMatch || modelMatch || categoryMatch;
+      });
+    } else {
       // Si pas de recherche, afficher tous les objets triés
       this.filteredObjects = [...this.sortedObjects];
-      return;
     }
-
-    const searchLower = this.myObjectsSearchTerm.toLowerCase().trim();
-    this.filteredObjects = this.sortedObjects.filter((obj) => {
-      const nameMatch = obj.name?.toLowerCase().includes(searchLower);
-      const brandMatch = obj.brand?.toLowerCase().includes(searchLower);
-      const modelMatch = obj.model?.toLowerCase().includes(searchLower);
-      const categoryMatch = this.getCategoryLabel(obj.category)
-        .toLowerCase()
-        .includes(searchLower);
-
-      return nameMatch || brandMatch || modelMatch || categoryMatch;
-    });
+    
+    // Regrouper les objets filtrés par catégorie (US2.6)
+    this.groupObjectsByCategory();
   }
 
   clearMyObjectsSearch() {

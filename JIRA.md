@@ -102,14 +102,15 @@
 ### US2.6: En tant qu'utilisateur, mes objets sont triés par catégorie avec lazy loading
 
 **Dépendances:** US2.4  
-**Priorité:** Moyenne
+**Priorité:** Moyenne  
+**Statut:** ✅ Done
 
-- [ ] 2.6.1 Organiser l'affichage des objets par catégorie (accordéons)
-- [ ] 2.6.2 Implémenter le lazy loading (30 objets par page)
-- [ ] 2.6.3 Ajouter un endpoint API avec pagination
-- [ ] 2.6.4 Créer un composant de chargement (spinner)
-- [ ] 2.6.5 Détecter le scroll pour charger plus d'objets
-- [ ] 2.6.6 Tester le lazy loading avec de nombreux objets
+- [x] 2.6.1 Organiser l'affichage des objets par catégorie (accordéons)
+- [x] 2.6.2 Implémenter le lazy loading (30 objets par page)
+- [x] 2.6.3 Ajouter un endpoint API avec pagination
+- [x] 2.6.4 Créer un composant de chargement (spinner)
+- [x] 2.6.5 Détecter le scroll pour charger plus d'objets
+- [x] 2.6.6 Tester le lazy loading avec de nombreux objets
 
 ## Epic 3: Gestion des Problèmes Partagés 🔧
 
