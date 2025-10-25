@@ -64,6 +64,15 @@ object_tags = Table(
     Column('tag_id', Integer, ForeignKey('tags.id'))
 )
 
+# Table association pour les objets partagés (many-to-many users <-> objects)
+user_objects = Table(
+    'user_objects',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id'), primary_key=True),
+    Column('object_id', Integer, ForeignKey('objects.id'), primary_key=True),
+    Column('added_at', DateTime, default=lambda: datetime.now(UTC))
+)
+
 
 class UserRole(str, enum.Enum):
     USER = "USER"
@@ -83,7 +92,7 @@ class User(Base):
     last_login = Column(DateTime, nullable=True)
     
     # Relations
-    objects = relationship("Object", back_populates="owner")
+    objects = relationship("Object", secondary=user_objects, back_populates="owners")
     maintenance_tasks = relationship("MaintenanceTask", back_populates="user")
     contributions = relationship("Contribution", back_populates="author")
 
@@ -102,11 +111,11 @@ class Object(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     status = Column(String, nullable=False, default="active")  # Statut de l'objet
     
-    # Clés étrangères
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    # Créateur initial de l'objet (pour traçabilité)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     
     # Relations
-    owner = relationship("User", back_populates="objects")
+    owners = relationship("User", secondary=user_objects, back_populates="objects")
     maintenance_tasks = relationship("MaintenanceTask", back_populates="object")
     maintenance_advice = relationship("MaintenanceAdvice", back_populates="object_type")
     tags = relationship("Tag", secondary=object_tags, back_populates="objects")

@@ -58,6 +58,40 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/objects/${id}`);
   }
 
+  // ===== SHARED OBJECTS (US2.1) =====
+  searchObjects(
+    name?: string,
+    category?: string,
+    brand?: string,
+    model?: string
+  ): Observable<ObjectItem[]> {
+    const params = new URLSearchParams();
+    if (name) params.append("name", name);
+    if (category) params.append("category", category);
+    if (brand) params.append("brand", brand);
+    if (model) params.append("model", model);
+
+    const queryString = params.toString();
+    const url = queryString
+      ? `${this.apiUrl}/objects/search?${queryString}`
+      : `${this.apiUrl}/objects/search`;
+
+    return this.http.get<ObjectItem[]>(url);
+  }
+
+  linkObjectToUser(objectId: number, userId: number): Observable<ObjectItem> {
+    return this.http.post<ObjectItem>(
+      `${this.apiUrl}/objects/link?user_id=${userId}`,
+      { object_id: objectId }
+    );
+  }
+
+  unlinkObjectFromUser(objectId: number, userId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/objects/unlink/${objectId}?user_id=${userId}`
+    );
+  }
+
   // ===== USER OBJECTS (New endpoints US 2.2) =====
   getUserObjects(userId: number): Observable<ObjectItem[]> {
     return this.http.get<ObjectItem[]>(

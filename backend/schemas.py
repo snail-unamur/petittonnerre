@@ -79,11 +79,28 @@ class ObjectCreate(ObjectBase):
 
 class Object(ObjectBase):
     id: int
-    owner_id: int
+    created_by: int
     created_at: datetime
     status: Optional[str] = "active"
     
     model_config = ConfigDict(from_attributes=True)
+
+class ObjectWithOwners(Object):
+    """Schema with owners list for detailed object view"""
+    owner_ids: List[int] = []
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class ObjectLink(BaseModel):
+    """Schema for linking an existing object to a user"""
+    object_id: int
+
+class ObjectSearch(BaseModel):
+    """Schema for searching objects"""
+    name: Optional[str] = None
+    category: Optional[ObjectCategory] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
 
 
 # Maintenance Advice Schemas

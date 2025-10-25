@@ -10,13 +10,20 @@ router = APIRouter(prefix="/objects", tags=["objects"])
 
 @router.post("/", response_model=schemas.Object)
 def create_object(obj: schemas.ObjectCreate, user_id: int, db: Session = Depends(get_db)):
+    """Créer un nouvel objet et l'associer à l'utilisateur"""
     # Vérifier que l'utilisateur existe
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     
-    db_object = models.Object(**obj.model_dump(), owner_id=user_id)
+    # Créer l'objet avec created_by au lieu de owner_id
+    db_object = models.Object(**obj.model_dump(), created_by=user_id)
     db.add(db_object)
+    db.flush()  # Pour avoir l'ID de l'objet
+    
+    # Ajouter l'utilisateur comme propriétaire via la table d'association
+    db_object.owners.append(user)
+    
     db.commit()
     db.refresh(db_object)
     return db_object
@@ -24,13 +31,51 @@ def create_object(obj: schemas.ObjectCreate, user_id: int, db: Session = Depends
 
 @router.get("/", response_model=List[schemas.Object])
 def get_objects(user_id: int = None, skip: int = 0, limit: int = None, db: Session = Depends(get_db)):
-    query = db.query(models.Object)
+    """Récupérer les objets, filtrés par utilisateur si user_id fourni"""
     if user_id:
-        query = query.filter(models.Object.owner_id == user_id)
-    if limit:
-        objects = query.offset(skip).limit(limit).all()
+        # Récupérer seulement les objets de l'utilisateur via la relation many-to-many
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+        
+        if limit:
+            objects = user.objects[skip:skip+limit]
+        else:
+            objects = user.objects[skip:]
+        return objects
     else:
-        objects = query.offset(skip).all()
+        # Récupérer tous les objets (pour admin)
+        query = db.query(models.Object)
+        if limit:
+            objects = query.offset(skip).limit(limit).all()
+        else:
+            objects = query.offset(skip).all()
+        return objects
+
+
+@router.get("/search", response_model=List[schemas.Object])
+def search_objects(
+    name: str = "",
+    category: str = "",
+    brand: str = "",
+    model: str = "",
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    """Rechercher des objets existants par critères"""
+    query = db.query(models.Object)
+    
+    if name:
+        query = query.filter(models.Object.name.ilike(f"%{name}%"))
+    if category:
+        query = query.filter(models.Object.category == category)
+    if brand:
+        query = query.filter(models.Object.brand.ilike(f"%{brand}%"))
+    if model:
+        query = query.filter(models.Object.model.ilike(f"%{model}%"))
+    
+    objects = query.offset(skip).limit(limit).all()
     return objects
 
 
@@ -67,6 +112,59 @@ def delete_object(object_id: int, db: Session = Depends(get_db)):
     return {"message": "Objet supprimé avec succès"}
 
 
+# ====== ENDPOINTS POUR LES OBJETS PARTAGÉS (MANY-TO-MANY) ======
+
+@router.post("/link", response_model=schemas.Object)
+def link_object_to_user(link_data: schemas.ObjectLink, user_id: int, db: Session = Depends(get_db)):
+    """Lier un objet existant à un utilisateur"""
+    # Vérifier que l'utilisateur existe
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    # Vérifier que l'objet existe
+    obj = db.query(models.Object).filter(models.Object.id == link_data.object_id).first()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
+    
+    # Vérifier si l'objet n'est pas déjà lié à l'utilisateur
+    if user in obj.owners:
+        raise HTTPException(status_code=400, detail="Cet objet est déjà lié à votre compte")
+    
+    # Ajouter l'utilisateur aux propriétaires
+    obj.owners.append(user)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+
+@router.delete("/unlink/{object_id}")
+def unlink_object_from_user(object_id: int, user_id: int, db: Session = Depends(get_db)):
+    """Délier un objet d'un utilisateur"""
+    # Vérifier que l'utilisateur existe
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    # Vérifier que l'objet existe
+    obj = db.query(models.Object).filter(models.Object.id == object_id).first()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
+    
+    # Vérifier que l'objet est bien lié à l'utilisateur
+    if user not in obj.owners:
+        raise HTTPException(status_code=400, detail="Cet objet n'est pas lié à votre compte")
+    
+    # Empêcher de délier si c'est le seul propriétaire
+    if len(obj.owners) <= 1:
+        raise HTTPException(status_code=400, detail="Impossible de délier : vous êtes le seul propriétaire de cet objet")
+    
+    # Retirer l'utilisateur des propriétaires
+    obj.owners.remove(user)
+    db.commit()
+    return {"message": "Objet délié avec succès"}
+
+
 # ====== ENDPOINTS POUR LES DEMANDES D'OBJETS ======
 
 @router.post("/requests", response_model=schemas.ObjectRequestResponse)
@@ -76,12 +174,6 @@ def create_object_request(obj_request: schemas.ObjectRequestCreate, user_id: int
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
-    
-    # Vérifier que le parent existe s'il est spécifié
-    if obj_request.parent_id:
-        parent_obj = db.query(models.Object).filter(models.Object.id == obj_request.parent_id).first()
-        if not parent_obj:
-            raise HTTPException(status_code=404, detail="Parent object not found")
     
     db_request = models.ObjectRequest(**obj_request.model_dump(), requester_id=user_id)
     db.add(db_request)
@@ -151,11 +243,16 @@ def admin_decide_object_request(
                 purchase_date=request_obj.purchase_date,
                 manual_url=request_obj.manual_url,
                 notes=request_obj.notes,
-                owner_id=request_obj.requester_id,
-                parent_id=request_obj.parent_id,
+                created_by=request_obj.requester_id,
                 status="active"  # Statut actif par défaut
             )
             db.add(new_object)
+            db.flush()  # Pour avoir l'ID de l'objet
+            
+            # Ajouter le demandeur comme propriétaire
+            requester = db.query(models.User).filter(models.User.id == request_obj.requester_id).first()
+            if requester:
+                new_object.owners.append(requester)
         
         db.commit()
         db.refresh(request_obj)

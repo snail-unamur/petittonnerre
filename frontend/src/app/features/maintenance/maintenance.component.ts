@@ -388,7 +388,7 @@ export class MaintenanceComponent implements OnInit {
         this.tasks.push(createdTask);
         this.closeCreateForm();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error("Erreur lors de la création de la tâche:", err);
         alert("Une erreur est survenue lors de la création de la tâche.");
       },

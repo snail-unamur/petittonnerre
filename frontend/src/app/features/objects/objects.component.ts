@@ -23,10 +23,159 @@ import { ObjectItem } from "../../core/models/models";
         </button>
       </div>
 
-      <!-- Add/Edit Form -->
+      <!-- Success Message -->
+      <div class="alert alert-success mb-lg" *ngIf="successMessage">
+        ✅ {{ successMessage }}
+      </div>
+
+      <!-- Add/Edit Form avec Recherche -->
       <div class="card mb-xl" *ngIf="showAddForm">
-        <h3 class="mb-md">{{ editingObject ? '✏️ Modifier' : '➕ Nouvel objet' }}</h3>
+        <h3 class="mb-md">
+          {{ editingObject ? '✏️ Modifier' : '➕ Ajouter un objet' }}
+        </h3>
+
+        <!-- Section de recherche d'objets existants (seulement en mode création) -->
+        <div *ngIf="!editingObject" class="search-section mb-lg">
+          <div class="alert alert-info mb-md">
+            <strong>💡 Conseil :</strong> Avant de créer un nouvel objet,
+            vérifiez s'il existe déjà dans la base de données. Cela permet de
+            partager les informations et les maintenances avec d'autres
+            utilisateurs.
+          </div>
+
+          <h4 class="mb-md">🔍 Rechercher un objet existant</h4>
+
+          <div class="form-grid mb-md">
+            <div class="form-group">
+              <label for="search-name">Nom</label>
+              <input
+                type="text"
+                id="search-name"
+                [(ngModel)]="searchQuery.name"
+                name="search-name"
+                class="form-control"
+                placeholder="Ex: Chaudière"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="search-category">Catégorie</label>
+              <select
+                id="search-category"
+                [(ngModel)]="searchQuery.category"
+                name="search-category"
+                class="form-control"
+              >
+                <option value="">Toutes les catégories</option>
+                <option value="heating">🔥 Chauffage</option>
+                <option value="appliance">🏠 Électroménager</option>
+                <option value="kitchen">🍳 Cuisine</option>
+                <option value="bathroom">🚿 Salle de bain</option>
+                <option value="flooring">🪨 Revêtement sol</option>
+                <option value="other">📦 Autre</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="search-brand">Marque</label>
+              <input
+                type="text"
+                id="search-brand"
+                [(ngModel)]="searchQuery.brand"
+                name="search-brand"
+                class="form-control"
+                placeholder="Ex: Vaillant"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="search-model">Modèle</label>
+              <input
+                type="text"
+                id="search-model"
+                [(ngModel)]="searchQuery.model"
+                name="search-model"
+                class="form-control"
+                placeholder="Ex: ecoTEC"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-md">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="searchExistingObjects()"
+              [disabled]="loading"
+            >
+              🔍 Rechercher
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="resetSearch()"
+              *ngIf="showSearchResults"
+            >
+              ↺ Réinitialiser
+            </button>
+          </div>
+
+          <!-- Résultats de recherche -->
+          <div *ngIf="showSearchResults" class="search-results mt-lg">
+            <h5 class="mb-md">
+              {{ searchResults.length }} résultat(s) trouvé(s)
+            </h5>
+
+            <div class="grid grid-2 gap-md" *ngIf="searchResults.length > 0">
+              <div
+                class="card card-hover"
+                *ngFor="let result of searchResults"
+              >
+                <div class="flex flex-between items-start mb-sm">
+                  <span class="badge badge-primary"
+                    >{{ getCategoryIcon(result.category) }}
+                    {{ getCategoryLabel(result.category) }}</span
+                  >
+                  <span
+                    class="badge badge-success"
+                    *ngIf="isObjectAlreadyLinked(result.id!)"
+                    >✓ Déjà lié</span
+                  >
+                </div>
+
+                <h4 class="mb-sm">{{ result.name }}</h4>
+
+                <div class="text-sm text-secondary mb-md">
+                  <div *ngIf="result.brand">🏷️ {{ result.brand }}</div>
+                  <div *ngIf="result.model">📋 {{ result.model }}</div>
+                </div>
+
+                <button
+                  class="btn btn-sm btn-primary full-width"
+                  (click)="linkExistingObject(result.id!)"
+                  [disabled]="loading || isObjectAlreadyLinked(result.id!)"
+                >
+                  {{
+                    isObjectAlreadyLinked(result.id!)
+                      ? '✓ Déjà dans mes objets'
+                      : '➕ Ajouter à mes objets'
+                  }}
+                </button>
+              </div>
+            </div>
+
+            <div class="divider my-lg"></div>
+            <p class="text-center text-secondary">
+              Vous n'avez pas trouvé votre objet ? Créez-le ci-dessous.
+            </p>
+          </div>
+        </div>
+
+        <!-- Formulaire de création/modification -->
         <form (ngSubmit)="saveObject()" class="form">
+          <h4 class="mb-md" *ngIf="!editingObject">
+            ✨ Créer un nouvel objet
+          </h4>
           <div class="form-grid">
             <div class="form-group">
               <label for="name" class="required">Nom de l'objet</label>
@@ -324,6 +473,53 @@ import { ObjectItem } from "../../core/models/models";
         opacity: 0.9;
       }
 
+      /* Nouveaux styles pour US2.1 */
+      .search-section {
+        background: var(--bg-secondary);
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-md);
+        border: 2px dashed var(--border-color);
+      }
+
+      .alert-info {
+        background: #e3f2fd;
+        color: #0d47a1;
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        border-left: 4px solid #2196f3;
+      }
+
+      .alert-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        border-left: 4px solid #4caf50;
+      }
+
+      .search-results {
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--border-color);
+      }
+
+      .card-hover {
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .badge-success {
+        background: #4caf50;
+        color: white;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
       @media (max-width: 767px) {
         .page-header {
           flex-direction: column;
@@ -337,6 +533,10 @@ import { ObjectItem } from "../../core/models/models";
         .form-grid {
           grid-template-columns: 1fr;
         }
+
+        .grid-2 {
+          grid-template-columns: 1fr !important;
+        }
       }
     `,
   ],
@@ -344,8 +544,17 @@ import { ObjectItem } from "../../core/models/models";
 export class ObjectsComponent implements OnInit {
   objects: ObjectItem[] = [];
   showAddForm = false;
+  showSearchResults = false;
+  searchResults: ObjectItem[] = [];
+  searchQuery = {
+    name: "",
+    category: "",
+    brand: "",
+    model: "",
+  };
   loading = false;
   error = "";
+  successMessage = "";
 
   // Pour le moment, userId est hardcodé à 1 (en attendant l'authentification)
   currentUserId = 1;
@@ -372,12 +581,12 @@ export class ObjectsComponent implements OnInit {
     this.loading = true;
     this.error = "";
 
-    this.apiService.getUserObjects(this.currentUserId).subscribe({
+    this.apiService.getObjects(this.currentUserId).subscribe({
       next: (data) => {
         this.objects = data;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error("Erreur lors du chargement des objets:", err);
         this.error = "Impossible de charger les objets. Veuillez réessayer.";
         this.loading = false;
@@ -427,9 +636,8 @@ export class ObjectsComponent implements OnInit {
 
     if (this.editingObject) {
       this.apiService
-        .updateUserObject(
-          this.currentUserId,
-          this.editingObject.id!,
+        .updateObject(
+          this.editingObject.id,
           this.formData
         )
         .subscribe({
@@ -441,7 +649,7 @@ export class ObjectsComponent implements OnInit {
             this.cancelEdit();
             this.loading = false;
           },
-          error: (err) => {
+          error: (err: any) => {
             console.error("Erreur lors de la mise à jour:", err);
             this.error = "Impossible de mettre à jour l'objet.";
             this.loading = false;
@@ -449,14 +657,14 @@ export class ObjectsComponent implements OnInit {
         });
     } else {
       this.apiService
-        .addUserObject(this.currentUserId, this.formData)
+        .createObject(this.formData, this.currentUserId)
         .subscribe({
           next: (created) => {
             this.objects.push(created);
             this.cancelEdit();
             this.loading = false;
           },
-          error: (err) => {
+          error: (err: any) => {
             console.error("Erreur lors de la création:", err);
             this.error = "Impossible de créer l'objet.";
             this.loading = false;
@@ -480,7 +688,7 @@ export class ObjectsComponent implements OnInit {
     this.error = "";
 
     this.apiService
-      .deleteUserObject(this.currentUserId, this.objectToDelete.id!)
+      .deleteObject(this.objectToDelete.id)
       .subscribe({
         next: () => {
           this.objects = this.objects.filter(
@@ -489,7 +697,7 @@ export class ObjectsComponent implements OnInit {
           this.cancelDelete();
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error("Erreur lors de la suppression:", err);
           this.error = "Impossible de supprimer l'objet.";
           this.cancelDelete();
@@ -530,5 +738,94 @@ export class ObjectsComponent implements OnInit {
 
   countByCategory(category: string): number {
     return this.objects.filter((obj) => obj.category === category).length;
+  }
+
+  // ===== NOUVELLES MÉTHODES POUR US2.1 =====
+
+  searchExistingObjects() {
+    if (
+      !this.searchQuery.name &&
+      !this.searchQuery.category &&
+      !this.searchQuery.brand &&
+      !this.searchQuery.model
+    ) {
+      this.error = "Veuillez remplir au moins un critère de recherche";
+      return;
+    }
+
+    this.loading = true;
+    this.error = "";
+    this.successMessage = "";
+
+    this.apiService
+      .searchObjects(
+        this.searchQuery.name || undefined,
+        this.searchQuery.category || undefined,
+        this.searchQuery.brand || undefined,
+        this.searchQuery.model || undefined
+      )
+      .subscribe({
+        next: (results) => {
+          this.searchResults = results;
+          this.showSearchResults = true;
+          this.loading = false;
+
+          if (results.length === 0) {
+            this.error =
+              "Aucun objet trouvé. Vous pouvez créer un nouvel objet ci-dessous.";
+          }
+        },
+        error: (err) => {
+          console.error("Erreur lors de la recherche:", err);
+          this.error = "Impossible d'effectuer la recherche. Veuillez réessayer.";
+          this.loading = false;
+        },
+      });
+  }
+
+  linkExistingObject(objectId: number) {
+    this.loading = true;
+    this.error = "";
+    this.successMessage = "";
+
+    this.apiService.linkObjectToUser(objectId, this.currentUserId).subscribe({
+      next: (linkedObject) => {
+        this.objects.push(linkedObject);
+        this.successMessage = `L'objet "${linkedObject.name}" a été ajouté à votre compte avec succès !`;
+        this.resetSearch();
+        this.showAddForm = false;
+
+        // Faire défiler vers le haut pour voir le message de succès
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        this.loading = false;
+
+        // Cacher le message après 5 secondes
+        setTimeout(() => {
+          this.successMessage = "";
+        }, 5000);
+      },
+      error: (err) => {
+        console.error("Erreur lors du lien de l'objet:", err);
+        this.error =
+          err.error?.detail ||
+          "Impossible de lier l'objet à votre compte. Veuillez réessayer.";
+        this.loading = false;
+      },
+    });
+  }
+
+  resetSearch() {
+    this.searchQuery = {
+      name: "",
+      category: "",
+      brand: "",
+      model: "",
+    };
+    this.searchResults = [];
+    this.showSearchResults = false;
+  }
+
+  isObjectAlreadyLinked(objectId: number): boolean {
+    return this.objects.some((obj) => obj.id === objectId);
   }
 }
