@@ -1,0 +1,105 @@
+image: python:3.14
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  POSTGRES_DB: test_db
+  POSTGRES_USER: test_user
+  POSTGRES_PASSWORD: test_password
+  DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}"
+
+# Cache les dépendances Python entre les jobs
+cache:
+  paths:
+    - .pip-cache/
+    - backend/.venv/
+    - frontend/node_modules/
+
+stages:
+  - setup
+  - test
+  - build
+  - deploy
+
+# Job pour installer les dépendances Backend
+backend-setup:
+  stage: setup
+  script:
+    - cd backend
+    - python -m venv .venv
+    - source .venv/bin/activate
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  artifacts:
+    paths:
+      - backend/.venv/
+
+# Job pour les tests Backend
+backend-test:
+  stage: test
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: test_db
+    POSTGRES_USER: test_user
+    POSTGRES_PASSWORD: test_password
+  script:
+    - cd backend
+    - source .venv/bin/activate
+    - pytest tests/ -v
+  dependencies:
+    - backend-setup
+
+# Job pour installer les dépendances Frontend
+frontend-setup:
+  stage: setup
+  image: node:latest
+  script:
+    - cd frontend
+    - npm install
+  artifacts:
+    paths:
+      - frontend/node_modules/
+
+# Job pour build le Frontend
+frontend-build:
+  stage: build
+  image: node:latest
+  script:
+    - cd frontend
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+  dependencies:
+    - frontend-setup
+
+# Job pour build le Backend
+backend-build:
+  stage: build
+  script:
+    - cd backend
+    - source .venv/bin/activate
+    - python -c "import compileall; compileall.compile_dir('.')"
+  dependencies:
+    - backend-setup
+
+# Job de déploiement pour l'environnement de développement
+deploy-dev:
+  stage: deploy
+  script:
+    - echo "Déploiement sur l'environnement de développement"
+  only:
+    - develop
+  environment:
+    name: development
+
+# Job de déploiement pour l'environnement de production
+deploy-prod:
+  stage: deploy
+  script:
+    - echo "Déploiement sur l'environnement de production"
+  only:
+    - main
+  environment:
+    name: production
+  when: manual  # Déploiement manuel requis
