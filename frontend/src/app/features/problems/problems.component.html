@@ -125,6 +125,14 @@
     <div class="filters-section mb-xl">
       <div class="filters-header mb-md">
         <h3>🔍 Filtrer les problèmes</h3>
+        <button 
+          class="btn" 
+          [class.btn-primary]="filterMyProblems"
+          [class.btn-secondary]="!filterMyProblems"
+          (click)="toggleMyProblems()"
+        >
+          {{ filterMyProblems ? '👤 Mes problèmes' : '🌐 Tous les problèmes' }}
+        </button>
       </div>
       <div class="filters-grid">
         <div class="filter-group">

@@ -15,43 +15,35 @@ def get_dashboard_stats(
 ):
     """Récupérer les statistiques pour le dashboard de l'utilisateur"""
     
-    # Nombre total d'objets de l'utilisateur (via la relation many-to-many)
+    # Import de la table d'association
     from models import user_objects
-    total_objects = db.query(func.count(models.Object.id)).join(
-        user_objects, user_objects.c.object_id == models.Object.id
-    ).filter(
+    
+    # Nombre total d'objets de l'utilisateur (via user_objects)
+    total_objects = db.query(func.count(user_objects.c.object_id)).filter(
         user_objects.c.user_id == user_id
     ).scalar()
     
-    # Nombre de tâches de maintenance en attente
+    # Nombre de tâches de maintenance en attente (via user_id)
     pending_tasks = db.query(func.count(models.MaintenanceTask.id)).filter(
         models.MaintenanceTask.user_id == user_id,
         models.MaintenanceTask.status == models.MaintenanceStatus.PENDING
     ).scalar()
     
-    # Nombre de tâches terminées
+    # Nombre de tâches terminées (via user_id)
     completed_tasks = db.query(func.count(models.MaintenanceTask.id)).filter(
         models.MaintenanceTask.user_id == user_id,
         models.MaintenanceTask.status == models.MaintenanceStatus.COMPLETED
     ).scalar()
     
-    # Nombre de problèmes ouverts (via la relation many-to-many)
-    open_problems = db.query(func.count(models.Problem.id)).join(
-        models.Object, models.Problem.object_id == models.Object.id
-    ).join(
-        user_objects, user_objects.c.object_id == models.Object.id
-    ).filter(
-        user_objects.c.user_id == user_id,
+    # Nombre de problèmes ouverts (signalés par l'utilisateur via reported_by)
+    open_problems = db.query(func.count(models.Problem.id)).filter(
+        models.Problem.reported_by == user_id,
         models.Problem.status == models.ProblemStatus.OPEN
     ).scalar()
     
-    # Nombre de problèmes résolus (via la relation many-to-many)
-    resolved_problems = db.query(func.count(models.Problem.id)).join(
-        models.Object, models.Problem.object_id == models.Object.id
-    ).join(
-        user_objects, user_objects.c.object_id == models.Object.id
-    ).filter(
-        user_objects.c.user_id == user_id,
+    # Nombre de problèmes résolus (signalés par l'utilisateur via reported_by)
+    resolved_problems = db.query(func.count(models.Problem.id)).filter(
+        models.Problem.reported_by == user_id,
         models.Problem.status == models.ProblemStatus.RESOLVED
     ).scalar()
     

@@ -66,6 +66,7 @@ export class ProblemsComponent implements OnInit {
   filterStatus: string = 'all';
   filterSeverity: string = 'all';
   filterCategory: string = 'all';
+  filterMyProblems: boolean = false;
   
   // État du formulaire
   showCreateForm: boolean = false;
@@ -115,8 +116,14 @@ export class ProblemsComponent implements OnInit {
   }
   
   loadProblems() {
-    // TODO: Implémenter l'appel API
-    this.apiService.getProblems().subscribe({
+    const filters: any = {};
+    
+    if (this.filterMyProblems && this.currentUserId) {
+      filters.my_problems = true;
+      filters.user_id = this.currentUserId;
+    }
+    
+    this.apiService.getProblems(filters).subscribe({
       next: (data: Problem[]) => {
         this.problems = data;
       },
@@ -139,6 +146,11 @@ export class ProblemsComponent implements OnInit {
       }
       return true;
     });
+  }
+  
+  toggleMyProblems() {
+    this.filterMyProblems = !this.filterMyProblems;
+    this.loadProblems();
   }
   
   selectProblem(problem: Problem) {

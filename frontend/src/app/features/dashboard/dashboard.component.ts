@@ -70,22 +70,21 @@ import { ObjectItem, MaintenanceTask } from "../../core/models/models";
               </div>
               <div class="list-item-content">
                 <div class="list-item-title">
-                  Tâche #{{ task.id }}
+                  {{ task.name }}
                   <span class="badge" [ngClass]="'badge-' + getTaskBadgeType(task.status)">
                     {{ task.status }}
                   </span>
                 </div>
                 <div class="list-item-subtitle">
-                  Maintenance programmée
+                  Programmée pour le {{ task.scheduled_date | date:'dd/MM/yyyy' }}
                 </div>
               </div>
-              <button class="btn btn-sm btn-ghost">Voir détails</button>
             </div>
           </div>
         </div>
         
         <div class="card-footer" *ngIf="tasks.length > 5">
-          <button class="btn btn-secondary">Voir toutes les tâches</button>
+          <button class="btn btn-secondary" (click)="goToMaintenance()">Voir toutes les tâches</button>
         </div>
       </div>
 

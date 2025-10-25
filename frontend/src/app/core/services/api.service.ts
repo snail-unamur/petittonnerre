@@ -208,6 +208,8 @@ export class ApiService {
       if (filters.category) params.append("category", filters.category);
       if (filters.status) params.append("status", filters.status);
       if (filters.severity) params.append("severity", filters.severity);
+      if (filters.user_id) params.append("user_id", filters.user_id);
+      if (filters.my_problems !== undefined) params.append("my_problems", filters.my_problems.toString());
     }
 
     const queryString = params.toString();

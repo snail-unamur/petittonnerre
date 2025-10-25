@@ -51,11 +51,18 @@ def get_problems(
     category: Optional[models.ProblemCategory] = None,
     status: Optional[models.ProblemStatus] = None,
     severity: Optional[models.ProblemSeverity] = None,
+    user_id: Optional[int] = None,
+    my_problems: Optional[bool] = None,
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db)
 ):
-    """Récupérer la liste des problèmes avec filtres optionnels"""
+    """Récupérer la liste des problèmes avec filtres optionnels
+    
+    Args:
+        my_problems: Si True et user_id fourni, ne retourne que les problèmes signalés par cet utilisateur
+        user_id: ID de l'utilisateur (requis si my_problems=True)
+    """
     query = db.query(models.Problem).filter(models.Problem.deleted_at == None)
     
     if object_id:
@@ -69,6 +76,10 @@ def get_problems(
     
     if severity:
         query = query.filter(models.Problem.severity == severity)
+    
+    # Filtre "mes problèmes" - ne retourne que ceux signalés par l'utilisateur
+    if my_problems and user_id:
+        query = query.filter(models.Problem.reported_by == user_id)
     
     problems = query.order_by(models.Problem.created_at.desc()).offset(skip).limit(limit).all()
     return problems
