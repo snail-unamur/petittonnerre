@@ -284,6 +284,31 @@ import { ObjectItem } from "../../core/models/models";
       <!-- Error Message -->
       <div class="alert alert-error mb-lg" *ngIf="error">⚠️ {{ error }}</div>
 
+      <!-- Search Bar for My Objects (US2.5) -->
+      <div class="search-bar mb-lg" *ngIf="!loading && objects.length > 0">
+        <div class="search-bar-content">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            [(ngModel)]="myObjectsSearchTerm"
+            (ngModelChange)="filterMyObjects()"
+            placeholder="Rechercher dans mes objets (nom, marque, modèle, catégorie)..."
+            class="search-input"
+          />
+          <button
+            *ngIf="myObjectsSearchTerm"
+            class="clear-search-btn"
+            (click)="clearMyObjectsSearch()"
+            title="Effacer la recherche"
+          >
+            ✖️
+          </button>
+        </div>
+        <p class="search-results-count" *ngIf="myObjectsSearchTerm">
+          {{ filteredObjects.length }} résultat(s) trouvé(s)
+        </p>
+      </div>
+
       <!-- Sort Options -->
       <div class="sort-bar mb-lg" *ngIf="!loading && objects.length > 0">
         <div class="sort-bar-content">
@@ -312,7 +337,7 @@ import { ObjectItem } from "../../core/models/models";
 
       <!-- Objects Grid -->
       <div class="grid grid-3" *ngIf="!loading && objects.length > 0">
-        <div class="card" *ngFor="let obj of sortedObjects">
+        <div class="card" *ngFor="let obj of filteredObjects">
           <div class="flex flex-between items-start mb-md">
             <span class="badge badge-primary"
               >{{ getCategoryIcon(obj.category) }}
@@ -588,6 +613,60 @@ import { ObjectItem } from "../../core/models/models";
         width: 100%;
       }
 
+      /* Styles pour la barre de recherche (US2.5) */
+      .search-bar {
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-md);
+        border: 1px solid var(--border-color);
+      }
+
+      .search-bar-content {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+      }
+
+      .search-icon {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+      }
+
+      .search-input {
+        flex: 1;
+        padding: var(--spacing-sm) var(--spacing-md);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        font-size: 0.95rem;
+        transition: border-color 0.2s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .clear-search-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        color: var(--text-secondary);
+        padding: var(--spacing-xs);
+        transition: color 0.2s;
+      }
+
+      .clear-search-btn:hover {
+        color: var(--error-color);
+      }
+
+      .search-results-count {
+        margin-top: var(--spacing-sm);
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
       /* Styles pour la barre de tri */
       .sort-bar {
         background: var(--bg-secondary);
@@ -704,6 +783,7 @@ import { ObjectItem } from "../../core/models/models";
 export class ObjectsComponent implements OnInit {
   objects: ObjectItem[] = [];
   sortedObjects: ObjectItem[] = [];
+  filteredObjects: ObjectItem[] = []; // Pour US2.5 : objets après filtrage
   showAddForm = false;
   showSearchResults = false;
   showCreateForm = false; // Nouvelle variable pour US2.2
@@ -714,6 +794,7 @@ export class ObjectsComponent implements OnInit {
     brand: "",
     model: "",
   };
+  myObjectsSearchTerm = ""; // Pour US2.5 : terme de recherche dans mes objets
   loading = false;
   error = "";
   successMessage = "";
@@ -758,6 +839,7 @@ export class ObjectsComponent implements OnInit {
       next: (data) => {
         this.objects = data;
         this.sortObjects();
+        this.filterMyObjects(); // Appliquer le filtre après le chargement
         this.loading = false;
       },
       error: (err: any) => {
@@ -1057,6 +1139,9 @@ export class ObjectsComponent implements OnInit {
 
       return this.sortOrder === "asc" ? compareValue : -compareValue;
     });
+    
+    // Appliquer le filtre après le tri
+    this.filterMyObjects();
   }
 
   toggleSortOrder() {
@@ -1069,5 +1154,32 @@ export class ObjectsComponent implements OnInit {
   ) {
     this.sortBy = sortBy;
     this.sortObjects();
+  }
+
+  // ===== MÉTHODES DE RECHERCHE DANS MES OBJETS (US2.5) =====
+
+  filterMyObjects() {
+    if (!this.myObjectsSearchTerm.trim()) {
+      // Si pas de recherche, afficher tous les objets triés
+      this.filteredObjects = [...this.sortedObjects];
+      return;
+    }
+
+    const searchLower = this.myObjectsSearchTerm.toLowerCase().trim();
+    this.filteredObjects = this.sortedObjects.filter((obj) => {
+      const nameMatch = obj.name?.toLowerCase().includes(searchLower);
+      const brandMatch = obj.brand?.toLowerCase().includes(searchLower);
+      const modelMatch = obj.model?.toLowerCase().includes(searchLower);
+      const categoryMatch = this.getCategoryLabel(obj.category)
+        .toLowerCase()
+        .includes(searchLower);
+
+      return nameMatch || brandMatch || modelMatch || categoryMatch;
+    });
+  }
+
+  clearMyObjectsSearch() {
+    this.myObjectsSearchTerm = "";
+    this.filterMyObjects();
   }
 }

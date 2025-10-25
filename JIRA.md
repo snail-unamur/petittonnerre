@@ -80,13 +80,14 @@
 
 ### US2.5: En tant qu'utilisateur, je peux rechercher dans tous mes objets
 **Dépendances:** US2.4  
-**Priorité:** Moyenne
+**Priorité:** Moyenne  
+**Statut:** ✅ Done
 
-- [ ] 2.5.1 Ajouter une barre de recherche en haut de la page "Mes objets"
-- [ ] 2.5.2 Implémenter la recherche côté frontend (filtre en temps réel)
-- [ ] 2.5.3 Rechercher dans nom, marque, modèle, catégorie
-- [ ] 2.5.4 Ajouter un indicateur de résultats trouvés
-- [ ] 2.5.5 Tester la recherche avec divers critères
+- [x] 2.5.1 Ajouter une barre de recherche en haut de la page "Mes objets"
+- [x] 2.5.2 Implémenter la recherche côté frontend (filtre en temps réel)
+- [x] 2.5.3 Rechercher dans nom, marque, modèle, catégorie
+- [x] 2.5.4 Ajouter un indicateur de résultats trouvés
+- [x] 2.5.5 Tester la recherche avec divers critères
 
 ### US2.6: En tant qu'utilisateur, mes objets sont triés par catégorie avec lazy loading
 **Dépendances:** US2.4  
