@@ -13,7 +13,7 @@ from models import Base, User, UserRole, ObjectRequest, ObjectCategory
 BASE_URL = "http://localhost:8000"
 
 # Configuration du hachage de mot de passe
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:

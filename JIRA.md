@@ -5,11 +5,12 @@
 ### US1.1: En tant qu'utilisateur connecté, je ne peux pas accéder aux pages login/register
 **Dépendances:** Aucune  
 **Priorité:** Haute
+**Statut:** ✅ Done
 
-- [ ] 1.1.1 Créer un guard pour rediriger les utilisateurs connectés depuis login/register
-- [ ] 1.1.2 Modifier les routes pour appliquer le guard
-- [ ] 1.1.3 Rediriger vers le dashboard après connexion réussie
-- [ ] 1.1.4 Tester le comportement de redirection
+- [x] 1.1.1 Créer un guard pour rediriger les utilisateurs connectés depuis login/register
+- [x] 1.1.2 Modifier les routes pour appliquer le guard
+- [x] 1.1.3 Rediriger vers le dashboard après connexion réussie
+- [x] 1.1.4 Tester le comportement de redirection
 
 ### US1.2: En tant qu'utilisateur non connecté, je ne vois que login/register dans le menu
 **Dépendances:** Aucune  
