@@ -8,6 +8,8 @@ import {
   MaintenanceAdvice,
   MaintenanceTask,
   Contribution,
+  ObjectRequest,
+  ObjectRequestDecision,
 } from "../models/models";
 
 @Injectable({
@@ -211,5 +213,32 @@ export class ApiService {
 
   reopenProblem(problemId: number, userId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/problems/${problemId}/reopen?user_id=${userId}`, {});
+  }
+
+  // ===== OBJECT REQUESTS =====
+  createObjectRequest(request: Partial<ObjectRequest>, userId: number): Observable<ObjectRequest> {
+    return this.http.post<ObjectRequest>(`${this.apiUrl}/objects/requests?user_id=${userId}`, request);
+  }
+
+  getObjectRequests(status?: string): Observable<ObjectRequest[]> {
+    const url = status ? `${this.apiUrl}/objects/requests?status=${status}` : `${this.apiUrl}/objects/requests`;
+    return this.http.get<ObjectRequest[]>(url);
+  }
+
+  getObjectRequest(id: number): Observable<ObjectRequest> {
+    return this.http.get<ObjectRequest>(`${this.apiUrl}/objects/requests/${id}`);
+  }
+
+  // ===== ADMIN OPERATIONS =====
+  getPendingRequests(adminId: number): Observable<ObjectRequest[]> {
+    return this.http.get<ObjectRequest[]>(`${this.apiUrl}/objects/admin/pending-requests?admin_id=${adminId}`);
+  }
+
+  adminDecideRequest(requestId: number, decision: ObjectRequestDecision, adminId: number): Observable<ObjectRequest> {
+    return this.http.put<ObjectRequest>(`${this.apiUrl}/objects/requests/${requestId}/decide?admin_id=${adminId}`, decision);
+  }
+
+  adminDeleteRequest(requestId: number, adminId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/objects/admin/requests/${requestId}?admin_id=${adminId}`);
   }
 }

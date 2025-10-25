@@ -90,7 +90,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         username=user.username,
         hashed_password=hashed_password,
         location=user.location,
-        role=UserRole.user
+        role=UserRole.USER
     )
     
     db.add(db_user)

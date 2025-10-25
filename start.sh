@@ -10,8 +10,15 @@ echo "🧹 Nettoyage des anciens conteneurs..."
 docker compose down
 
 echo ""
-echo "� Construction et démarrage des services..."
-docker compose up --build -d
+echo "🚀 Démarrage des services..."
+# Utiliser --build seulement si demandé avec ./start.sh --build
+if [ "$1" == "--build" ]; then
+  echo "🔨 Reconstruction des images..."
+  docker compose up --build -d
+else
+  echo "💡 Astuce: Utilisez './start.sh --build' pour reconstruire les images"
+  docker compose up -d
+fi
 
 echo ""
 echo "⏳ Attente du démarrage des services..."

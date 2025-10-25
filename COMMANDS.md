@@ -6,23 +6,44 @@
 # Setup initial (une fois)
 ./setup.sh
 
-# Démarrer PostgreSQL + PgAdmin
+# DÉVELOPPEMENT RAPIDE (RECOMMANDÉ)
+# Démarrage rapide sans rebuild (utilise les images existantes)
+./dev-start.sh
+
+# OU Démarrage complet (rebuild si nécessaire)
+./start.sh
+
+# OU Forcer un rebuild complet (après modifications de requirements.txt)
+./start.sh --build
+
+# Démarrer uniquement PostgreSQL + PgAdmin (sans backend/frontend)
 ./start-docker.sh
 
-# Lancer le backend
+# Lancer le backend manuellement (mode dev local)
 cd backend && source .venv/bin/activate
 uvicorn main:app --reload
 
 # Données de test
 python create_test_data.py
+
+# Créer admin et demandes d'objets (VIA DOCKER - RECOMMANDÉ)
+sudo docker exec petit_tonnerre_backend python create_admin_test_data.py
+
+# OU via API REST (alternative si problème bcrypt)
+python create_admin_via_api.py
+# Puis promouvoir en admin via PgAdmin (voir docs/ADMIN_SETUP.md)
 ```
 
 **URLs** :
 - API : http://localhost:8000/docs
 - PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
 - Frontend : http://localhost:4200
+- Admin Dashboard : http://localhost:4200/admin/auth (code: admin123)
 
-💡 **Le serveur "Petit Tonnerre DB" est déjà configuré dans PgAdmin !**
+💡 **Astuces:**
+- Utilise `./dev-start.sh` pour démarrer rapidement sans rebuild
+- Utilise `./start.sh --build` seulement quand tu modifies `requirements.txt`
+- Le serveur "Petit Tonnerre DB" est déjà configuré dans PgAdmin !
 
 ---
 
@@ -279,6 +300,34 @@ curl -X PATCH "http://localhost:8000/community/contributions/1" \
   -d '{"status": "approved"}'
 ```
 
+### Admin - Demandes d'objets
+
+```bash
+# Créer une demande d'objet
+curl -X POST "http://localhost:8000/objects/requests?user_id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Chaudière Vaillant", "category": "heating", "brand": "Vaillant", "model": "ecoTEC", "notes": "Besoin conseils entretien"}'
+
+# Lister toutes les demandes
+curl http://localhost:8000/objects/requests
+
+# Lister demandes en attente (admin)
+curl "http://localhost:8000/objects/admin/pending-requests?admin_id=1"
+
+# Approuver une demande (admin)
+curl -X PUT "http://localhost:8000/objects/requests/1/decide?admin_id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "approved", "admin_notes": "Demande validée"}'
+
+# Rejeter une demande (admin)
+curl -X PUT "http://localhost:8000/objects/requests/1/decide?admin_id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "rejected", "admin_notes": "Informations incomplètes"}'
+
+# Supprimer une demande (admin)
+curl -X DELETE "http://localhost:8000/objects/admin/requests/1?admin_id=1"
+```
+
 ---
 
 ## 🌐 URLs
@@ -287,6 +336,7 @@ curl -X PATCH "http://localhost:8000/community/contributions/1" \
 - Documentation Swagger : http://localhost:8000/docs
 - ReDoc : http://localhost:8000/redoc
 - PostgreSQL : localhost:5432
+- **Admin Dashboard** : http://localhost:4200/admin/auth (code: admin123)
 
 ---
 

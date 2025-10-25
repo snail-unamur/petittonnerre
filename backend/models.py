@@ -18,7 +18,17 @@ class MaintenanceStatus(str, enum.Enum):
     SKIPPED = "skipped"
     ISSUE_REPORTED = "issue_reported"
 
+class ObjectStatus(str, enum.Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    ARCHIVED = "archived"
+
 class ContributionStatus(str, enum.Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+class ObjectRequestStatus(str, enum.Enum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
@@ -56,8 +66,8 @@ object_tags = Table(
 
 
 class UserRole(str, enum.Enum):
-    user = "user"
-    admin = "admin"
+    USER = "USER"
+    ADMIN = "ADMIN"
 
 class User(Base):
     __tablename__ = "users"
@@ -66,7 +76,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
+    role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     location = Column(String)  # Pour l'aide locale
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -90,6 +100,8 @@ class Object(Base):
     manual_url = Column(String)  # Lien vers le manuel
     notes = Column(Text)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)  # Pour les objets liés
+    status = Column(String, nullable=False, default="active")  # Statut de l'objet
     
     # Clés étrangères
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -170,6 +182,33 @@ class Tag(Base):
     
     # Relations
     objects = relationship("Object", secondary=object_tags, back_populates="tags")
+
+
+class ObjectRequest(Base):
+    __tablename__ = "object_requests"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    category = Column(Enum(ObjectCategory), nullable=False)
+    brand = Column(String)
+    model = Column(String)
+    purchase_date = Column(DateTime)
+    manual_url = Column(String)
+    notes = Column(Text)
+    status = Column(Enum(ObjectRequestStatus), default=ObjectRequestStatus.PENDING)
+    admin_notes = Column(Text)  # Notes de l'admin lors de la décision
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    reviewed_at = Column(DateTime)
+    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)
+    
+    # Clé étrangère
+    requester_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    reviewed_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+    
+    # Relations
+    requester = relationship("User", foreign_keys=[requester_id])
+    reviewer = relationship("User", foreign_keys=[reviewed_by])
+    parent = relationship("Object", foreign_keys=[parent_id])
 
 
 class Problem(Base):

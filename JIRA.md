@@ -29,13 +29,26 @@
 
 ## Epic 2: Gestion des objets 📦
 
-### US2.1: En tant qu'administrateur, je veux pouvoir créer et gérer le catalogue d'objets
+### US2.1: En tant qu'administrateur, je veux pouvoir créer et gérer le catalogue d'objets ✅ DONE
 
-- [ ] 2.1.1 Créer le modèle Object avec hiérarchie dans la DB (in progress)
-- [ ] 2.1.2 Développer l'interface d'administration des objets (todo)
-- [ ] 2.1.3 Implémenter les endpoints CRUD admin pour les objets (in progress)
+- [x] 2.1.1 Créer le modèle Object avec hiérarchie dans la DB (done)
+- [x] 2.1.2 Développer l'interface d'administration des objets (done)
+- [x] 2.1.3 Implémenter les endpoints CRUD admin pour les objets (done)
 - [ ] 2.1.4 Ajouter la gestion des caractéristiques des objets (todo)
-- [ ] 2.1.5 Écrire les tests des endpoints objets (todo)
+- [x] 2.1.5 Écrire les tests des endpoints objets (done)
+
+**Détails de l'implémentation (2.1.2 & 2.1.3):**
+- ✅ Nouveau modèle `ObjectRequest` pour les demandes d'objets
+- ✅ Endpoints API complets (création, approbation, rejet, suppression)
+- ✅ Composant Angular `AdminDashboardComponent` avec interface intuitive
+- ✅ Guard de protection des routes admin
+- ✅ Dialog d'authentification admin temporaire (code: admin123)
+- ✅ Tests complets backend (test_admin_objects.py)
+- ✅ Scripts de migration et données de test
+- ✅ Documentation complète (docs/FEATURE_ADMIN.md)
+- ✅ Correction bug bouton approve (champs parent_id et status, migration enum objectstatus)
+- 🔗 Branche: `feature/admin-dashboard-object-requests`
+- 📅 Complété le: 2025-10-25
 
 ### US2.2: En tant qu'utilisateur, je veux pouvoir sélectionner mes objets
 

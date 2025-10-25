@@ -1,0 +1,109 @@
+<div class="admin-dashboard">
+  <div class="header">
+    <h1>🛠️ Tableau de bord Admin</h1>
+    <p>Gestion des demandes d'objets en attente</p>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- Liste des demandes en attente -->
+    <div class="requests-list">
+      <h2>Demandes en attente ({{ pendingRequests.length }})</h2>
+      
+      <div *ngIf="loading" class="loading">
+        Chargement des demandes...
+      </div>
+
+      <div *ngIf="!loading && pendingRequests.length === 0" class="no-requests">
+        Aucune demande en attente
+      </div>
+
+      <div 
+        *ngFor="let request of pendingRequests" 
+        class="request-card"
+        [class.selected]="selectedRequest?.id === request.id"
+        (click)="selectRequest(request)">
+        
+        <div class="request-header">
+          <h3>{{ request.name }}</h3>
+          <span class="category-badge">{{ getCategoryLabel(request.category) }}</span>
+        </div>
+        
+        <div class="request-info">
+          <p><strong>Marque:</strong> {{ request.brand || 'Non spécifiée' }}</p>
+          <p><strong>Modèle:</strong> {{ request.model || 'Non spécifié' }}</p>
+          <p><strong>Demandé le:</strong> {{ formatDate(request.created_at) }}</p>
+        </div>
+
+        <div *ngIf="request.notes" class="request-notes">
+          <strong>Notes:</strong> {{ request.notes }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Détails de la demande sélectionnée -->
+    <div class="request-details" *ngIf="selectedRequest">
+      <h2>Détails de la demande</h2>
+      
+      <div class="details-content">
+        <div class="info-section">
+          <h3>{{ selectedRequest.name }}</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Catégorie:</label>
+              <span>{{ getCategoryLabel(selectedRequest.category) }}</span>
+            </div>
+            <div class="info-item">
+              <label>Marque:</label>
+              <span>{{ selectedRequest.brand || 'Non spécifiée' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Modèle:</label>
+              <span>{{ selectedRequest.model || 'Non spécifié' }}</span>
+            </div>
+            <div class="info-item" *ngIf="selectedRequest.purchase_date">
+              <label>Date d'achat:</label>
+              <span>{{ formatDate(selectedRequest.purchase_date) }}</span>
+            </div>
+            <div class="info-item" *ngIf="selectedRequest.manual_url">
+              <label>Manuel:</label>
+              <a [href]="selectedRequest.manual_url" target="_blank">Voir le manuel</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-section" *ngIf="selectedRequest.notes">
+          <h4>Notes du demandeur:</h4>
+          <p>{{ selectedRequest.notes }}</p>
+        </div>
+
+        <!-- Zone de notes admin -->
+        <div class="admin-notes-section">
+          <h4>Notes d'administration:</h4>
+          <textarea 
+            [(ngModel)]="adminNotes" 
+            placeholder="Ajoutez vos commentaires sur cette demande..."
+            rows="3">
+          </textarea>
+        </div>
+
+        <!-- Actions admin -->
+        <div class="admin-actions">
+          <button class="btn btn-approve" (click)="approveRequest()">
+            ✅ Approuver
+          </button>
+          <button class="btn btn-reject" (click)="rejectRequest()">
+            ❌ Rejeter
+          </button>
+          <button class="btn btn-delete" (click)="deleteRequest()">
+            🗑️ Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message si aucune demande sélectionnée -->
+    <div class="no-selection" *ngIf="!selectedRequest && !loading">
+      <p>Sélectionnez une demande pour voir les détails</p>
+    </div>
+  </div>
+</div>

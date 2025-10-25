@@ -52,3 +52,26 @@ export interface Contribution {
   author_id: number;
   created_at: Date;
 }
+
+export interface ObjectRequest {
+  id: number;
+  name: string;
+  category: 'heating' | 'appliance' | 'kitchen' | 'bathroom' | 'flooring' | 'other';
+  brand?: string;
+  model?: string;
+  purchase_date?: Date;
+  manual_url?: string;
+  notes?: string;
+  parent_id?: number;
+  status: 'pending' | 'approved' | 'rejected';
+  admin_notes?: string;
+  requester_id: number;
+  reviewed_by?: number;
+  created_at: Date;
+  reviewed_at?: Date;
+}
+
+export interface ObjectRequestDecision {
+  status: 'approved' | 'rejected';
+  admin_notes?: string;
+}

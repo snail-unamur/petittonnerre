@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 from datetime import datetime
 from typing import Optional, List
-from models import ObjectCategory, MaintenanceStatus, ContributionStatus, ProblemStatus, ProblemSeverity, ProblemCategory
+from models import ObjectCategory, MaintenanceStatus, ContributionStatus, ObjectRequestStatus, ProblemStatus, ProblemSeverity, ProblemCategory
 
 
 # Auth Schemas
@@ -81,6 +81,8 @@ class Object(ObjectBase):
     id: int
     owner_id: int
     created_at: datetime
+    parent_id: Optional[int] = None
+    status: Optional[str] = "active"
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -165,6 +167,36 @@ class Tag(TagBase):
     id: int
     
     model_config = ConfigDict(from_attributes=True)
+
+
+# Object Request Schemas
+class ObjectRequestBase(BaseModel):
+    name: str
+    category: ObjectCategory
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    purchase_date: Optional[datetime] = None
+    manual_url: Optional[str] = None
+    notes: Optional[str] = None
+    parent_id: Optional[int] = None
+
+class ObjectRequestCreate(ObjectRequestBase):
+    pass
+
+class ObjectRequestResponse(ObjectRequestBase):
+    id: int
+    status: ObjectRequestStatus
+    admin_notes: Optional[str] = None
+    requester_id: int
+    reviewed_by: Optional[int] = None
+    created_at: datetime
+    reviewed_at: Optional[datetime] = None
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class ObjectRequestDecision(BaseModel):
+    status: ObjectRequestStatus  # APPROVED ou REJECTED
+    admin_notes: Optional[str] = None
 
 
 # Problem Schemas

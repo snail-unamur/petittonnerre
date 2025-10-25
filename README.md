@@ -8,17 +8,29 @@ Application de gestion intelligente et collaborative de l'entretien d'objets et 
 
 ## 🚀 Démarrage Rapide
 
-**🐳 Tout en un avec Docker (recommandé) :**
+**🐳 Avec Docker (recommandé) :**
 
 ```bash
-# Démarrer tous les services (PostgreSQL + PgAdmin + Backend + Frontend)
+# Première fois OU après modification de requirements.txt
+./start.sh --build
+
+# Démarrages suivants (rapide, sans rebuild)
+./dev-start.sh
+# OU simplement
 ./start.sh
 ```
+
+**Quand utiliser `--build` ?**
+- ✅ Première installation
+- ✅ Après modification de `requirements.txt` (nouvelles dépendances Python)
+- ✅ Après modification du `Dockerfile`
+- ❌ **PAS nécessaire** pour les changements de code Python/TypeScript
 
 **Services disponibles :**
 - 🎨 Frontend : http://localhost:4200
 - 🔧 Backend API : http://localhost:8000/docs  
 - 🗄️ PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
+- 🛠️ Admin Dashboard : http://localhost:4200/admin/auth (code: admin123)
 - 📊 PostgreSQL : localhost:5432
 
 ---
