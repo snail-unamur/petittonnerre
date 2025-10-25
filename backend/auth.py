@@ -14,7 +14,7 @@ from models import User
 import schemas
 
 # Configuration de la sécurité
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 settings = get_settings()
 

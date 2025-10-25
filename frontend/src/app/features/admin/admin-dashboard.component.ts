@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { AuthService } from '../../core/services/auth.service';
 import { ObjectRequest, ObjectRequestDecision } from '../../core/models/models';
 
 @Component({
@@ -14,13 +15,21 @@ import { ObjectRequest, ObjectRequestDecision } from '../../core/models/models';
 export class AdminDashboardComponent implements OnInit {
   pendingRequests: ObjectRequest[] = [];
   selectedRequest: ObjectRequest | null = null;
-  adminId = 3; // Temporaire - ID de l'admin en DB (admin@example.com)
+  adminId: number = 0;
   adminNotes = '';
   loading = false;
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    // Récupérer l'ID de l'utilisateur connecté
+    const currentUser = this.authService.getCurrentUserValue();
+    if (currentUser) {
+      this.adminId = currentUser.id;
+    }
     this.loadPendingRequests();
   }
 
