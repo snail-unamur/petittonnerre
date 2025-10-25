@@ -8,8 +8,14 @@ from database import get_db
 from passlib.context import CryptContext
 import re
 
-# Configuration de bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Configuration de bcrypt avec paramètres explicites et identification du backend
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__ident="2b",  # Force l'utilisation de bcrypt moderne ($2b$)
+    bcrypt__min_rounds=12,  # Nombre minimum de rounds
+    default="bcrypt"  # S'assure que bcrypt est le schéma par défaut
+)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -71,15 +77,27 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
             detail="Password cannot be longer than 72 bytes"
         )
     
-    # Hasher le mot de passe
+    # Hasher le mot de passe avec gestion d'erreur détaillée
     try:
+        # Vérifier que bcrypt est disponible
+        if not pwd_context.schemes():
+            raise RuntimeError("No hashing schemes available")
+            
         hashed_password = pwd_context.hash(user.password)
+        if not hashed_password:
+            raise ValueError("Password hashing failed - empty hash")
+            
     except Exception as e:
-        # Log the error for debugging but don't expose it to the client
-        print(f"Password hashing error: {str(e)}")  # TODO: Use proper logging
+        error_msg = f"Password hashing error: {str(e)}"
+        print(error_msg)  # TODO: Use proper logging
+        if "cannot be longer than 72 bytes" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password cannot be longer than 72 bytes"
+            )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while processing your request"
+            detail="An error occurred during password hashing"
         )
     
     # Créer l'utilisateur
