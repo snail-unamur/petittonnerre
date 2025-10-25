@@ -79,6 +79,9 @@
             </button>
             
             <div class="dropdown-menu" [class.open]="isUserMenuOpen">
+              <a routerLink="/admin/dashboard" class="dropdown-item" (click)="closeMenus()" *ngIf="isAdmin()">
+                <span>👨‍💼</span> Dashboard Admin
+              </a>
               <a href="#" class="dropdown-item" (click)="closeMenus()">
                 <span>⚙️</span> Paramètres
               </a>

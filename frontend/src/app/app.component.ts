@@ -53,6 +53,10 @@ export class AppComponent implements OnInit {
     this.isMenuOpen = false;
     this.isUserMenuOpen = false;
   }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
   
   logout() {
     this.authService.logout().subscribe({

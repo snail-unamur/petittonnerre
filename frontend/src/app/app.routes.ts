@@ -65,22 +65,15 @@ export const routes: Routes = [
   },
   {
     path: "admin",
-    children: [
-      {
-        path: "auth",
-        loadComponent: () =>
-          import("./features/admin/admin-auth.component").then(
-            (m) => m.AdminAuthComponent
-          ),
-      },
-      {
-        path: "dashboard",
-        loadComponent: () =>
-          import("./features/admin/admin-dashboard.component").then(
-            (m) => m.AdminDashboardComponent
-          ),
-        canActivate: [adminGuard],
-      },
-    ],
+    redirectTo: "/admin/dashboard",
+    pathMatch: "full",
+  },
+  {
+    path: "admin/dashboard",
+    loadComponent: () =>
+      import("./features/admin/admin-dashboard.component").then(
+        (m) => m.AdminDashboardComponent
+      ),
+    canActivate: [adminGuard],
   },
 ];
