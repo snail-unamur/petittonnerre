@@ -12,7 +12,7 @@
 .auth-wrapper {
   width: 100%;
   max-width: 1200px;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -100,8 +100,10 @@
 
 .brand-subtitle {
   font-size: 1.0625rem;
-  opacity: 0.95;
+  opacity: 1;
   margin: 0 0 1.25rem;
+  color: white;
+  font-weight: 400;
 }
 
 .brand-features {
@@ -159,13 +161,13 @@
 .auth-header h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0 0 0.5rem;
 }
 
 .auth-header p {
   font-size: 0.9375rem;
-  color: #64748b;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -212,15 +214,17 @@
 .form-group label {
   font-size: 0.9375rem;
   font-weight: 500;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .form-group input {
   padding: 0.75rem 1rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.9375rem;
   transition: all 0.2s ease;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .form-group input:focus {
@@ -230,12 +234,12 @@
 }
 
 .form-group input:disabled {
-  background: #f1f5f9;
+  background: var(--bg-tertiary);
   cursor: not-allowed;
 }
 
 .form-group input::placeholder {
-  color: #94a3b8;
+  color: var(--text-tertiary);
 }
 
 .form-error {
@@ -301,7 +305,7 @@
 
 .auth-footer p {
   font-size: 0.9375rem;
-  color: #64748b;
+  color: var(--text-secondary);
   margin: 0;
 }
 

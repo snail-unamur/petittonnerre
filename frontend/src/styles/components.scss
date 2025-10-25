@@ -233,6 +233,36 @@
   }
 }
 
+// Dark mode specific badge styles
+[data-theme="dark"] {
+  .badge {
+    &.badge-primary {
+      background: rgba(139, 159, 248, 0.2);
+      color: #c7d2fe;
+    }
+    
+    &.badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+    }
+    
+    &.badge-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+    }
+    
+    &.badge-error {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+    }
+    
+    &.badge-info {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+  }
+}
+
 // Grid
 .grid {
   display: grid;
@@ -423,6 +453,35 @@ select {
     background: var(--info-light);
     color: #1e40af;
     border-left: 4px solid var(--info-color);
+  }
+}
+
+// Dark mode specific alert styles
+[data-theme="dark"] {
+  .alert {
+    &.alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      border-left-color: var(--success-color);
+    }
+    
+    &.alert-warning {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-left-color: var(--warning-color);
+    }
+    
+    &.alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-left-color: var(--error-color);
+    }
+    
+    &.alert-info {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border-left-color: var(--info-color);
+    }
   }
 }
 

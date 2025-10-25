@@ -9,12 +9,12 @@
   margin-bottom: 30px;
   
   h1 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
   }
   
   p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 1.1rem;
   }
 }
@@ -31,7 +31,7 @@
 
 .requests-list {
   h2 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
     font-size: 1.3rem;
   }
@@ -40,27 +40,28 @@
 .loading, .no-requests {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
 .request-card {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
+  background: var(--bg-primary);
   
   &:hover {
-    border-color: #007bff;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
   }
   
   &.selected {
-    border-color: #007bff;
-    background-color: #f8f9fa;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    border-color: var(--primary-color);
+    background-color: var(--bg-tertiary);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
   }
 }
 
@@ -72,13 +73,13 @@
   
   h3 {
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.1rem;
   }
 }
 
 .category-badge {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   padding: 4px 8px;
   border-radius: 12px;
@@ -90,26 +91,27 @@
   p {
     margin: 5px 0;
     font-size: 0.9rem;
-    color: #555;
+    color: var(--text-secondary);
   }
 }
 
 .request-notes {
   margin-top: 10px;
   padding: 8px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-tertiary);
   border-radius: 4px;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .request-details {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
+  background: var(--bg-primary);
   
   h2 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
     font-size: 1.3rem;
   }
@@ -117,7 +119,7 @@
 
 .details-content {
   h3 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 15px;
     font-size: 1.2rem;
   }
@@ -140,18 +142,18 @@
   
   label {
     font-weight: bold;
-    color: #555;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 2px;
   }
   
   span, a {
-    color: #333;
+    color: var(--text-primary);
     font-size: 0.95rem;
   }
   
   a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
     
     &:hover {
@@ -164,30 +166,32 @@
   margin: 20px 0;
   
   h4 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
     font-size: 1rem;
   }
   
   p {
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     padding: 10px;
     border-radius: 4px;
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
   }
   
   textarea {
     width: 100%;
     padding: 10px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     border-radius: 4px;
     resize: vertical;
     font-family: inherit;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     
     &:focus {
       outline: none;
-      border-color: #007bff;
+      border-color: var(--primary-color);
     }
   }
 }
@@ -212,29 +216,29 @@
   transition: all 0.3s ease;
   
   &.btn-approve {
-    background-color: #28a745;
+    background-color: var(--success-color);
     color: white;
     
     &:hover {
-      background-color: #218838;
+      background-color: #059669;
     }
   }
   
   &.btn-reject {
-    background-color: #dc3545;
+    background-color: var(--error-color);
     color: white;
     
     &:hover {
-      background-color: #c82333;
+      background-color: #dc2626;
     }
   }
   
   &.btn-delete {
-    background-color: #6c757d;
+    background-color: var(--text-tertiary);
     color: white;
     
     &:hover {
-      background-color: #5a6268;
+      background-color: var(--text-secondary);
     }
   }
 }
@@ -244,8 +248,9 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  border: 2px dashed #e0e0e0;
+  border: 2px dashed var(--border-color);
   border-radius: 8px;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
+  background: var(--bg-primary);
 }

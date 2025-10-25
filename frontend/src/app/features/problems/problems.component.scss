@@ -105,11 +105,19 @@
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.95);
-  color: var(--text-primary);
+  color: #334155;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  
+  // Options avec bon contraste
+  option {
+    background: white;
+    color: #334155;
+    font-weight: 500;
+    padding: 8px;
+  }
   
   &:hover {
     border-color: rgba(255, 255, 255, 0.6);
@@ -123,6 +131,71 @@
     border-color: white;
     background: white;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Dark mode - amélioration des filtres
+[data-theme="dark"] {
+  .filters-section {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+  
+  .filters-header h3 {
+    color: #f1f5f9;
+  }
+  
+  .filter-label {
+    color: #cbd5e1;
+  }
+  
+  .filter-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #0f172a !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f1f5f9' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 12px !important;
+    color: #f1f5f9 !important;
+    border-color: rgba(203, 213, 225, 0.3) !important;
+    padding-right: 40px !important;
+    
+    option {
+      background: #0f172a !important;
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+      padding: 8px;
+    }
+    
+    option:checked {
+      background: #1e293b !important;
+      background-color: #1e293b !important;
+    }
+    
+    &:hover {
+      background-color: #1e293b !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f1f5f9' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+      border-color: rgba(203, 213, 225, 0.5) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    &:focus {
+      background-color: #1e293b !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f1f5f9' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+      border-color: #8b9ff8 !important;
+      box-shadow: 0 0 0 3px rgba(139, 159, 248, 0.3);
+    }
+  }
+  
+  .filters-summary {
+    border-top-color: rgba(203, 213, 225, 0.2);
+    
+    span {
+      background: rgba(15, 23, 42, 0.5);
+      color: #f1f5f9;
+    }
   }
 }
 

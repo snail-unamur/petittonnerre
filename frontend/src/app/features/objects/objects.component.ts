@@ -536,6 +536,27 @@ import { ObjectItem } from "../../core/models/models";
         margin-bottom: var(--spacing-xl);
       }
 
+      .page-header .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        font-weight: 600;
+      }
+
+      .page-header .btn-primary:hover {
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px);
+      }
+
+      [data-theme="dark"] .page-header .btn-primary {
+        box-shadow: 0 4px 12px rgba(139, 159, 248, 0.3);
+      }
+
+      [data-theme="dark"] .page-header .btn-primary:hover {
+        box-shadow: 0 6px 16px rgba(139, 159, 248, 0.4);
+      }
+
       .form-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);

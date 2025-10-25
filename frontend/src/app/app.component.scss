@@ -363,6 +363,18 @@
   box-shadow: 0 2px 8px rgba(255,215,0,0.5);
 }
 
+[data-theme="dark"] .btn-primary {
+  background: rgba(139, 159, 248, 0.2);
+  color: #c7d2fe;
+  border: 1px solid rgba(139, 159, 248, 0.4);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: rgba(139, 159, 248, 0.3);
+  border-color: rgba(139, 159, 248, 0.6);
+  box-shadow: 0 2px 8px rgba(139, 159, 248, 0.3);
+}
+
 @media (max-width: 767px) {
   .btn-primary {
     width: 100%;
@@ -526,11 +538,12 @@
 
 /* Footer */
 .footer {
-  background: #1e293b;
-  color: white;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   padding: 1.5rem 1rem;
   margin-top: auto;
   transition: all 0.3s ease;
+  border-top: 1px solid var(--border-color);
 }
 
 /* Footer - Communist Mode */
@@ -563,7 +576,6 @@
 .footer-content p {
   margin: 0;
   font-size: 0.875rem;
-  opacity: 0.8;
 }
 
 :host-context([data-communist="true"]) .footer-content p {
