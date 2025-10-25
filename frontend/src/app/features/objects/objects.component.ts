@@ -269,9 +269,35 @@ import { ObjectItem } from "../../core/models/models";
       <!-- Error Message -->
       <div class="alert alert-error mb-lg" *ngIf="error">⚠️ {{ error }}</div>
 
+      <!-- Sort Options -->
+      <div class="sort-bar mb-lg" *ngIf="!loading && objects.length > 0">
+        <div class="sort-bar-content">
+          <span class="sort-label">Trier par :</span>
+
+          <div class="sort-buttons">
+            <button
+              *ngFor="let option of sortOptions"
+              class="sort-btn"
+              [class.active]="sortBy === option.value"
+              (click)="changeSortBy(option.value)"
+            >
+              {{ option.label }}
+            </button>
+          </div>
+
+          <button
+            class="sort-order-toggle"
+            (click)="toggleSortOrder()"
+            [title]="sortOrder === 'asc' ? 'Tri croissant' : 'Tri décroissant'"
+          >
+            {{ sortOrder === "asc" ? "↑" : "↓" }}
+          </button>
+        </div>
+      </div>
+
       <!-- Objects Grid -->
       <div class="grid grid-3" *ngIf="!loading && objects.length > 0">
-        <div class="card" *ngFor="let obj of objects">
+        <div class="card" *ngFor="let obj of sortedObjects">
           <div class="flex flex-between items-start mb-md">
             <span class="badge badge-primary"
               >{{ getCategoryIcon(obj.category) }}
@@ -547,6 +573,78 @@ import { ObjectItem } from "../../core/models/models";
         width: 100%;
       }
 
+      /* Styles pour la barre de tri */
+      .sort-bar {
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-md);
+        border: 1px solid var(--border-color);
+      }
+
+      .sort-bar-content {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+      }
+
+      .sort-label {
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      .sort-buttons {
+        display: flex;
+        gap: var(--spacing-xs);
+        flex-wrap: wrap;
+        flex: 1;
+      }
+
+      .sort-btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+      }
+
+      .sort-btn:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--primary-color);
+      }
+
+      .sort-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+        font-weight: 500;
+      }
+
+      .sort-order-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: var(--text-primary);
+      }
+
+      .sort-order-toggle:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--primary-color);
+      }
+
       @media (max-width: 767px) {
         .page-header {
           flex-direction: column;
@@ -564,12 +662,33 @@ import { ObjectItem } from "../../core/models/models";
         .grid-2 {
           grid-template-columns: 1fr !important;
         }
+
+        .sort-bar-content {
+          flex-direction: column;
+          align-items: stretch;
+          gap: var(--spacing-md);
+        }
+
+        .sort-buttons {
+          justify-content: center;
+        }
+
+        .sort-btn {
+          flex: 1;
+          min-width: 80px;
+          justify-content: center;
+        }
+
+        .sort-order-toggle {
+          width: 100%;
+        }
       }
     `,
   ],
 })
 export class ObjectsComponent implements OnInit {
   objects: ObjectItem[] = [];
+  sortedObjects: ObjectItem[] = [];
   showAddForm = false;
   showSearchResults = false;
   searchResults: ObjectItem[] = [];
@@ -582,6 +701,17 @@ export class ObjectsComponent implements OnInit {
   loading = false;
   error = "";
   successMessage = "";
+
+  // Tri
+  sortBy: "name" | "added_at" | "purchase_date" | "brand" | "model" = "name";
+  sortOrder: "asc" | "desc" = "asc";
+  sortOptions = [
+    { value: "name" as const, label: "Nom" },
+    { value: "added_at" as const, label: "Ajout" },
+    { value: "purchase_date" as const, label: "Achat" },
+    { value: "brand" as const, label: "Marque" },
+    { value: "model" as const, label: "Modèle" },
+  ];
 
   // Pour le moment, userId est hardcodé à 1 (en attendant l'authentification)
   currentUserId = 1;
@@ -598,7 +728,7 @@ export class ObjectsComponent implements OnInit {
   editingObject: ObjectItem | null = null;
   objectToDelete: ObjectItem | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   ngOnInit() {
     this.loadObjects();
@@ -611,6 +741,7 @@ export class ObjectsComponent implements OnInit {
     this.apiService.getObjects(this.currentUserId).subscribe({
       next: (data) => {
         this.objects = data;
+        this.sortObjects();
         this.loading = false;
       },
       error: (err: any) => {
@@ -670,6 +801,7 @@ export class ObjectsComponent implements OnInit {
             if (index !== -1) {
               this.objects[index] = updated;
             }
+            this.sortObjects();
             this.cancelEdit();
             this.loading = false;
           },
@@ -685,6 +817,7 @@ export class ObjectsComponent implements OnInit {
         .subscribe({
           next: (created) => {
             this.objects.push(created);
+            this.sortObjects();
             this.cancelEdit();
             this.loading = false;
           },
@@ -816,6 +949,7 @@ export class ObjectsComponent implements OnInit {
     this.apiService.linkObjectToUser(objectId, this.currentUserId).subscribe({
       next: (linkedObject) => {
         this.objects.push(linkedObject);
+        this.sortObjects();
         this.successMessage = `L'objet "${linkedObject.name}" a été ajouté à votre compte avec succès !`;
         this.resetSearch();
         this.showAddForm = false;
@@ -852,5 +986,55 @@ export class ObjectsComponent implements OnInit {
 
   isObjectAlreadyLinked(objectId: number): boolean {
     return this.objects.some((obj) => obj.id === objectId);
+  }
+
+  // ===== MÉTHODES DE TRI =====
+
+  sortObjects() {
+    this.sortedObjects = [...this.objects].sort((a, b) => {
+      let compareValue = 0;
+
+      switch (this.sortBy) {
+        case "name":
+          compareValue = (a.name || "").localeCompare(b.name || "");
+          break;
+        case "brand":
+          compareValue = (a.brand || "").localeCompare(b.brand || "");
+          break;
+        case "model":
+          compareValue = (a.model || "").localeCompare(b.model || "");
+          break;
+        case "added_at": {
+          const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+          compareValue = dateB - dateA; // Plus récent en premier par défaut
+          break;
+        }
+        case "purchase_date": {
+          const purchaseA = a.purchase_date
+            ? new Date(a.purchase_date).getTime()
+            : 0;
+          const purchaseB = b.purchase_date
+            ? new Date(b.purchase_date).getTime()
+            : 0;
+          compareValue = purchaseB - purchaseA; // Plus récent en premier par défaut
+          break;
+        }
+      }
+
+      return this.sortOrder === "asc" ? compareValue : -compareValue;
+    });
+  }
+
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+    this.sortObjects();
+  }
+
+  changeSortBy(
+    sortBy: "name" | "added_at" | "purchase_date" | "brand" | "model"
+  ) {
+    this.sortBy = sortBy;
+    this.sortObjects();
   }
 }
