@@ -8,13 +8,10 @@ from database import get_db
 from passlib.context import CryptContext
 import re
 
-# Configuration de bcrypt directement
-pwd_context = CryptContext(
-    schemes=["bcrypt"]
-)
+# Configuration de bcrypt
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter(prefix="/users", tags=["users"])
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def validate_password(password: str) -> bool:
     """
@@ -78,9 +75,11 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
         hashed_password = pwd_context.hash(user.password)
     except Exception as e:
+        # Log the error for debugging but don't expose it to the client
+        print(f"Password hashing error: {str(e)}")  # TODO: Use proper logging
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error hashing password: {str(e)}"
+            detail="An error occurred while processing your request"
         )
     
     # Créer l'utilisateur
@@ -99,15 +98,15 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     return db_user
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model=List[schemas.UserResponse])
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = db.query(models.User).offset(skip).limit(limit).all()
+    users = db.query(User).offset(skip).limit(limit).all()
     return users
 
 
-@router.get("/{user_id}", response_model=schemas.User)
+@router.get("/{user_id}", response_model=schemas.UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

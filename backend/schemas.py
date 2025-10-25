@@ -39,8 +39,11 @@ class UserResponse(UserBase):
     
     model_config = ConfigDict(from_attributes=True)
 
-class User(UserResponse):
+# Classe interne pour les opérations internes uniquement, ne pas utiliser comme response_model
+class UserInternal(UserResponse):
     hashed_password: str
+    
+    model_config = {"from_attributes": True}
 
 
 # Object Schemas
