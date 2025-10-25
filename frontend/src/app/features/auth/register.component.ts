@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { RouterModule, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
-import { ThemeService } from "../../core/services/theme.service";
 
 @Component({
   selector: "app-register",
@@ -27,8 +26,7 @@ export class RegisterComponent {
   
   constructor(
     private authService: AuthService,
-    private router: Router,
-    public themeService: ThemeService
+    private router: Router
   ) {}
   
   onSubmit() {
@@ -68,9 +66,5 @@ export class RegisterComponent {
         this.isLoading = false;
       }
     });
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
   }
 }
