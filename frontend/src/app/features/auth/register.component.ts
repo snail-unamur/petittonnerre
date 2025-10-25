@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
+import { CommunistService } from "../../core/services/communist.service";
 
 @Component({
   selector: "app-register",
@@ -11,7 +12,7 @@ import { AuthService } from "../../core/services/auth.service";
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   formData = {
     username: '',
     email: '',
@@ -23,11 +24,20 @@ export class RegisterComponent {
   errorMessage = '';
   successMessage = '';
   isLoading = false;
+  isCommunistMode = false;
   
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private communistService: CommunistService
   ) {}
+
+  ngOnInit() {
+    // Souscrire au mode communiste
+    this.communistService.communistMode$.subscribe(mode => {
+      this.isCommunistMode = mode;
+    });
+  }
   
   onSubmit() {
     if (this.isLoading) return;

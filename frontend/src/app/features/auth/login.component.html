@@ -1,12 +1,18 @@
 <div class="auth-container">
   <div class="auth-wrapper">
     <!-- Brand Side -->
-    <div class="auth-brand">
+    <div class="auth-brand" [class.communist-mode]="isCommunistMode">
       <div class="brand-content">
-        <img class="brand-icon" src="assets/logo.png" alt="Petit Tonnerre logo" />
-        <p class="brand-subtitle">Gérez l'entretien de vos équipements en toute simplicité</p>
+        <div class="brand-icon" *ngIf="!isCommunistMode">
+          <img src="assets/logo.png" alt="Petit Tonnerre logo" />
+        </div>
+        <div class="brand-icon communist-star" *ngIf="isCommunistMode">
+          ⭐
+        </div>
+        <p class="brand-subtitle" *ngIf="!isCommunistMode">Gérez l'entretien de vos équipements en toute simplicité</p>
+        <p class="brand-subtitle" *ngIf="isCommunistMode">Unissons-nous pour la maintenance des moyens de production !</p>
         
-        <div class="brand-features">
+        <div class="brand-features" *ngIf="!isCommunistMode">
           <div class="feature-item">
             <span class="feature-icon">✅</span>
             <span>Suivez vos maintenances</span>
@@ -20,6 +26,21 @@
             <span>Rejoignez la communauté</span>
           </div>
         </div>
+        
+        <div class="brand-features" *ngIf="isCommunistMode">
+          <div class="feature-item">
+            <span class="feature-icon">⚒️</span>
+            <span>Planifiez collectivement</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🚩</span>
+            <span>Partagez les ressources</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✊</span>
+            <span>Unissez-vous, camarades !</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -27,8 +48,10 @@
     <div class="auth-form-container">
       <div class="auth-form-wrapper">
         <div class="auth-header">
-          <h2>Connexion</h2>
-          <p>Bienvenue! Connectez-vous à votre compte</p>
+          <h2 *ngIf="!isCommunistMode">Connexion</h2>
+          <h2 *ngIf="isCommunistMode">Rejoins le Soviet ! ☭</h2>
+          <p *ngIf="!isCommunistMode">Bienvenue! Connectez-vous à votre compte</p>
+          <p *ngIf="isCommunistMode">Salut camarade ! Identifie-toi pour servir la cause</p>
         </div>
 
         <div *ngIf="errorMessage" class="alert alert-error">
@@ -85,13 +108,15 @@
             class="btn btn-primary btn-block"
             [disabled]="!loginForm.valid || isLoading"
           >
-            <span *ngIf="!isLoading">Se connecter</span>
+            <span *ngIf="!isLoading && !isCommunistMode">Se connecter</span>
+            <span *ngIf="!isLoading && isCommunistMode">Rejoindre la révolution ⚒️</span>
             <span *ngIf="isLoading" class="loading-spinner"></span>
           </button>
         </form>
 
         <div class="auth-footer">
-          <p>Pas encore de compte ? <a routerLink="/auth/register">Créer un compte</a></p>
+          <p *ngIf="!isCommunistMode">Pas encore de compte ? <a routerLink="/auth/register">Créer un compte</a></p>
+          <p *ngIf="isCommunistMode">Pas encore un camarade ? <a routerLink="/auth/register">Rejoins le collectif</a></p>
         </div>
       </div>
     </div>

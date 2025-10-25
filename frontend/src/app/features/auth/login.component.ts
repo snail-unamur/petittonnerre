@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule, Router, ActivatedRoute } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
+import { CommunistService } from "../../core/services/communist.service";
 
 @Component({
   selector: "app-login",
@@ -20,17 +21,24 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   isLoading = false;
+  isCommunistMode = false;
   private returnUrl: string = '/dashboard';
   
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private communistService: CommunistService
   ) {}
 
   ngOnInit() {
     // Récupérer l'URL de retour depuis les query params
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    
+    // Souscrire au mode communiste
+    this.communistService.communistMode$.subscribe(mode => {
+      this.isCommunistMode = mode;
+    });
   }
   
   onSubmit() {

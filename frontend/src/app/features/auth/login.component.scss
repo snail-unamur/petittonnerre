@@ -38,6 +38,11 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  transition: background 0.3s ease;
+  
+  &.communist-mode {
+    background: linear-gradient(135deg, #cc0000 0%, #8b0000 100%) !important;
+  }
 }
 
 @media (max-width: 991px) {
@@ -78,9 +83,34 @@
   width: 160px;
   height: 160px;
   margin: 0 auto 0.75rem;
-  display: block;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  }
+  
+  &.communist-star {
+    font-size: 140px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
+    animation: glow-star 2s ease-in-out infinite;
+  }
+}
+
+@keyframes glow-star {
+  0%, 100% {
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 8px 20px rgba(255, 215, 0, 0.9));
+    transform: scale(1.05);
+  }
 }
 
 .brand-title {
