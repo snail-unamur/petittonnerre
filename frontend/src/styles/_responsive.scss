@@ -1,0 +1,162 @@
+// Breakpoints responsive
+$breakpoints: (
+  'mobile': 320px,
+  'mobile-md': 375px,
+  'mobile-lg': 425px,
+  'tablet': 768px,
+  'tablet-lg': 1024px,
+  'desktop': 1280px,
+  'desktop-lg': 1440px,
+  'desktop-xl': 1920px,
+);
+
+// Mixins pour media queries
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Le breakpoint `#{$breakpoint}` n'existe pas dans $breakpoints.";
+  }
+}
+
+// Mixin pour max-width
+@mixin respond-below($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: #{map-get($breakpoints, $breakpoint) - 1px}) {
+      @content;
+    }
+  } @else {
+    @warn "Le breakpoint `#{$breakpoint}` n'existe pas dans $breakpoints.";
+  }
+}
+
+// Mixin pour range
+@mixin respond-between($min, $max) {
+  @if map-has-key($breakpoints, $min) and map-has-key($breakpoints, $max) {
+    @media (min-width: map-get($breakpoints, $min)) and (max-width: #{map-get($breakpoints, $max) - 1px}) {
+      @content;
+    }
+  }
+}
+
+// Classes utilitaires responsive
+.hide-mobile {
+  @include respond-below('tablet') {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @include respond-between('tablet', 'desktop') {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @include respond-to('desktop') {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  @include respond-below('tablet') {
+    display: block !important;
+  }
+}
+
+.show-tablet {
+  display: none !important;
+  @include respond-between('tablet', 'desktop') {
+    display: block !important;
+  }
+}
+
+.show-desktop {
+  display: none !important;
+  @include respond-to('desktop') {
+    display: block !important;
+  }
+}
+
+// Container responsive
+.container-responsive {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+
+  @include respond-to('mobile-lg') {
+    padding: 0 var(--space-lg);
+  }
+
+  @include respond-to('tablet') {
+    max-width: 720px;
+  }
+
+  @include respond-to('tablet-lg') {
+    max-width: 960px;
+  }
+
+  @include respond-to('desktop') {
+    max-width: 1140px;
+    padding: 0 var(--space-xl);
+  }
+
+  @include respond-to('desktop-lg') {
+    max-width: 1320px;
+  }
+}
+
+// Grid responsive
+.grid-responsive {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+
+  @include respond-to('tablet') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to('desktop') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+}
+
+// Flexbox utilities responsive
+.flex-col-mobile {
+  display: flex;
+  flex-direction: column;
+
+  @include respond-to('tablet') {
+    flex-direction: row;
+  }
+}
+
+// Text size responsive
+.text-responsive {
+  font-size: 0.875rem;
+
+  @include respond-to('tablet') {
+    font-size: 1rem;
+  }
+
+  @include respond-to('desktop') {
+    font-size: 1.125rem;
+  }
+}
+
+// Spacing responsive
+.padding-responsive {
+  padding: var(--space-md);
+
+  @include respond-to('tablet') {
+    padding: var(--space-lg);
+  }
+
+  @include respond-to('desktop') {
+    padding: var(--space-xl);
+  }
+}

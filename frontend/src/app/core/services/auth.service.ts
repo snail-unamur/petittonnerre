@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { environment } from "../../../environments/environment";
 
 export interface UserRegistration {
@@ -9,6 +9,17 @@ export interface UserRegistration {
   password: string;
   password_confirm: string;
   location?: string;
+}
+
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  token_type: string;
+  user: UserResponse;
 }
 
 export interface UserResponse {
@@ -35,5 +46,40 @@ export class AuthService {
       `${this.apiUrl}/users/register`,
       userData
     );
+  }
+
+  login(credentials: UserLogin): Observable<LoginResponse> {
+    const formData = new FormData();
+    formData.append('username', credentials.email);
+    formData.append('password', credentials.password);
+    
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/users/login`,
+      formData
+    ).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.access_token);
+        localStorage.setItem('username', response.user.username);
+        localStorage.setItem('userId', response.user.id.toString());
+      })
+    );
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getUsername(): string | null {
+    return localStorage.getItem('username');
   }
 }

@@ -38,7 +38,7 @@ def get_maintenance_advice(
 def get_advice(advice_id: int, db: Session = Depends(get_db)):
     advice = db.query(models.MaintenanceAdvice).filter(models.MaintenanceAdvice.id == advice_id).first()
     if not advice:
-        raise HTTPException(status_code=404, detail="Advice not found")
+        raise HTTPException(status_code=404, detail="Conseil non trouvé")
     return advice
 
 
@@ -48,11 +48,11 @@ def create_maintenance_task(task: schemas.MaintenanceTaskCreate, user_id: int, d
     # Vérifier que l'objet et le conseil existent
     obj = db.query(models.Object).filter(models.Object.id == task.object_id).first()
     if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
     
     advice = db.query(models.MaintenanceAdvice).filter(models.MaintenanceAdvice.id == task.advice_id).first()
     if not advice:
-        raise HTTPException(status_code=404, detail="Advice not found")
+        raise HTTPException(status_code=404, detail="Conseil non trouvé")
     
     db_task = models.MaintenanceTask(**task.model_dump(), user_id=user_id)
     db.add(db_task)
@@ -85,7 +85,7 @@ def get_maintenance_tasks(
 def get_task(task_id: int, db: Session = Depends(get_db)):
     task = db.query(models.MaintenanceTask).filter(models.MaintenanceTask.id == task_id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail="Tâche non trouvée")
     return task
 
 
@@ -97,7 +97,7 @@ def update_maintenance_task(
 ):
     db_task = db.query(models.MaintenanceTask).filter(models.MaintenanceTask.id == task_id).first()
     if not db_task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail="Tâche non trouvée")
     
     update_data = task_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():

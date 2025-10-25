@@ -8,82 +8,124 @@ import { ObjectItem, MaintenanceTask } from "../../core/models/models";
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="dashboard">
-      <h2>📊 Dashboard</h2>
+    <div class="container">
+      <div class="page-header">
+        <h1>📊 Dashboard</h1>
+        <p class="page-subtitle">Vue d'ensemble de vos objets et tâches de maintenance</p>
+      </div>
 
-      <div class="stats">
-        <div class="card">
-          <h3>📦 Mes Objets</h3>
-          <p class="number">{{ objects.length }}</p>
+      <!-- Stats Grid -->
+      <div class="grid grid-3 mb-xl">
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-label">Mes Objets</div>
+          <div class="stat-value">{{ objects.length }}</div>
+          <div class="stat-change positive" *ngIf="objects.length > 0">
+            ↗ +{{ objects.length }} objets enregistrés
+          </div>
         </div>
-        <div class="card">
-          <h3>✅ Tâches en attente</h3>
-          <p class="number">{{ pendingTasks.length }}</p>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-label">Tâches en attente</div>
+          <div class="stat-value">{{ pendingTasks.length }}</div>
+          <div class="stat-change" [class.positive]="pendingTasks.length === 0" [class.negative]="pendingTasks.length > 0">
+            {{ pendingTasks.length === 0 ? '✓ Tout est à jour' : '! Nécessite attention' }}
+          </div>
         </div>
-        <div class="card">
-          <h3>🎯 Tâches terminées</h3>
-          <p class="number">{{ completedTasks.length }}</p>
+        
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Tâches terminées</div>
+          <div class="stat-value">{{ completedTasks.length }}</div>
+          <div class="stat-change positive" *ngIf="completedTasks.length > 0">
+            ↗ Excellent travail!
+          </div>
         </div>
       </div>
 
-      <div class="recent-tasks card">
-        <h3>📋 Tâches Récentes</h3>
-        <div *ngIf="tasks.length === 0">
-          <p>Aucune tâche pour le moment.</p>
+      <!-- Recent Tasks -->
+      <div class="card">
+        <div class="card-header">
+          <h3>📋 Tâches Récentes</h3>
+          <p class="card-subtitle">Activités de maintenance récentes</p>
         </div>
-        <ul *ngIf="tasks.length > 0">
-          <li *ngFor="let task of tasks.slice(0, 5)">
-            <span [class]="'status-' + task.status">{{ task.status }}</span>
-            Tâche #{{ task.id }}
-          </li>
-        </ul>
+        
+        <div class="card-body">
+          <div class="empty-state" *ngIf="tasks.length === 0">
+            <div class="empty-icon">📭</div>
+            <h4 class="empty-title">Aucune tâche</h4>
+            <p class="empty-description">
+              Vous n'avez pas encore de tâches de maintenance. Commencez par ajouter des objets!
+            </p>
+            <button class="btn btn-primary">Ajouter un objet</button>
+          </div>
+          
+          <div class="list" *ngIf="tasks.length > 0">
+            <div class="list-item" *ngFor="let task of tasks.slice(0, 5)">
+              <div class="list-item-icon">
+                {{ getTaskIcon(task.status) }}
+              </div>
+              <div class="list-item-content">
+                <div class="list-item-title">
+                  Tâche #{{ task.id }}
+                  <span class="badge" [ngClass]="'badge-' + getTaskBadgeType(task.status)">
+                    {{ task.status }}
+                  </span>
+                </div>
+                <div class="list-item-subtitle">
+                  Maintenance programmée
+                </div>
+              </div>
+              <button class="btn btn-sm btn-ghost">Voir détails</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-footer" *ngIf="tasks.length > 5">
+          <button class="btn btn-secondary">Voir toutes les tâches</button>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-2 mt-xl">
+        <div class="card card-flat">
+          <div class="card-body">
+            <h4>🎯 Actions Rapides</h4>
+            <div class="flex flex-column gap-sm mt-md">
+              <button class="btn btn-outline w-full">➕ Ajouter un objet</button>
+              <button class="btn btn-outline w-full">📝 Créer une tâche</button>
+              <button class="btn btn-outline w-full">👥 Rejoindre la communauté</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card card-flat">
+          <div class="card-body">
+            <h4>💡 Astuce du jour</h4>
+            <p class="mt-md">
+              N'oubliez pas de programmer vos entretiens réguliers pour prolonger la durée de vie de vos équipements!
+            </p>
+            <div class="alert alert-info mt-md">
+              <div class="alert-icon">ℹ️</div>
+              <div class="alert-content">
+                <div class="alert-title">Rappel</div>
+                Vérifiez vos filtres tous les 3 mois
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `,
   styles: [
     `
-      .dashboard {
-        padding: 20px;
+      :host {
+        display: block;
+        padding: var(--spacing-xl) 0;
       }
-
-      h2 {
-        margin-bottom: 30px;
-      }
-
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-
-      .number {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #007bff;
-        margin: 10px 0;
-      }
-
-      .recent-tasks ul {
-        list-style: none;
-      }
-
-      .recent-tasks li {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-      }
-
-      .status-pending {
-        color: orange;
-      }
-      .status-completed {
-        color: green;
-      }
-      .status-issue_reported {
-        color: red;
-      }
-    `,
-  ],
+    `
+  ]
 })
 export class DashboardComponent implements OnInit {
   objects: ObjectItem[] = [];
@@ -108,4 +150,25 @@ export class DashboardComponent implements OnInit {
       this.completedTasks = data.filter((t) => t.status === "completed");
     });
   }
+  
+  getTaskIcon(status: string): string {
+    const icons: Record<string, string> = {
+      'pending': '⏳',
+      'completed': '✅',
+      'issue_reported': '⚠️',
+      'in_progress': '🔄'
+    };
+    return icons[status] || '📝';
+  }
+  
+  getTaskBadgeType(status: string): string {
+    const types: Record<string, string> = {
+      'pending': 'warning',
+      'completed': 'success',
+      'issue_reported': 'error',
+      'in_progress': 'info'
+    };
+    return types[status] || 'primary';
+  }
 }
+

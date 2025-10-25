@@ -16,7 +16,7 @@ def create_contribution(
     # Vérifier que l'auteur existe
     user = db.query(models.User).filter(models.User.id == author_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     
     db_contribution = models.Contribution(**contribution.model_dump(), author_id=author_id)
     db.add(db_contribution)
@@ -47,7 +47,7 @@ def get_contributions(
 def get_contribution(contribution_id: int, db: Session = Depends(get_db)):
     contribution = db.query(models.Contribution).filter(models.Contribution.id == contribution_id).first()
     if not contribution:
-        raise HTTPException(status_code=404, detail="Contribution not found")
+        raise HTTPException(status_code=404, detail="Contribution non trouvée")
     return contribution
 
 
@@ -59,7 +59,7 @@ def update_contribution_status(
 ):
     db_contribution = db.query(models.Contribution).filter(models.Contribution.id == contribution_id).first()
     if not db_contribution:
-        raise HTTPException(status_code=404, detail="Contribution not found")
+        raise HTTPException(status_code=404, detail="Contribution non trouvée")
     
     if contribution_update.status:
         db_contribution.status = contribution_update.status
@@ -73,7 +73,7 @@ def update_contribution_status(
 def upvote_contribution(contribution_id: int, db: Session = Depends(get_db)):
     contribution = db.query(models.Contribution).filter(models.Contribution.id == contribution_id).first()
     if not contribution:
-        raise HTTPException(status_code=404, detail="Contribution not found")
+        raise HTTPException(status_code=404, detail="Contribution non trouvée")
     
     contribution.upvotes += 1
     db.commit()

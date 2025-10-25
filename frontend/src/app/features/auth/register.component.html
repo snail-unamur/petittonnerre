@@ -1,0 +1,153 @@
+<div class="auth-container">
+  <div class="auth-wrapper">
+    <!-- Brand Side -->
+    <div class="auth-brand">
+      <div class="brand-content">
+        <div class="brand-icon">🔧</div>
+        <h1 class="brand-title">Rejoignez-nous !</h1>
+        <p class="brand-subtitle">Commencez à gérer vos équipements dès aujourd'hui</p>
+        
+        <div class="brand-features">
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <span>Inscription gratuite</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🔒</span>
+            <span>Données sécurisées</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🚀</span>
+            <span>Démarrage rapide</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Side -->
+    <div class="auth-form-container">
+      <div class="auth-form-wrapper">
+        <div class="auth-header">
+          <h2>Créer un compte</h2>
+          <p>Remplissez le formulaire pour commencer</p>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-error">
+          <span class="alert-icon">⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success">
+          <span class="alert-icon">✓</span>
+          <span>{{ successMessage }}</span>
+        </div>
+
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit()" class="auth-form">
+          <div class="form-group">
+            <label for="username">Nom d'utilisateur</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="formData.username"
+              #usernameField="ngModel"
+              required
+              minlength="3"
+              [disabled]="isLoading"
+              placeholder="johndoe"
+            />
+            <div *ngIf="usernameField.invalid && (usernameField.dirty || usernameField.touched)" class="form-error">
+              <span *ngIf="usernameField.errors?.['required']">Le nom d'utilisateur est requis</span>
+              <span *ngIf="usernameField.errors?.['minlength']">Le nom d'utilisateur doit contenir au moins 3 caractères</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="formData.email"
+              #emailField="ngModel"
+              required
+              email
+              [disabled]="isLoading"
+              placeholder="john@example.com"
+            />
+            <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)" class="form-error">
+              <span *ngIf="emailField.errors?.['required']">L'email est requis</span>
+              <span *ngIf="emailField.errors?.['email']">L'email n'est pas valide</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="formData.password"
+              #passwordField="ngModel"
+              required
+              minlength="6"
+              [disabled]="isLoading"
+              placeholder="••••••••"
+            />
+            <div *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)" class="form-error">
+              <span *ngIf="passwordField.errors?.['required']">Le mot de passe est requis</span>
+              <span *ngIf="passwordField.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password_confirm">Confirmer le mot de passe</label>
+            <input
+              type="password"
+              id="password_confirm"
+              name="password_confirm"
+              [(ngModel)]="formData.password_confirm"
+              #passwordConfirmField="ngModel"
+              required
+              minlength="6"
+              [disabled]="isLoading"
+              placeholder="••••••••"
+            />
+            <div *ngIf="passwordConfirmField.invalid && (passwordConfirmField.dirty || passwordConfirmField.touched)" class="form-error">
+              <span *ngIf="passwordConfirmField.errors?.['required']">La confirmation du mot de passe est requise</span>
+              <span *ngIf="passwordConfirmField.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
+            </div>
+            <div *ngIf="formData.password !== formData.password_confirm && passwordConfirmField.touched && passwordConfirmField.dirty" class="form-error">
+              <span>Les mots de passe ne correspondent pas</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Localisation (optionnel)</label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              [(ngModel)]="formData.location"
+              [disabled]="isLoading"
+              placeholder="Paris, France"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-block"
+            [disabled]="!registerForm.valid || isLoading || formData.password !== formData.password_confirm"
+          >
+            <span *ngIf="!isLoading">S'inscrire</span>
+            <span *ngIf="isLoading" class="loading-spinner"></span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Vous avez déjà un compte ? <a routerLink="/auth/login">Se connecter</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

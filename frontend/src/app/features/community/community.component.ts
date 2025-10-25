@@ -1,130 +1,197 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../core/services/api.service';
-import { Contribution } from '../../core/models/models';
 
 @Component({
   selector: 'app-community',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="community">
-      <div class="header">
-        <h2>👥 Communauté</h2>
-        <button>+ Partager une astuce</button>
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1>👥 Communauté</h1>
+          <p class="page-subtitle">Partagez vos expériences et découvrez les conseils de la communauté</p>
+        </div>
       </div>
 
-      <div class="contributions-list">
-        <div class="card contribution" *ngFor="let contrib of contributions">
-          <div class="contribution-header">
-            <h3>{{ contrib.title }}</h3>
-            <span class="category-badge">{{ contrib.category }}</span>
-          </div>
-          <p>{{ contrib.content }}</p>
-          <div class="contribution-footer">
-            <button (click)="upvote(contrib)" class="upvote-btn">
-              👍 {{ contrib.upvotes }}
-            </button>
-            <span class="status" [class]="'status-' + contrib.status">
-              {{ getStatusLabel(contrib.status) }}
-            </span>
+      <!-- Community Stats -->
+      <div class="grid grid-4 mb-xl">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-label">Membres</div>
+          <div class="stat-value">1,234</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-label">Discussions</div>
+          <div class="stat-value">456</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💡</div>
+          <div class="stat-label">Astuces</div>
+          <div class="stat-value">789</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-label">Expertises</div>
+          <div class="stat-value">234</div>
+        </div>
+      </div>
+
+      <!-- Trending Topics -->
+      <div class="card mb-xl">
+        <div class="card-header">
+          <h3>🔥 Sujets Tendances</h3>
+          <p class="card-subtitle">Les discussions les plus populaires</p>
+        </div>
+        <div class="card-body">
+          <div class="list">
+            <div class="list-item" *ngFor="let topic of trendingTopics">
+              <div class="list-item-icon">{{ topic.icon }}</div>
+              <div class="list-item-content">
+                <div class="list-item-title">
+                  {{ topic.title }}
+                  <span class="badge badge-primary">{{ topic.replies }} réponses</span>
+                </div>
+                <div class="list-item-subtitle">
+                  Par {{ topic.author }} • {{ topic.date }}
+                </div>
+              </div>
+              <button class="btn btn-sm btn-ghost">Voir →</button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="card empty" *ngIf="contributions.length === 0">
-          <p>Aucune contribution pour le moment. Soyez le premier à partager !</p>
+      <!-- Categories -->
+      <h3 class="mb-lg">📂 Catégories</h3>
+      <div class="grid grid-3 mb-xl">
+        <div class="card card-flat" *ngFor="let category of categories">
+          <div class="flex gap-md items-start">
+            <div class="text-3xl">{{ category.icon }}</div>
+            <div class="flex-1">
+              <h4 class="mb-xs">{{ category.name }}</h4>
+              <p class="text-sm text-tertiary mb-sm">{{ category.description }}</p>
+              <div class="flex gap-sm text-xs">
+                <span class="badge badge-info">{{ category.topics }} sujets</span>
+                <span class="badge badge-success">{{ category.posts }} posts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <h3>⚡ Activité Récente</h3>
+          <p class="card-subtitle">Dernières contributions de la communauté</p>
+        </div>
+        <div class="card-body">
+          <div class="empty-state">
+            <div class="empty-icon">🌟</div>
+            <h4 class="empty-title">Fonctionnalité à venir</h4>
+            <p class="empty-description">
+              La section communauté sera bientôt disponible! Vous pourrez échanger des astuces, poser des questions et partager vos expériences.
+            </p>
+            <button class="btn btn-primary">
+              📧 M'avertir du lancement
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="alert alert-info mt-xl">
+        <div class="alert-icon">💡</div>
+        <div class="alert-content">
+          <div class="alert-title">Envie de contribuer?</div>
+          Partagez vos connaissances et aidez la communauté à grandir!
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    
-    .contributions-list {
-      display: grid;
-      gap: 20px;
-    }
-    
-    .contribution-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .contribution-header h3 {
-      margin: 0;
-    }
-    
-    .category-badge {
-      padding: 4px 12px;
-      background: #6c757d;
-      color: white;
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
-    
-    .contribution-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
-    }
-    
-    .upvote-btn {
-      background: #f8f9fa;
-      color: #333;
-      border: 1px solid #ddd;
-    }
-    
-    .upvote-btn:hover {
-      background: #e9ecef;
-    }
-    
-    .status-pending { color: #856404; }
-    .status-approved { color: #155724; }
-    .status-rejected { color: #721c24; }
-    
-    .empty {
-      text-align: center;
-      color: #999;
+    :host {
+      display: block;
+      padding: var(--spacing-xl) 0;
     }
   `]
 })
 export class CommunityComponent implements OnInit {
-  contributions: Contribution[] = [];
+  trendingTopics = [
+    {
+      icon: '🔧',
+      title: 'Comment entretenir sa chaudière?',
+      author: 'Jean Dupont',
+      date: 'Il y a 2 heures',
+      replies: 12
+    },
+    {
+      icon: '🚗',
+      title: 'Meilleurs moments pour vidanger sa voiture',
+      author: 'Marie Martin',
+      date: 'Il y a 5 heures',
+      replies: 8
+    },
+    {
+      icon: '💻',
+      title: 'Nettoyage d\'ordinateur: les bonnes pratiques',
+      author: 'Pierre Bernard',
+      date: 'Hier',
+      replies: 15
+    }
+  ];
+
+  categories = [
+    {
+      icon: '🏠',
+      name: 'Maison & Jardin',
+      description: 'Entretien de la maison, jardinage, bricolage',
+      topics: 123,
+      posts: 456
+    },
+    {
+      icon: '🚗',
+      name: 'Automobile',
+      description: 'Entretien véhicules, mécanique, conseils',
+      topics: 89,
+      posts: 234
+    },
+    {
+      icon: '💻',
+      name: 'Électronique',
+      description: 'Informatique, électroménager, gadgets',
+      topics: 67,
+      posts: 189
+    },
+    {
+      icon: '🛠️',
+      name: 'Bricolage & DIY',
+      description: 'Projets DIY, réparations, tutoriels',
+      topics: 45,
+      posts: 123
+    },
+    {
+      icon: '💡',
+      name: 'Astuces & Conseils',
+      description: 'Trucs et astuces, économies, optimisation',
+      topics: 78,
+      posts: 267
+    },
+    {
+      icon: '❓',
+      name: 'Questions Générales',
+      description: 'Questions diverses, aide, support',
+      topics: 92,
+      posts: 345
+    }
+  ];
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.loadContributions();
-  }
-
-  loadContributions() {
-    this.apiService.getContributions().subscribe(data => {
-      this.contributions = data;
-    });
-  }
-
-  upvote(contribution: Contribution) {
-    this.apiService.upvoteContribution(contribution.id).subscribe(() => {
-      contribution.upvotes++;
-    });
-  }
-
-  getStatusLabel(status: string): string {
-    const labels: any = {
-      pending: 'En attente',
-      approved: 'Approuvé',
-      rejected: 'Rejeté'
-    };
-    return labels[status] || status;
+    // Future implementation
   }
 }

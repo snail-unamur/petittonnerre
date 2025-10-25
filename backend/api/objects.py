@@ -12,7 +12,7 @@ def create_object(obj: schemas.ObjectCreate, user_id: int, db: Session = Depends
     # Vérifier que l'utilisateur existe
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     
     db_object = models.Object(**obj.model_dump(), owner_id=user_id)
     db.add(db_object)
@@ -34,7 +34,7 @@ def get_objects(user_id: int = None, skip: int = 0, limit: int = 100, db: Sessio
 def get_object(object_id: int, db: Session = Depends(get_db)):
     obj = db.query(models.Object).filter(models.Object.id == object_id).first()
     if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
     return obj
 
 
@@ -42,7 +42,7 @@ def get_object(object_id: int, db: Session = Depends(get_db)):
 def update_object(object_id: int, obj_update: schemas.ObjectCreate, db: Session = Depends(get_db)):
     db_object = db.query(models.Object).filter(models.Object.id == object_id).first()
     if not db_object:
-        raise HTTPException(status_code=404, detail="Object not found")
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
     
     for key, value in obj_update.model_dump().items():
         setattr(db_object, key, value)
@@ -56,8 +56,8 @@ def update_object(object_id: int, obj_update: schemas.ObjectCreate, db: Session 
 def delete_object(object_id: int, db: Session = Depends(get_db)):
     db_object = db.query(models.Object).filter(models.Object.id == object_id).first()
     if not db_object:
-        raise HTTPException(status_code=404, detail="Object not found")
+        raise HTTPException(status_code=404, detail="Objet non trouvé")
     
     db.delete(db_object)
     db.commit()
-    return {"message": "Object deleted successfully"}
+    return {"message": "Objet supprimé avec succès"}
