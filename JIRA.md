@@ -40,7 +40,7 @@
 ### US2.2: En tant qu'utilisateur, je veux pouvoir sélectionner mes objets
 
 - [x] 2.2.1 Créer la table de liaison User-Objects dans la DB (done)
-- [ ] 2.2.2 Développer l'interface de sélection des objets (todo)
+- [x] 2.2.2 Développer l'interface de sélection des objets (done)
 - [x] 2.2.3 Implémenter les endpoints de gestion des objets utilisateur (done)
 - [x] 2.2.4 Ajouter la validation des permissions (done)
 - [x] 2.2.5 Écrire les tests de sécurisation des endpoints (done)

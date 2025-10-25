@@ -132,6 +132,23 @@ import { ObjectItem } from '../../core/models/models';
 export class ObjectsComponent implements OnInit {
   objects: ObjectItem[] = [];
   showAddForm = false;
+  loading = false;
+  error = '';
+  
+  // Pour le moment, userId est hardcodé à 1 (en attendant l'authentification)
+  currentUserId = 1;
+
+  // Formulaire
+  formData: Partial<ObjectItem> = {
+    name: '',
+    category: '',
+    brand: '',
+    model: '',
+    notes: ''
+  };
+
+  editingObject: ObjectItem | null = null;
+  objectToDelete: ObjectItem | null = null;
 
   constructor(private apiService: ApiService) {}
 
@@ -140,17 +157,130 @@ export class ObjectsComponent implements OnInit {
   }
 
   loadObjects() {
-    this.apiService.getObjects().subscribe(data => {
-      this.objects = data;
+    this.loading = true;
+    this.error = '';
+    
+    this.apiService.getUserObjects(this.currentUserId).subscribe({
+      next: (data) => {
+        this.objects = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des objets:', err);
+        this.error = 'Impossible de charger les objets. Veuillez réessayer.';
+        this.loading = false;
+      }
+    });
+  }
+
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    if (!this.showAddForm) {
+      this.cancelEdit();
+    }
+  }
+
+  editObject(obj: ObjectItem) {
+    this.editingObject = obj;
+    this.formData = {
+      name: obj.name,
+      category: obj.category,
+      brand: obj.brand || '',
+      model: obj.model || '',
+      notes: obj.notes || ''
+    };
+    this.showAddForm = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelEdit() {
+    this.showAddForm = false;
+    this.editingObject = null;
+    this.formData = {
+      name: '',
+      category: '',
+      brand: '',
+      model: '',
+      notes: ''
+    };
+  }
+
+  saveObject() {
+    if (!this.formData.name || !this.formData.category) {
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+
+    if (this.editingObject) {
+      this.apiService.updateUserObject(this.currentUserId, this.editingObject.id!, this.formData).subscribe({
+        next: (updated) => {
+          const index = this.objects.findIndex(o => o.id === updated.id);
+          if (index !== -1) {
+            this.objects[index] = updated;
+          }
+          this.cancelEdit();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Erreur lors de la mise à jour:', err);
+          this.error = 'Impossible de mettre à jour l\'objet.';
+          this.loading = false;
+        }
+      });
+    } else {
+      this.apiService.addUserObject(this.currentUserId, this.formData).subscribe({
+        next: (created) => {
+          this.objects.push(created);
+          this.cancelEdit();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Erreur lors de la création:', err);
+          this.error = 'Impossible de créer l\'objet.';
+          this.loading = false;
+        }
+      });
+    }
+  }
+
+  confirmDelete(obj: ObjectItem) {
+    this.objectToDelete = obj;
+  }
+
+  cancelDelete() {
+    this.objectToDelete = null;
+  }
+
+  deleteObject() {
+    if (!this.objectToDelete) return;
+
+    this.loading = true;
+    this.error = '';
+
+    this.apiService.deleteUserObject(this.currentUserId, this.objectToDelete.id!).subscribe({
+      next: () => {
+        this.objects = this.objects.filter(o => o.id !== this.objectToDelete!.id);
+        this.cancelDelete();
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la suppression:', err);
+        this.error = 'Impossible de supprimer l\'objet.';
+        this.cancelDelete();
+        this.loading = false;
+      }
     });
   }
 
   getCategoryLabel(category: string): string {
     const labels: Record<string, string> = {
+      'heating': 'Chauffage',
       'appliance': 'Électroménager',
-      'vehicle': 'Véhicule',
-      'electronics': 'Électronique',
-      'furniture': 'Mobilier',
+      'kitchen': 'Cuisine',
+      'bathroom': 'Salle de bain',
+      'flooring': 'Revêtement sol',
       'other': 'Autre'
     };
     return labels[category] || category;
@@ -158,11 +288,12 @@ export class ObjectsComponent implements OnInit {
   
   getCategoryIcon(category: string): string {
     const icons: Record<string, string> = {
+      'heating': '🔥',
       'appliance': '🏠',
-      'vehicle': '🚗',
-      'electronics': '💻',
-      'furniture': '�',
-      'other': '�'
+      'kitchen': '🍳',
+      'bathroom': '�',
+      'flooring': '🪨',
+      'other': '📦'
     };
     return icons[category] || '📦';
   }

@@ -39,6 +39,27 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/objects/${id}`);
   }
 
+  // ===== USER OBJECTS (New endpoints US 2.2) =====
+  getUserObjects(userId: number): Observable<ObjectItem[]> {
+    return this.http.get<ObjectItem[]>(`${this.apiUrl}/users/${userId}/objects`);
+  }
+
+  addUserObject(userId: number, object: Partial<ObjectItem>): Observable<ObjectItem> {
+    return this.http.post<ObjectItem>(`${this.apiUrl}/users/${userId}/objects`, object);
+  }
+
+  getUserObject(userId: number, objectId: number): Observable<ObjectItem> {
+    return this.http.get<ObjectItem>(`${this.apiUrl}/users/${userId}/objects/${objectId}`);
+  }
+
+  updateUserObject(userId: number, objectId: number, object: Partial<ObjectItem>): Observable<ObjectItem> {
+    return this.http.put<ObjectItem>(`${this.apiUrl}/users/${userId}/objects/${objectId}`, object);
+  }
+
+  deleteUserObject(userId: number, objectId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/users/${userId}/objects/${objectId}`);
+  }
+
   // ===== MAINTENANCE ADVICE =====
   getMaintenanceAdvice(): Observable<MaintenanceAdvice[]> {
     return this.http.get<MaintenanceAdvice[]>(`${this.apiUrl}/maintenance/advice`);
