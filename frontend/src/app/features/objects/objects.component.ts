@@ -18,8 +18,8 @@ import { ObjectItem } from "../../core/models/models";
           </p>
         </div>
         <button class="btn btn-primary" (click)="toggleAddForm()">
-          <span>{{ showAddForm ? '✖️' : '➕' }}</span>
-          {{ showAddForm ? 'Annuler' : 'Ajouter un objet' }}
+          <span>{{ showAddForm ? "✖️" : "➕" }}</span>
+          {{ showAddForm ? "Annuler" : "Ajouter un objet" }}
         </button>
       </div>
 
@@ -31,7 +31,7 @@ import { ObjectItem } from "../../core/models/models";
       <!-- Add/Edit Form avec Recherche -->
       <div class="card mb-xl" *ngIf="showAddForm">
         <h3 class="mb-md">
-          {{ editingObject ? '✏️ Modifier' : '➕ Ajouter un objet' }}
+          {{ editingObject ? "✏️ Modifier" : "➕ Ajouter un objet" }}
         </h3>
 
         <!-- Section de recherche d'objets existants (seulement en mode création) -->
@@ -127,10 +127,7 @@ import { ObjectItem } from "../../core/models/models";
             </h5>
 
             <div class="grid grid-2 gap-md" *ngIf="searchResults.length > 0">
-              <div
-                class="card card-hover"
-                *ngFor="let result of searchResults"
-              >
+              <div class="card card-hover" *ngFor="let result of searchResults">
                 <div class="flex flex-between items-start mb-sm">
                   <span class="badge badge-primary"
                     >{{ getCategoryIcon(result.category) }}
@@ -157,8 +154,8 @@ import { ObjectItem } from "../../core/models/models";
                 >
                   {{
                     isObjectAlreadyLinked(result.id!)
-                      ? '✓ Déjà dans mes objets'
-                      : '➕ Ajouter à mes objets'
+                      ? "✓ Déjà dans mes objets"
+                      : "➕ Ajouter à mes objets"
                   }}
                 </button>
               </div>
@@ -173,9 +170,7 @@ import { ObjectItem } from "../../core/models/models";
 
         <!-- Formulaire de création/modification -->
         <form (ngSubmit)="saveObject()" class="form">
-          <h4 class="mb-md" *ngIf="!editingObject">
-            ✨ Créer un nouvel objet
-          </h4>
+          <h4 class="mb-md" *ngIf="!editingObject">✨ Créer un nouvel objet</h4>
           <div class="form-grid">
             <div class="form-group">
               <label for="name" class="required">Nom de l'objet</label>
@@ -247,11 +242,19 @@ import { ObjectItem } from "../../core/models/models";
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelEdit()"
+            >
               Annuler
             </button>
-            <button type="submit" class="btn btn-primary" [disabled]="!formData.name || !formData.category">
-              {{ editingObject ? '💾 Enregistrer' : '➕ Ajouter' }}
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!formData.name || !formData.category"
+            >
+              {{ editingObject ? "💾 Enregistrer" : "➕ Ajouter" }}
             </button>
           </div>
         </form>
@@ -264,9 +267,7 @@ import { ObjectItem } from "../../core/models/models";
       </div>
 
       <!-- Error Message -->
-      <div class="alert alert-error mb-lg" *ngIf="error">
-        ⚠️ {{ error }}
-      </div>
+      <div class="alert alert-error mb-lg" *ngIf="error">⚠️ {{ error }}</div>
 
       <!-- Objects Grid -->
       <div class="grid grid-3" *ngIf="!loading && objects.length > 0">
@@ -277,10 +278,18 @@ import { ObjectItem } from "../../core/models/models";
               {{ getCategoryLabel(obj.category) }}</span
             >
             <div class="flex gap-xs">
-              <button class="btn btn-sm btn-ghost" (click)="editObject(obj)" title="Modifier">
+              <button
+                class="btn btn-sm btn-ghost"
+                (click)="editObject(obj)"
+                title="Modifier"
+              >
                 ✏️
               </button>
-              <button class="btn btn-sm btn-ghost text-error" (click)="confirmDelete(obj)" title="Supprimer">
+              <button
+                class="btn btn-sm btn-ghost text-error"
+                (click)="confirmDelete(obj)"
+                title="Supprimer"
+              >
                 🗑️
               </button>
             </div>
@@ -318,7 +327,10 @@ import { ObjectItem } from "../../core/models/models";
       </div>
 
       <!-- Empty State -->
-      <div class="empty-state" *ngIf="!loading && objects.length === 0 && !showAddForm">
+      <div
+        class="empty-state"
+        *ngIf="!loading && objects.length === 0 && !showAddForm"
+      >
         <div class="empty-icon">📦</div>
         <h3 class="empty-title">Aucun objet enregistré</h3>
         <p class="empty-description">
@@ -373,8 +385,9 @@ import { ObjectItem } from "../../core/models/models";
         <div class="modal-content" (click)="$event.stopPropagation()">
           <h3 class="mb-md">🗑️ Confirmer la suppression</h3>
           <p class="mb-lg">
-            Êtes-vous sûr de vouloir supprimer <strong>{{ objectToDelete.name }}</strong> ?
-            Cette action est irréversible.
+            Êtes-vous sûr de vouloir supprimer
+            <strong>{{ objectToDelete.name }}</strong> ? Cette action est
+            irréversible.
           </p>
           <div class="flex gap-md justify-end">
             <button class="btn btn-secondary" (click)="cancelDelete()">
@@ -434,7 +447,9 @@ import { ObjectItem } from "../../core/models/models";
       }
 
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       .modal {
@@ -636,10 +651,7 @@ export class ObjectsComponent implements OnInit {
 
     if (this.editingObject) {
       this.apiService
-        .updateObject(
-          this.editingObject.id,
-          this.formData
-        )
+        .updateObject(this.editingObject.id, this.formData)
         .subscribe({
           next: (updated) => {
             const index = this.objects.findIndex((o) => o.id === updated.id);
@@ -688,7 +700,7 @@ export class ObjectsComponent implements OnInit {
     this.error = "";
 
     this.apiService
-      .deleteObject(this.objectToDelete.id)
+      .deleteObject(this.objectToDelete.id, this.currentUserId)
       .subscribe({
         next: () => {
           this.objects = this.objects.filter(
@@ -703,7 +715,7 @@ export class ObjectsComponent implements OnInit {
           this.cancelDelete();
           this.loading = false;
         },
-      });
+    });
   }
 
   getCategoryLabel(category: string): string {
@@ -777,7 +789,8 @@ export class ObjectsComponent implements OnInit {
         },
         error: (err) => {
           console.error("Erreur lors de la recherche:", err);
-          this.error = "Impossible d'effectuer la recherche. Veuillez réessayer.";
+          this.error =
+            "Impossible d'effectuer la recherche. Veuillez réessayer.";
           this.loading = false;
         },
       });

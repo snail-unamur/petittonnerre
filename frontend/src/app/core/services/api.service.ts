@@ -54,8 +54,8 @@ export class ApiService {
     return this.http.put<ObjectItem>(`${this.apiUrl}/objects/${id}`, object);
   }
 
-  deleteObject(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/objects/${id}`);
+  deleteObject(id: number, userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/objects/${id}?user_id=${userId}`);
   }
 
   // ===== SHARED OBJECTS (US2.1) =====
@@ -202,19 +202,19 @@ export class ApiService {
   getProblems(filters?: any): Observable<any[]> {
     let url = `${this.apiUrl}/problems/`;
     const params = new URLSearchParams();
-    
+
     if (filters) {
-      if (filters.object_id) params.append('object_id', filters.object_id);
-      if (filters.category) params.append('category', filters.category);
-      if (filters.status) params.append('status', filters.status);
-      if (filters.severity) params.append('severity', filters.severity);
+      if (filters.object_id) params.append("object_id", filters.object_id);
+      if (filters.category) params.append("category", filters.category);
+      if (filters.status) params.append("status", filters.status);
+      if (filters.severity) params.append("severity", filters.severity);
     }
-    
+
     const queryString = params.toString();
     if (queryString) {
       url += `?${queryString}`;
     }
-    
+
     return this.http.get<any[]>(url);
   }
 
@@ -223,7 +223,10 @@ export class ApiService {
   }
 
   createProblem(problem: any, userId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/problems/?user_id=${userId}`, problem);
+    return this.http.post<any>(
+      `${this.apiUrl}/problems/?user_id=${userId}`,
+      problem
+    );
   }
 
   updateProblem(id: number, problem: Partial<any>): Observable<any> {
@@ -236,61 +239,109 @@ export class ApiService {
 
   // ===== PROBLEM RESOLUTIONS =====
   getProblemResolutions(problemId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/problems/${problemId}/resolutions`);
+    return this.http.get<any[]>(
+      `${this.apiUrl}/problems/${problemId}/resolutions`
+    );
   }
 
-  createProblemResolution(problemId: number, resolution: any, userId: number): Observable<any> {
+  createProblemResolution(
+    problemId: number,
+    resolution: any,
+    userId: number
+  ): Observable<any> {
     return this.http.post<any>(
       `${this.apiUrl}/problems/${problemId}/resolutions?user_id=${userId}`,
       resolution
     );
   }
 
-  updateProblemResolution(resolutionId: number, resolution: Partial<any>): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/problems/resolutions/${resolutionId}`, resolution);
+  updateProblemResolution(
+    resolutionId: number,
+    resolution: Partial<any>
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/problems/resolutions/${resolutionId}`,
+      resolution
+    );
   }
 
   upvoteProblemResolution(resolutionId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/problems/resolutions/${resolutionId}/upvote`, {});
+    return this.http.post(
+      `${this.apiUrl}/problems/resolutions/${resolutionId}/upvote`,
+      {}
+    );
   }
 
-  markResolutionSuccessful(resolutionId: number, userId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/problems/resolutions/${resolutionId}/mark-successful?user_id=${userId}`, {});
+  markResolutionSuccessful(
+    resolutionId: number,
+    userId: number
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/problems/resolutions/${resolutionId}/mark-successful?user_id=${userId}`,
+      {}
+    );
   }
 
   closeProblem(problemId: number, userId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/problems/${problemId}/close?user_id=${userId}`, {});
+    return this.http.post(
+      `${this.apiUrl}/problems/${problemId}/close?user_id=${userId}`,
+      {}
+    );
   }
 
   reopenProblem(problemId: number, userId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/problems/${problemId}/reopen?user_id=${userId}`, {});
+    return this.http.post(
+      `${this.apiUrl}/problems/${problemId}/reopen?user_id=${userId}`,
+      {}
+    );
   }
 
   // ===== OBJECT REQUESTS =====
-  createObjectRequest(request: Partial<ObjectRequest>, userId: number): Observable<ObjectRequest> {
-    return this.http.post<ObjectRequest>(`${this.apiUrl}/objects/requests?user_id=${userId}`, request);
+  createObjectRequest(
+    request: Partial<ObjectRequest>,
+    userId: number
+  ): Observable<ObjectRequest> {
+    return this.http.post<ObjectRequest>(
+      `${this.apiUrl}/objects/requests?user_id=${userId}`,
+      request
+    );
   }
 
   getObjectRequests(status?: string): Observable<ObjectRequest[]> {
-    const url = status ? `${this.apiUrl}/objects/requests?status=${status}` : `${this.apiUrl}/objects/requests`;
+    const url = status
+      ? `${this.apiUrl}/objects/requests?status=${status}`
+      : `${this.apiUrl}/objects/requests`;
     return this.http.get<ObjectRequest[]>(url);
   }
 
   getObjectRequest(id: number): Observable<ObjectRequest> {
-    return this.http.get<ObjectRequest>(`${this.apiUrl}/objects/requests/${id}`);
+    return this.http.get<ObjectRequest>(
+      `${this.apiUrl}/objects/requests/${id}`
+    );
   }
 
   // ===== ADMIN OPERATIONS =====
   getPendingRequests(adminId: number): Observable<ObjectRequest[]> {
-    return this.http.get<ObjectRequest[]>(`${this.apiUrl}/objects/admin/pending-requests?admin_id=${adminId}`);
+    return this.http.get<ObjectRequest[]>(
+      `${this.apiUrl}/objects/admin/pending-requests?admin_id=${adminId}`
+    );
   }
 
-  adminDecideRequest(requestId: number, decision: ObjectRequestDecision, adminId: number): Observable<ObjectRequest> {
-    return this.http.put<ObjectRequest>(`${this.apiUrl}/objects/requests/${requestId}/decide?admin_id=${adminId}`, decision);
+  adminDecideRequest(
+    requestId: number,
+    decision: ObjectRequestDecision,
+    adminId: number
+  ): Observable<ObjectRequest> {
+    return this.http.put<ObjectRequest>(
+      `${this.apiUrl}/objects/requests/${requestId}/decide?admin_id=${adminId}`,
+      decision
+    );
   }
 
   adminDeleteRequest(requestId: number, adminId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/objects/admin/requests/${requestId}?admin_id=${adminId}`);
+    return this.http.delete(
+      `${this.apiUrl}/objects/admin/requests/${requestId}?admin_id=${adminId}`
+    );
   }
 
   // ===== DASHBOARD =====

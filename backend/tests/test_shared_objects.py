@@ -379,3 +379,70 @@ def test_unlink_object_not_linked(test_users):
     
     assert unlink_response.status_code == 400
     assert "n'est pas lié" in unlink_response.json()["detail"]
+
+
+def test_delete_object_removes_user_link_only(test_users):
+    """Test que la suppression d'un objet retire uniquement le lien utilisateur, pas l'objet"""
+    user1_id = test_users["user1"]["id"]
+    user2_id = test_users["user2"]["id"]
+    
+    # User1 crée un objet
+    object_data = {"name": "Objet partagé", "category": "other"}
+    create_response = client.post(f"/objects/?user_id={user1_id}", json=object_data)
+    object_id = create_response.json()["id"]
+    
+    # User2 lie cet objet
+    link_data = {"object_id": object_id}
+    client.post(f"/objects/link?user_id={user2_id}", json=link_data)
+    
+    # User1 "supprime" l'objet (retire son lien)
+    delete_response = client.delete(f"/objects/{object_id}?user_id={user1_id}")
+    assert delete_response.status_code == 200
+    assert "retiré de votre liste" in delete_response.json()["message"]
+    
+    # Vérifier que l'objet existe toujours pour User2
+    user2_objects = client.get(f"/objects/?user_id={user2_id}")
+    assert user2_objects.status_code == 200
+    user2_obj_ids = [obj["id"] for obj in user2_objects.json()]
+    assert object_id in user2_obj_ids
+    
+    # Vérifier que User1 ne voit plus l'objet
+    user1_objects = client.get(f"/objects/?user_id={user1_id}")
+    assert user1_objects.status_code == 200
+    user1_obj_ids = [obj["id"] for obj in user1_objects.json()]
+    assert object_id not in user1_obj_ids
+
+
+def test_delete_object_removes_from_db_when_no_owners(test_users):
+    """Test que l'objet est supprimé de la BD quand il n'a plus de propriétaires"""
+    user1_id = test_users["user1"]["id"]
+    
+    # User1 crée un objet
+    object_data = {"name": "Objet solo", "category": "other"}
+    create_response = client.post(f"/objects/?user_id={user1_id}", json=object_data)
+    object_id = create_response.json()["id"]
+    
+    # User1 supprime l'objet
+    delete_response = client.delete(f"/objects/{object_id}?user_id={user1_id}")
+    assert delete_response.status_code == 200
+    assert "supprimé de la base" in delete_response.json()["message"]
+    
+    # Vérifier que l'objet n'existe plus du tout
+    get_response = client.get(f"/objects/{object_id}")
+    assert get_response.status_code == 404
+
+
+def test_delete_object_not_owner(test_users):
+    """Test qu'un utilisateur ne peut pas supprimer un objet dont il n'est pas propriétaire"""
+    user1_id = test_users["user1"]["id"]
+    user2_id = test_users["user2"]["id"]
+    
+    # User1 crée un objet
+    object_data = {"name": "Objet User1", "category": "other"}
+    create_response = client.post(f"/objects/?user_id={user1_id}", json=object_data)
+    object_id = create_response.json()["id"]
+    
+    # User2 essaie de supprimer l'objet de User1
+    delete_response = client.delete(f"/objects/{object_id}?user_id={user2_id}")
+    assert delete_response.status_code == 403
+    assert "pas propriétaire" in delete_response.json()["detail"]

@@ -34,14 +34,15 @@
 
 ### US2.1: En tant qu'utilisateur, je peux lier un objet existant à mon compte
 **Dépendances:** Aucune  
-**Priorité:** Haute
+**Priorité:** Haute  
+**Statut:** ✅ Done
 
-- [ ] 2.1.1 Modifier le modèle Object pour supporter plusieurs propriétaires (many-to-many)
-- [ ] 2.1.2 Créer une table d'association user_objects dans la DB
-- [ ] 2.1.3 Mettre à jour les endpoints API pour gérer les associations
-- [ ] 2.1.4 Créer un endpoint pour rechercher les objets existants
-- [ ] 2.1.5 Écrire les migrations de base de données
-- [ ] 2.1.6 Tester les associations multiples
+- [x] 2.1.1 Modifier le modèle Object pour supporter plusieurs propriétaires (many-to-many)
+- [x] 2.1.2 Créer une table d'association user_objects dans la DB
+- [x] 2.1.3 Mettre à jour les endpoints API pour gérer les associations
+- [x] 2.1.4 Créer un endpoint pour rechercher les objets existants
+- [x] 2.1.5 Écrire les migrations de base de données
+- [x] 2.1.6 Tester les associations multiples
 
 ### US2.2: En tant qu'utilisateur, je vois d'abord les objets existants avant de créer
 **Dépendances:** US2.1  

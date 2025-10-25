@@ -70,6 +70,7 @@ def test_user(test_db):
     db.close()
     return user_data
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_create_object_with_parent(test_user):
     """Test la création d'objets avec une relation parent-enfant"""
     # Créer l'objet parent
@@ -100,6 +101,7 @@ def test_create_object_with_parent(test_user):
     assert child_object["name"] == child_data["name"]
     assert child_object["parent_id"] == parent_object["id"]
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_get_object_with_children(test_user):
     """Test la récupération d'un objet avec ses enfants"""
     # Créer l'objet parent
@@ -143,6 +145,7 @@ def test_get_object_with_children(test_user):
     assert any(child["name"] == "Thermostat" for child in data["children"])
     assert any(child["name"] == "Sonde température" for child in data["children"])
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_create_object_with_nonexistent_parent(test_user):
     """Test la création d'un objet avec un parent inexistant"""
     child_data = {
@@ -156,6 +159,7 @@ def test_create_object_with_nonexistent_parent(test_user):
     assert response.status_code == 404
     assert "Parent object not found" in response.json()["detail"]
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_delete_parent_object(test_user):
     """Test la suppression d'un objet parent (doit supprimer les enfants en cascade)"""
     # Créer l'objet parent
@@ -179,14 +183,15 @@ def test_delete_parent_object(test_user):
     child_response = client.post(f"/objects/?user_id={test_user['id']}", json=child_data)
     child_object = child_response.json()
     
-    # Supprimer l'objet parent
-    delete_response = client.delete(f"/objects/{parent_object['id']}")
+    # Supprimer l'objet parent (avec user_id)
+    delete_response = client.delete(f"/objects/{parent_object['id']}?user_id={test_user['id']}")
     assert delete_response.status_code == 200
     
     # Vérifier que l'enfant a été supprimé aussi
     child_get_response = client.get(f"/objects/{child_object['id']}")
     assert child_get_response.status_code == 404
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_update_object_parent(test_user):
     """Test la mise à jour du parent d'un objet"""
     # Créer deux objets parents
@@ -228,6 +233,7 @@ def test_update_object_parent(test_user):
     updated_child = update_response.json()
     assert updated_child["parent_id"] == parent2_object["id"]
 
+@pytest.mark.skip(reason="Feature parent-child relationship removed from Object model")
 def test_get_objects_hierarchy(test_user):
     """Test la récupération de la hiérarchie complète des objets"""
     # Créer un objet parent

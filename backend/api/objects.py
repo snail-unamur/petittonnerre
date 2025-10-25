@@ -102,14 +102,34 @@ def update_object(object_id: int, obj_update: schemas.ObjectCreate, db: Session 
 
 
 @router.delete("/{object_id}")
-def delete_object(object_id: int, db: Session = Depends(get_db)):
+def delete_object(object_id: int, user_id: int, db: Session = Depends(get_db)):
+    """Retirer un objet de la liste de l'utilisateur (sans supprimer l'objet de la BD)"""
+    # Vérifier que l'utilisateur existe
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    # Vérifier que l'objet existe
     db_object = db.query(models.Object).filter(models.Object.id == object_id).first()
     if not db_object:
         raise HTTPException(status_code=404, detail="Objet non trouvé")
     
-    db.delete(db_object)
+    # Vérifier que l'utilisateur est bien propriétaire
+    if user not in db_object.owners:
+        raise HTTPException(status_code=403, detail="Vous n'êtes pas propriétaire de cet objet")
+    
+    # Retirer l'utilisateur de la liste des propriétaires
+    db_object.owners.remove(user)
     db.commit()
-    return {"message": "Objet supprimé avec succès"}
+    
+    # Si l'objet n'a plus de propriétaires, on peut le supprimer de la BD
+    # (optionnel, selon la logique métier souhaitée)
+    if len(db_object.owners) == 0:
+        db.delete(db_object)
+        db.commit()
+        return {"message": "Objet retiré de votre liste et supprimé de la base (plus aucun propriétaire)"}
+    
+    return {"message": "Objet retiré de votre liste avec succès"}
 
 
 # ====== ENDPOINTS POUR LES OBJETS PARTAGÉS (MANY-TO-MANY) ======

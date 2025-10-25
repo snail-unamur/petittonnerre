@@ -2,14 +2,23 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ApiService } from "../../core/services/api.service";
-import { MaintenanceTask, ObjectItem, MaintenanceAdvice } from "../../core/models/models";
+import {
+  MaintenanceTask,
+  ObjectItem,
+  MaintenanceAdvice,
+} from "../../core/models/models";
 import { ObjectTreeSelectComponent } from "../../shared/components/object-tree-select/object-tree-select.component";
 import { DateTimePickerComponent } from "../../shared/components/date-time-picker/date-time-picker.component";
 
 @Component({
   selector: "app-maintenance",
   standalone: true,
-  imports: [CommonModule, FormsModule, ObjectTreeSelectComponent, DateTimePickerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ObjectTreeSelectComponent,
+    DateTimePickerComponent,
+  ],
   template: `
     <div class="container">
       <div class="page-header">
@@ -69,7 +78,9 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
       <div class="card mb-xl" *ngIf="showCreateForm">
         <div class="flex flex-between items-center mb-md">
           <h3>➕ Nouvelle tâche de maintenance</h3>
-          <button class="btn btn-sm btn-ghost" (click)="closeCreateForm()">✕</button>
+          <button class="btn btn-sm btn-ghost" (click)="closeCreateForm()">
+            ✕
+          </button>
         </div>
 
         <form (ngSubmit)="createTask()" class="flex flex-column gap-md">
@@ -121,8 +132,14 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
 
           <!-- Boutons -->
           <div class="flex gap-sm">
-            <button type="submit" class="btn btn-primary">✅ Créer la tâche</button>
-            <button type="button" class="btn btn-ghost" (click)="closeCreateForm()">
+            <button type="submit" class="btn btn-primary">
+              ✅ Créer la tâche
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost"
+              (click)="closeCreateForm()"
+            >
               ❌ Annuler
             </button>
           </div>
@@ -142,7 +159,13 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
             <button class="btn btn-sm btn-ghost">⋯</button>
           </div>
 
-          <h3 class="mb-sm" *ngIf="!isEditing(task.id, 'name')" (click)="editField(task, 'name')" style="cursor: pointer;" title="Cliquer pour modifier">
+          <h3
+            class="mb-sm"
+            *ngIf="!isEditing(task.id, 'name')"
+            (click)="editField(task, 'name')"
+            style="cursor: pointer;"
+            title="Cliquer pour modifier"
+          >
             {{ task.name }}
           </h3>
 
@@ -156,7 +179,10 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; font-weight: 600;"
             />
             <div class="flex gap-sm">
-              <button class="btn btn-sm btn-primary" (click)="saveTaskName(task)">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="saveTaskName(task)"
+              >
                 ✅ Enregistrer
               </button>
               <button class="btn btn-sm btn-ghost" (click)="cancelEdit()">
@@ -172,13 +198,19 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
           </div>
 
           <div class="flex flex-column gap-sm text-sm mb-md">
-            <div class="flex gap-sm items-center" *ngIf="!isEditing(task.id, 'scheduled_date')" (click)="editField(task, 'scheduled_date')" style="cursor: pointer;" title="Cliquer pour modifier">
+            <div
+              class="flex gap-sm items-center"
+              *ngIf="!isEditing(task.id, 'scheduled_date')"
+              (click)="editField(task, 'scheduled_date')"
+              style="cursor: pointer;"
+              title="Cliquer pour modifier"
+            >
               <span class="text-tertiary">📅 Programmée:</span>
               <span class="font-medium">{{
                 formatDate(task.scheduled_date)
               }}</span>
             </div>
-            
+
             <!-- Edit mode for scheduled date -->
             <div *ngIf="isEditing(task.id, 'scheduled_date')" class="mb-sm">
               <input
@@ -188,7 +220,10 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
                 style="padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;"
               />
               <div class="flex gap-sm mt-sm">
-                <button class="btn btn-sm btn-primary" (click)="saveTaskScheduledDate(task)">
+                <button
+                  class="btn btn-sm btn-primary"
+                  (click)="saveTaskScheduledDate(task)"
+                >
                   ✅ Enregistrer
                 </button>
                 <button class="btn btn-sm btn-ghost" (click)="cancelEdit()">
@@ -196,7 +231,7 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
                 </button>
               </div>
             </div>
-            
+
             <div class="flex gap-sm items-center" *ngIf="task.completed_date">
               <span class="text-tertiary">✅ Complétée:</span>
               <span class="font-medium">{{
@@ -205,15 +240,27 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
             </div>
           </div>
 
-          <p class="text-sm text-secondary" *ngIf="task.notes && !isEditing(task.id, 'notes')" (click)="editField(task, 'notes')" style="cursor: pointer;" title="Cliquer pour modifier">
+          <p
+            class="text-sm text-secondary"
+            *ngIf="task.notes && !isEditing(task.id, 'notes')"
+            (click)="editField(task, 'notes')"
+            style="cursor: pointer;"
+            title="Cliquer pour modifier"
+          >
             💬 {{ task.notes }}
           </p>
-          
+
           <!-- Empty state for notes -->
-          <p class="text-sm text-secondary" *ngIf="!task.notes && !isEditing(task.id, 'notes')" (click)="editField(task, 'notes')" style="cursor: pointer; font-style: italic; opacity: 0.6;" title="Cliquer pour ajouter des notes">
+          <p
+            class="text-sm text-secondary"
+            *ngIf="!task.notes && !isEditing(task.id, 'notes')"
+            (click)="editField(task, 'notes')"
+            style="cursor: pointer; font-style: italic; opacity: 0.6;"
+            title="Cliquer pour ajouter des notes"
+          >
             💬 Ajouter des notes...
           </p>
-          
+
           <!-- Edit mode for notes -->
           <div *ngIf="isEditing(task.id, 'notes')" class="mb-md">
             <textarea
@@ -224,7 +271,10 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;"
             ></textarea>
             <div class="flex gap-sm">
-              <button class="btn btn-sm btn-primary" (click)="saveTaskNotes(task)">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="saveTaskNotes(task)"
+              >
                 ✅ Enregistrer
               </button>
               <button class="btn btn-sm btn-ghost" (click)="cancelEdit()">
@@ -306,7 +356,7 @@ export class MaintenanceComponent implements OnInit {
   editingName: string = "";
   editingNotes: string = "";
   editingScheduledDate: string = "";
-  
+
   // Formulaire de création
   showCreateForm: boolean = false;
   newTask = {
@@ -314,7 +364,7 @@ export class MaintenanceComponent implements OnInit {
     object_id: 0,
     advice_id: 1, // Valeur par défaut, sera ajustable plus tard
     scheduled_date: "",
-    notes: ""
+    notes: "",
   };
 
   constructor(private readonly apiService: ApiService) {}
@@ -351,7 +401,7 @@ export class MaintenanceComponent implements OnInit {
       object_id: 0,
       advice_id: 1,
       scheduled_date: "",
-      notes: ""
+      notes: "",
     };
   }
 
@@ -377,7 +427,7 @@ export class MaintenanceComponent implements OnInit {
       advice_id: this.newTask.advice_id,
       scheduled_date: new Date(this.newTask.scheduled_date).toISOString(),
       notes: this.newTask.notes.trim() || undefined,
-      status: "pending"
+      status: "pending",
     };
 
     // Récupérer le user_id depuis le service d'auth (pour l'instant hardcodé)
@@ -420,22 +470,22 @@ export class MaintenanceComponent implements OnInit {
 
   editTask(task: MaintenanceTask) {
     this.editingTaskId = task.id;
-    this.editingField = 'name';
+    this.editingField = "name";
     this.editingName = task.name || "";
   }
 
   editField(task: MaintenanceTask, field: string) {
     this.editingTaskId = task.id;
     this.editingField = field;
-    
-    switch(field) {
-      case 'name':
+
+    switch (field) {
+      case "name":
         this.editingName = task.name || "";
         break;
-      case 'notes':
+      case "notes":
         this.editingNotes = task.notes || "";
         break;
-      case 'scheduled_date': {
+      case "scheduled_date": {
         // Convertir la date en format ISO pour l'input datetime-local
         const date = new Date(task.scheduled_date);
         this.editingScheduledDate = this.formatDateForInput(date);
@@ -462,7 +512,9 @@ export class MaintenanceComponent implements OnInit {
 
   saveTaskScheduledDate(task: MaintenanceTask) {
     if (this.editingScheduledDate) {
-      const update: any = { scheduled_date: new Date(this.editingScheduledDate).toISOString() };
+      const update: any = {
+        scheduled_date: new Date(this.editingScheduledDate).toISOString(),
+      };
       this.updateTask(task.id, update);
     }
     this.cancelEdit();
@@ -486,10 +538,10 @@ export class MaintenanceComponent implements OnInit {
   formatDateForInput(date: Date): string {
     // Format: YYYY-MM-DDTHH:mm
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
