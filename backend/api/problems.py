@@ -608,3 +608,140 @@ def admin_restore_resolution(
         "message": "Résolution restaurée avec succès",
         "resolution_id": resolution.id
     }
+
+
+# ====== ENDPOINTS CHAT ======
+
+@router.get("/{problem_id}/chat", response_model=List[schemas.ProblemChatResponse])
+def get_problem_chat(
+    problem_id: int,
+    user_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Récupérer tous les messages de chat pour un problème
+    
+    L'utilisateur doit avoir accès à l'objet associé au problème
+    """
+    # Vérifier que le problème existe et n'est pas supprimé
+    problem = db.query(models.Problem).filter(
+        models.Problem.id == problem_id,
+        models.Problem.deleted_at == None
+    ).first()
+    
+    if not problem:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Problème non trouvé"
+        )
+    
+    # Vérifier que l'utilisateur a accès à l'objet lié au problème
+    obj = db.query(models.Object).filter(models.Object.id == problem.object_id).first()
+    if not obj:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Objet non trouvé"
+        )
+    
+    # Vérifier que l'utilisateur est propriétaire de l'objet
+    user_has_access = db.query(models.user_objects).filter(
+        models.user_objects.c.user_id == user_id,
+        models.user_objects.c.object_id == obj.id
+    ).first()
+    
+    if not user_has_access:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vous n'avez pas accès à ce problème"
+        )
+    
+    # Récupérer les messages de chat (non supprimés)
+    chats = db.query(models.ProblemChat).filter(
+        models.ProblemChat.problem_id == problem_id,
+        models.ProblemChat.deleted_at == None
+    ).order_by(models.ProblemChat.created_at.asc()).offset(skip).limit(limit).all()
+    
+    # Enrichir avec le nom d'utilisateur
+    result = []
+    for chat in chats:
+        user = db.query(models.User).filter(models.User.id == chat.user_id).first()
+        result.append({
+            "id": chat.id,
+            "problem_id": chat.problem_id,
+            "user_id": chat.user_id,
+            "username": user.username if user else "Utilisateur inconnu",
+            "message": chat.message,
+            "created_at": chat.created_at,
+            "deleted_at": chat.deleted_at
+        })
+    
+    return result
+
+
+@router.post("/{problem_id}/chat", response_model=schemas.ProblemChatResponse, status_code=status.HTTP_201_CREATED)
+def create_chat_message(
+    problem_id: int,
+    chat: schemas.ProblemChatCreate,
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    """Créer un nouveau message de chat pour un problème
+    
+    L'utilisateur doit avoir accès à l'objet associé au problème
+    """
+    # Vérifier que le problème existe et n'est pas supprimé
+    problem = db.query(models.Problem).filter(
+        models.Problem.id == problem_id,
+        models.Problem.deleted_at == None
+    ).first()
+    
+    if not problem:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Problème non trouvé"
+        )
+    
+    # Vérifier que l'utilisateur a accès à l'objet lié au problème
+    obj = db.query(models.Object).filter(models.Object.id == problem.object_id).first()
+    if not obj:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Objet non trouvé"
+        )
+    
+    # Vérifier que l'utilisateur est propriétaire de l'objet
+    user_has_access = db.query(models.user_objects).filter(
+        models.user_objects.c.user_id == user_id,
+        models.user_objects.c.object_id == obj.id
+    ).first()
+    
+    if not user_has_access:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vous n'avez pas accès à ce problème"
+        )
+    
+    # Créer le message de chat
+    db_chat = models.ProblemChat(
+        problem_id=problem_id,
+        user_id=user_id,
+        message=chat.message
+    )
+    
+    db.add(db_chat)
+    db.commit()
+    db.refresh(db_chat)
+    
+    # Récupérer le nom d'utilisateur
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    
+    return {
+        "id": db_chat.id,
+        "problem_id": db_chat.problem_id,
+        "user_id": db_chat.user_id,
+        "username": user.username if user else "Utilisateur inconnu",
+        "message": db_chat.message,
+        "created_at": db_chat.created_at,
+        "deleted_at": db_chat.deleted_at
+    }

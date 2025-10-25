@@ -150,14 +150,15 @@
 
 **Dépendances:** US3.1  
 **Priorité:** Moyenne
+**Statut:** ✅ Done
 
-- [ ] 3.4.1 Créer le modèle ProblemChat dans la DB
-- [ ] 3.4.2 Implémenter les endpoints CRUD pour les messages de chat
-- [ ] 3.4.3 Vérifier les droits d'accès (utilisateurs avec l'objet)
-- [ ] 3.4.4 Créer le composant de chat dans la page problème
-- [ ] 3.4.5 Afficher les messages en temps réel (polling ou websocket simple)
-- [ ] 3.4.6 Ajouter l'indication de l'auteur et timestamp
-- [ ] 3.4.7 Tester l'envoi et réception de messages
+- [x] 3.4.1 Créer le modèle ProblemChat dans la DB
+- [x] 3.4.2 Implémenter les endpoints CRUD pour les messages de chat
+- [x] 3.4.3 Vérifier les droits d'accès (utilisateurs avec l'objet)
+- [x] 3.4.4 Créer le composant de chat dans la page problème
+- [x] 3.4.5 Afficher les messages en temps réel (polling ou websocket simple)
+- [x] 3.4.6 Ajouter l'indication de l'auteur et timestamp
+- [x] 3.4.7 Tester l'envoi et réception de messages
 
 ## Epic 4: Dashboard et Actions Rapides 📊
 

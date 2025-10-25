@@ -30,24 +30,28 @@ export class ApiService {
   }
 
   // ===== OBJECTS =====
-  getObjects(userId?: number, skip: number = 0, limit?: number): Observable<ObjectItem[]> {
+  getObjects(
+    userId?: number,
+    skip: number = 0,
+    limit?: number
+  ): Observable<ObjectItem[]> {
     let url = `${this.apiUrl}/objects/`;
     const params: string[] = [];
-    
+
     if (userId) {
       params.push(`user_id=${userId}`);
     }
-    
+
     params.push(`skip=${skip}`);
-    
+
     if (limit) {
       params.push(`limit=${limit}`);
     }
-    
+
     if (params.length > 0) {
-      url += `?${params.join('&')}`;
+      url += `?${params.join("&")}`;
     }
-    
+
     return this.http.get<ObjectItem[]>(url);
   }
 
@@ -184,7 +188,7 @@ export class ApiService {
   exportMaintenanceToIcal(userId: number): Observable<Blob> {
     return this.http.get(
       `${this.apiUrl}/maintenance/export/ical?user_id=${userId}`,
-      { responseType: 'blob' }
+      { responseType: "blob" }
     );
   }
 
@@ -223,8 +227,10 @@ export class ApiService {
       if (filters.status) params.append("status", filters.status);
       if (filters.severity) params.append("severity", filters.severity);
       if (filters.user_id) params.append("user_id", filters.user_id);
-      if (filters.my_problems !== undefined) params.append("my_problems", filters.my_problems.toString());
-      if (filters.include_shared !== undefined) params.append("include_shared", filters.include_shared.toString());
+      if (filters.my_problems !== undefined)
+        params.append("my_problems", filters.my_problems.toString());
+      if (filters.include_shared !== undefined)
+        params.append("include_shared", filters.include_shared.toString());
     }
 
     const queryString = params.toString();
@@ -320,7 +326,11 @@ export class ApiService {
     );
   }
 
-  adminGetDeletedProblems(adminId: number, skip: number = 0, limit: number = 100): Observable<any[]> {
+  adminGetDeletedProblems(
+    adminId: number,
+    skip: number = 0,
+    limit: number = 100
+  ): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiUrl}/problems/admin/deleted?admin_id=${adminId}&skip=${skip}&limit=${limit}`
     );
@@ -334,19 +344,29 @@ export class ApiService {
   }
 
   // Admin endpoints - Resolutions
-  adminSoftDeleteResolution(resolutionId: number, adminId: number): Observable<any> {
+  adminSoftDeleteResolution(
+    resolutionId: number,
+    adminId: number
+  ): Observable<any> {
     return this.http.delete(
       `${this.apiUrl}/problems/admin/resolutions/${resolutionId}?admin_id=${adminId}`
     );
   }
 
-  adminGetDeletedResolutions(adminId: number, skip: number = 0, limit: number = 100): Observable<any[]> {
+  adminGetDeletedResolutions(
+    adminId: number,
+    skip: number = 0,
+    limit: number = 100
+  ): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiUrl}/problems/admin/resolutions/deleted?admin_id=${adminId}&skip=${skip}&limit=${limit}`
     );
   }
 
-  adminRestoreResolution(resolutionId: number, adminId: number): Observable<any> {
+  adminRestoreResolution(
+    resolutionId: number,
+    adminId: number
+  ): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/problems/admin/resolutions/${resolutionId}/restore?admin_id=${adminId}`,
       {}
@@ -403,6 +423,26 @@ export class ApiService {
 
   // ===== DASHBOARD =====
   getDashboardStats(userId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/dashboard/stats?user_id=${userId}`);
+    return this.http.get<any>(
+      `${this.apiUrl}/dashboard/stats?user_id=${userId}`
+    );
+  }
+
+  // ===== PROBLEM CHAT =====
+  getProblemChat(problemId: number, userId: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/problems/${problemId}/chat?user_id=${userId}`
+    );
+  }
+
+  sendChatMessage(
+    problemId: number,
+    message: string,
+    userId: number
+  ): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/problems/${problemId}/chat?user_id=${userId}`,
+      { message }
+    );
   }
 }

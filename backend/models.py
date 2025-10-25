@@ -266,3 +266,20 @@ class ProblemResolution(Base):
     # Relations
     problem = relationship("Problem", back_populates="resolutions")
     resolver = relationship("User")
+
+
+class ProblemChat(Base):
+    __tablename__ = "problem_chats"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    message = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    deleted_at = Column(DateTime, nullable=True)  # Soft delete
+    
+    # Clés étrangères
+    problem_id = Column(Integer, ForeignKey("problems.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Relations
+    problem = relationship("Problem")
+    user = relationship("User")

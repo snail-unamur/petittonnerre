@@ -1,0 +1,54 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h3>💬 Discussion</h3>
+  </div>
+
+  <div class="chat-messages" #messagesContainer>
+    <div *ngIf="loading" class="loading">
+      <p>Chargement des messages...</p>
+    </div>
+
+    <div *ngIf="!loading && messages.length === 0" class="empty-state">
+      <p>
+        Aucun message pour le moment. Soyez le premier à démarrer la discussion
+        !
+      </p>
+    </div>
+
+    <div
+      *ngFor="let message of messages"
+      class="message"
+      [class.own-message]="isOwnMessage(message)"
+      [class.other-message]="!isOwnMessage(message)"
+    >
+      <div class="message-header">
+        <span class="username">{{ message.username }}</span>
+        <span class="timestamp">{{ formatDate(message.created_at) }}</span>
+      </div>
+      <div class="message-content">
+        {{ message.message }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div class="chat-input">
+          <textarea
+        class="chat-input"
+        [(ngModel)]="newMessage"
+        placeholder="Tapez votre message... (Shift+Enter pour nouvelle ligne)"
+        rows="3"
+        (keydown.enter)="onEnterKey($any($event))"
+      ></textarea>
+    <button
+      (click)="sendMessage()"
+      [disabled]="!newMessage.trim()"
+      class="send-button"
+    >
+      Envoyer
+    </button>
+  </div>
+</div>

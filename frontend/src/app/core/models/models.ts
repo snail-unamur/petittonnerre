@@ -64,14 +64,20 @@ export interface Contribution {
 export interface ObjectRequest {
   id: number;
   name: string;
-  category: 'heating' | 'appliance' | 'kitchen' | 'bathroom' | 'flooring' | 'other';
+  category:
+    | "heating"
+    | "appliance"
+    | "kitchen"
+    | "bathroom"
+    | "flooring"
+    | "other";
   brand?: string;
   model?: string;
   purchase_date?: Date;
   manual_url?: string;
   notes?: string;
   parent_id?: number;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   admin_notes?: string;
   requester_id: number;
   reviewed_by?: number;
@@ -80,6 +86,61 @@ export interface ObjectRequest {
 }
 
 export interface ObjectRequestDecision {
-  status: 'approved' | 'rejected';
+  status: "approved" | "rejected";
   admin_notes?: string;
+}
+
+export interface Problem {
+  id: number;
+  title: string;
+  description: string;
+  category:
+    | "electrical"
+    | "leak"
+    | "mechanical"
+    | "noise"
+    | "heating_cooling"
+    | "wear"
+    | "safety"
+    | "other";
+  severity: "low" | "medium" | "high" | "critical";
+  status: "open" | "in_progress" | "resolved" | "closed";
+  symptoms?: string;
+  possible_causes?: string;
+  object_id: number;
+  reported_by: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+}
+
+export interface ProblemResolution {
+  id: number;
+  solution: string;
+  steps?: string;
+  cost_estimate?: string;
+  time_estimate?: string;
+  was_successful?: boolean;
+  feedback?: string;
+  helpfulness_score: number;
+  images?: string;
+  problem_id: number;
+  resolved_by: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+}
+
+export interface ProblemChat {
+  id: number;
+  problem_id: number;
+  user_id: number;
+  username: string;
+  message: string;
+  created_at: string | Date;
+  deleted_at?: string | Date;
+}
+
+export interface ProblemChatCreate {
+  message: string;
 }

@@ -283,3 +283,21 @@ class ProblemResolution(ProblemResolutionBase):
     deleted_at: Optional[datetime] = None
     
     model_config = ConfigDict(from_attributes=True)
+
+
+# ProblemChat Schemas
+class ProblemChatBase(BaseModel):
+    message: str
+
+class ProblemChatCreate(ProblemChatBase):
+    pass
+
+class ProblemChatResponse(ProblemChatBase):
+    id: int
+    problem_id: int
+    user_id: int
+    username: str  # Nom de l'utilisateur qui a posté le message
+    created_at: datetime
+    deleted_at: Optional[datetime] = None
+    
+    model_config = ConfigDict(from_attributes=True)
