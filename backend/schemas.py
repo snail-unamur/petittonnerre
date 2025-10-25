@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, validator
 from datetime import datetime
 from typing import Optional, List
 from models import ObjectCategory, MaintenanceStatus, ContributionStatus
@@ -13,6 +13,22 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     password_confirm: str
+
+    # Ajout de validation sur la longueur du mot de passe
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v.encode('utf-8')) > 72:  # bcrypt limite à 72 bytes
+            raise ValueError('Le mot de passe ne peut pas dépasser 72 caractères')
+        if len(v) < 8:
+            raise ValueError('Le mot de passe doit faire au moins 8 caractères')
+        return v
+
+    # Validation que les mots de passe correspondent
+    @validator('password_confirm')
+    def passwords_match(cls, v, values, **kwargs):
+        if 'password' in values and v != values['password']:
+            raise ValueError('Les mots de passe ne correspondent pas')
+        return v
 
 class UserResponse(UserBase):
     id: int

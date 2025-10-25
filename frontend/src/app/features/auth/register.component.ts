@@ -1,10 +1,18 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
 
 @Component({
   selector: "app-register",
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="container mt-5">
       <div class="row justify-content-center">
@@ -21,14 +29,18 @@ import { AuthService } from "../../core/services/auth.service";
                     id="email"
                     formControlName="email"
                     class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
                   />
                   <div
-                    *ngIf="submitted && f.email.errors"
+                    *ngIf="submitted && f['email'].errors"
                     class="invalid-feedback"
                   >
-                    <div *ngIf="f.email.errors.required">Email requis</div>
-                    <div *ngIf="f.email.errors.email">Email invalide</div>
+                    <div *ngIf="f['email'].errors?.['required']">
+                      Email requis
+                    </div>
+                    <div *ngIf="f['email'].errors?.['email']">
+                      Email invalide
+                    </div>
                   </div>
                 </div>
 
@@ -39,16 +51,18 @@ import { AuthService } from "../../core/services/auth.service";
                     id="username"
                     formControlName="username"
                     class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['username'].errors
+                    }"
                   />
                   <div
-                    *ngIf="submitted && f.username.errors"
+                    *ngIf="submitted && f['username'].errors"
                     class="invalid-feedback"
                   >
-                    <div *ngIf="f.username.errors.required">
+                    <div *ngIf="f['username'].errors?.['required']">
                       Nom d'utilisateur requis
                     </div>
-                    <div *ngIf="f.username.errors.minlength">
+                    <div *ngIf="f['username'].errors?.['minlength']">
                       Le nom d'utilisateur doit avoir au moins 3 caractères
                     </div>
                   </div>
@@ -61,16 +75,18 @@ import { AuthService } from "../../core/services/auth.service";
                     id="password"
                     formControlName="password"
                     class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['password'].errors
+                    }"
                   />
                   <div
-                    *ngIf="submitted && f.password.errors"
+                    *ngIf="submitted && f['password'].errors"
                     class="invalid-feedback"
                   >
-                    <div *ngIf="f.password.errors.required">
+                    <div *ngIf="f['password'].errors?.['required']">
                       Mot de passe requis
                     </div>
-                    <div *ngIf="f.password.errors.pattern">
+                    <div *ngIf="f['password'].errors?.['pattern']">
                       Le mot de passe doit contenir au moins 8 caractères, une
                       majuscule, une minuscule, un chiffre et un caractère
                       spécial
@@ -86,17 +102,17 @@ import { AuthService } from "../../core/services/auth.service";
                     formControlName="password_confirm"
                     class="form-control"
                     [ngClass]="{
-                      'is-invalid': submitted && f.password_confirm.errors
+                      'is-invalid': submitted && f['password_confirm'].errors
                     }"
                   />
                   <div
-                    *ngIf="submitted && f.password_confirm.errors"
+                    *ngIf="submitted && f['password_confirm'].errors"
                     class="invalid-feedback"
                   >
-                    <div *ngIf="f.password_confirm.errors.required">
+                    <div *ngIf="f['password_confirm'].errors?.['required']">
                       Confirmation du mot de passe requise
                     </div>
-                    <div *ngIf="f.password_confirm.errors.matching">
+                    <div *ngIf="f['password_confirm'].errors?.['matching']">
                       Les mots de passe ne correspondent pas
                     </div>
                   </div>
@@ -177,8 +193,15 @@ export class RegisterComponent {
     );
   }
 
-  get f() {
-    return this.registerForm.controls;
+  get f(): { [key: string]: any } {
+    const controls = this.registerForm.controls;
+    return {
+      email: controls["email"],
+      username: controls["username"],
+      password: controls["password"],
+      password_confirm: controls["password_confirm"],
+      location: controls["location"],
+    };
   }
 
   passwordMatchValidator(g: FormGroup) {
@@ -199,7 +222,7 @@ export class RegisterComponent {
 
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.router.navigate(["/login"], {
+        this.router.navigate(["/auth/login"], {
           queryParams: { registered: "true" },
         });
       },

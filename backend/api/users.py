@@ -2,10 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from models import User, UserRole
+import schemas  # Import the entire schemas module
 from schemas import UserCreate, UserResponse
 from database import get_db
 from passlib.context import CryptContext
 import re
+
+# Configuration de bcrypt directement
+pwd_context = CryptContext(
+    schemes=["bcrypt"]
+)
 
 router = APIRouter(prefix="/users", tags=["users"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -61,8 +67,21 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
             detail="Passwords do not match"
         )
     
+    # Vérifier la longueur du mot de passe (limite bcrypt)
+    if len(user.password.encode('utf-8')) > 72:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password cannot be longer than 72 bytes"
+        )
+    
     # Hasher le mot de passe
-    hashed_password = pwd_context.hash(user.password)
+    try:
+        hashed_password = pwd_context.hash(user.password)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error hashing password: {str(e)}"
+        )
     
     # Créer l'utilisateur
     db_user = User(
