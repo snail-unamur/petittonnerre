@@ -13,6 +13,7 @@ passlib[argon2]>=1.7.4  # Pour l'authentification avec argon2
 argon2-cffi>=23.1.0  # Backend argon2 pour passlib
 python-jose[cryptography]>=3.3.0  # Pour les tokens JWT
 requests>=2.31.0  # Pour le script de données de test
+icalendar>=5.0.11  # Pour l'export des maintenances au format iCalendar
 
 # Dépendances additionnelles pour la compatibilité Python 3.14
 typing-extensions>=4.8.0

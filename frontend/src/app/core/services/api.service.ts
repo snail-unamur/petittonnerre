@@ -133,6 +133,13 @@ export class ApiService {
     );
   }
 
+  exportMaintenanceToIcal(userId: number): Observable<Blob> {
+    return this.http.get(
+      `${this.apiUrl}/maintenance/export/ical?user_id=${userId}`,
+      { responseType: 'blob' }
+    );
+  }
+
   // ===== CONTRIBUTIONS =====
   getContributions(): Observable<Contribution[]> {
     return this.http.get<Contribution[]>(

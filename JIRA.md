@@ -163,10 +163,10 @@
 **Dépendances:** Aucune  
 **Priorité:** Moyenne
 
-- [ ] 5.1.1 Créer un endpoint pour générer un fichier .ics
-- [ ] 5.1.2 Formater les maintenances au format iCalendar
-- [ ] 5.1.3 Ajouter un bouton "Exporter" sur la page maintenance
-- [ ] 5.1.4 Télécharger le fichier .ics côté frontend
+- [x] 5.1.1 Créer un endpoint pour générer un fichier .ics
+- [x] 5.1.2 Formater les maintenances au format iCalendar
+- [x] 5.1.3 Ajouter un bouton "Exporter" sur la page maintenance
+- [x] 5.1.4 Télécharger le fichier .ics côté frontend
 - [ ] 5.1.5 Tester l'import dans différents calendriers (Google, Outlook, etc.)
 
 ### US5.2: En tant qu'utilisateur, je peux activer le mode sombre

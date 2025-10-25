@@ -19,7 +19,12 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
             Planifiez et suivez l'entretien de vos équipements
           </p>
         </div>
-        <button class="btn btn-primary" (click)="openCreateForm()">➕ Nouvelle tâche</button>
+        <div class="flex gap-sm">
+          <button class="btn btn-ghost" (click)="exportToIcal()" title="Exporter au format iCalendar">
+            📅 Exporter
+          </button>
+          <button class="btn btn-primary" (click)="openCreateForm()">➕ Nouvelle tâche</button>
+        </div>
       </div>
 
       <!-- Filters -->
@@ -546,5 +551,28 @@ export class MaintenanceComponent implements OnInit {
   formatDate(date: Date | string): string {
     const dateObj = typeof date === "string" ? new Date(date) : date;
     return dateObj.toLocaleDateString("fr-FR");
+  }
+
+  exportToIcal() {
+    // Récupérer le user_id depuis le service d'auth (pour l'instant hardcodé)
+    const userId = 1;
+
+    this.apiService.exportMaintenanceToIcal(userId).subscribe({
+      next: (blob: Blob) => {
+        // Créer un lien de téléchargement
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `maintenances-petit-tonnerre-${userId}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error("Erreur lors de l'export iCalendar:", err);
+        alert("Une erreur est survenue lors de l'export. Assurez-vous d'avoir des maintenances à exporter.");
+      },
+    });
   }
 }
