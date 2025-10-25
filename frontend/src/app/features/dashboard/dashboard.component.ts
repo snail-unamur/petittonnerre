@@ -148,9 +148,12 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData() {
-    this.apiService.getObjects().subscribe((data) => {
-      this.objects = data;
-    });
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.apiService.getObjects(userId).subscribe((data) => {
+        this.objects = data;
+      });
+    }
 
     this.apiService.getMaintenanceTasks().subscribe((data) => {
       this.tasks = data;

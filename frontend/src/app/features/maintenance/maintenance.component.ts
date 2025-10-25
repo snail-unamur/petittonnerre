@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ApiService } from "../../core/services/api.service";
+import { AuthService } from "../../core/services/auth.service";
 import {
   MaintenanceTask,
   ObjectItem,
@@ -373,7 +374,10 @@ export class MaintenanceComponent implements OnInit {
     notes: "",
   };
 
-  constructor(private readonly apiService: ApiService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadTasks();
@@ -387,9 +391,12 @@ export class MaintenanceComponent implements OnInit {
   }
 
   loadObjects() {
-    this.apiService.getObjects().subscribe((data) => {
-      this.objects = data;
-    });
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.apiService.getObjects(userId).subscribe((data) => {
+        this.objects = data;
+      });
+    }
   }
 
   openCreateForm() {

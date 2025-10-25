@@ -79,12 +79,13 @@
 ### US2.4: En tant qu'utilisateur, je ne vois que mes objets dans ma liste
 
 **Dépendances:** US2.1  
-**Priorité:** Haute
+**Priorité:** Haute  
+**Statut:** ✅ Done
 
-- [ ] 2.4.1 Modifier l'endpoint GET /objects pour filtrer par user_id
-- [ ] 2.4.2 Utiliser la table d'association pour récupérer les objets de l'utilisateur
-- [ ] 2.4.3 Mettre à jour le frontend pour passer le user_id
-- [ ] 2.4.4 Tester que chaque utilisateur voit uniquement ses objets
+- [x] 2.4.1 Modifier l'endpoint GET /objects pour filtrer par user_id
+- [x] 2.4.2 Utiliser la table d'association pour récupérer les objets de l'utilisateur
+- [x] 2.4.3 Mettre à jour le frontend pour passer le user_id
+- [x] 2.4.4 Tester que chaque utilisateur voit uniquement ses objets
 
 ### US2.5: En tant qu'utilisateur, je peux rechercher dans tous mes objets
 
