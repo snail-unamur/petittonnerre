@@ -1,0 +1,4 @@
+# Configuration mutmut
+[mutmut]
+runner = pytest -x --tb=short
+backup_dir = .mutmut_backup
