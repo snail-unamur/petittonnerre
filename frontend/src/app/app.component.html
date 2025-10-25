@@ -6,14 +6,6 @@
         <h1 class="logo-text">Petit Tonnerre</h1>
       </div>
       
-      <!-- Theme toggle -->
-      <button 
-        class="theme-toggle" 
-        (click)="toggleTheme()"
-        [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
-        <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
-      </button>
-      
       <!-- Menu burger (mobile) -->
       <button 
         class="menu-toggle" 
@@ -79,6 +71,14 @@
         
         <!-- User Menu -->
         <div class="user-menu" *ngIf="currentUser$ | async as user; else authButtons">
+          <!-- Theme toggle -->
+          <button 
+            class="theme-toggle" 
+            (click)="toggleTheme()"
+            [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
+            <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
+          </button>
+          
           <div class="user-dropdown">
             <button class="user-button" (click)="toggleUserMenu()">
               <span class="user-avatar">👤</span>
@@ -106,6 +106,14 @@
         
         <ng-template #authButtons>
           <div class="user-menu">
+            <!-- Theme toggle -->
+            <button 
+              class="theme-toggle" 
+              (click)="toggleTheme()"
+              [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
+              <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
+            </button>
+            
             <div class="auth-buttons">
               <a routerLink="/auth/login" class="btn btn-ghost btn-sm" (click)="closeMenu()">
                 Connexion

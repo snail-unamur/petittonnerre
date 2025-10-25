@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: petittonnerre
       POSTGRES_PASSWORD: petittonnerre
-      POSTGRES_DB: petittonnerre_db
+      POSTGRES_DB: petittonnerre
     ports:
       - "5432:5432"
     volumes:
@@ -47,7 +47,7 @@ services:
       dockerfile: Dockerfile
     container_name: petit_tonnerre_backend
     environment:
-      DATABASE_URL: postgresql://petittonnerre:petittonnerre@postgres:5432/petittonnerre_db
+      DATABASE_URL: postgresql://petittonnerre:petittonnerre@postgres:5432/petittonnerre
       SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-this-in-production-please}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 30
