@@ -1,4 +1,13 @@
 <div class="auth-container">
+  <!-- Theme Toggle Button -->
+  <button 
+    class="theme-toggle" 
+    (click)="toggleTheme()"
+    [attr.aria-label]="(themeService.theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'"
+  >
+    {{ (themeService.theme$ | async) === 'dark' ? '☀️' : '🌙' }}
+  </button>
+
   <div class="auth-wrapper">
     <!-- Brand Side -->
     <div class="auth-brand">

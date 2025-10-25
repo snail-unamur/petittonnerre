@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule, Router, ActivatedRoute } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
+import { ThemeService } from "../../core/services/theme.service";
 
 @Component({
   selector: "app-login",
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public themeService: ThemeService
   ) {}
 
   ngOnInit() {
@@ -59,5 +61,9 @@ export class LoginComponent implements OnInit {
         this.errorMessage = error.error?.detail || 'Identifiants incorrects. Veuillez réessayer.';
       }
     });
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }
