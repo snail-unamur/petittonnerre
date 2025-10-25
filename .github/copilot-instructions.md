@@ -31,3 +31,4 @@
 ## Instructions liées aux tâches:
 
 - Toujours faire le back et le front nécessaire!
+- Toujours modifier le fichier edit_data.py lorsque des données initiales doivent être modifiées ou ajoutées
