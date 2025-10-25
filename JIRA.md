@@ -15,20 +15,22 @@
 ### US1.2: En tant qu'utilisateur non connecté, je ne vois que login/register dans le menu
 **Dépendances:** Aucune  
 **Priorité:** Haute
+**Statut:** ✅ Done
 
-- [ ] 1.2.1 Modifier le composant de navigation pour vérifier l'état de connexion
-- [ ] 1.2.2 Cacher les éléments de menu pour utilisateurs non connectés
-- [ ] 1.2.3 Afficher uniquement Login et Register si non connecté
-- [ ] 1.2.4 Tester l'affichage du menu selon l'état de connexion
+- [x] 1.2.1 Modifier le composant de navigation pour vérifier l'état de connexion
+- [x] 1.2.2 Cacher les éléments de menu pour utilisateurs non connectés
+- [x] 1.2.3 Afficher uniquement Login et Register si non connecté
+- [x] 1.2.4 Tester l'affichage du menu selon l'état de connexion
 
 ### US1.3: En tant qu'administrateur connecté, je vois un lien "Admin" dans le menu
 **Dépendances:** US1.2  
 **Priorité:** Haute
+**Statut:** ✅ Done
 
-- [ ] 1.3.1 Ajouter la vérification du rôle admin dans AuthService
-- [ ] 1.3.2 Afficher le lien Admin dans le menu si role === admin
-- [ ] 1.3.3 Créer/améliorer le guard admin pour protéger les routes
-- [ ] 1.3.4 Tester l'accès admin selon les rôles
+- [x] 1.3.1 Ajouter la vérification du rôle admin dans AuthService
+- [x] 1.3.2 Afficher le lien Admin dans le menu si role === admin
+- [x] 1.3.3 Créer/améliorer le guard admin pour protéger les routes
+- [x] 1.3.4 Tester l'accès admin selon les rôles
 
 ## Epic 2: Gestion des Objets Partagés 📦
 
