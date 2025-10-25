@@ -794,11 +794,14 @@
 
   .time-section {
     border-left: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   }
 
   .time-label {
     color: var(--text-primary);
+    background: var(--bg-tertiary);
     border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .time-columns {
@@ -811,7 +814,7 @@
 
   .time-column-label {
     background: var(--bg-tertiary);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     border-bottom: 1px solid var(--border-color);
   }
 
