@@ -2,7 +2,10 @@
   <header class="header">
     <div class="header-content">
       <a routerLink="/dashboard" class="logo">
-        <app-soviet-logo></app-soviet-logo>
+        <app-soviet-logo *ngIf="communistMode$ | async; else normalLogo"></app-soviet-logo>
+        <ng-template #normalLogo>
+          <img class="logo-icon" src="assets/logo.png" alt="Petit Tonnerre logo" />
+        </ng-template>
       </a>
       
       <!-- Menu burger (mobile) - visible uniquement si connecté -->
@@ -28,8 +31,10 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">⚒️</span>
-              <span>Soviet Suprême</span>
+              <span class="nav-icon" *ngIf="communistMode$ | async; else dashboardIcon">⚒️</span>
+              <ng-template #dashboardIcon><span class="nav-icon">📊</span></ng-template>
+              <span *ngIf="communistMode$ | async; else dashboardText">Soviet Suprême</span>
+              <ng-template #dashboardText><span>Dashboard</span></ng-template>
             </a>
           </li>
           <li class="nav-item">
@@ -37,8 +42,10 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">🏭</span>
-              <span>Propriété Collective</span>
+              <span class="nav-icon" *ngIf="communistMode$ | async; else objectsIcon">🏭</span>
+              <ng-template #objectsIcon><span class="nav-icon">📦</span></ng-template>
+              <span *ngIf="communistMode$ | async; else objectsText">Propriété Collective</span>
+              <ng-template #objectsText><span>Mes Objets</span></ng-template>
             </a>
           </li>
           <li class="nav-item">
@@ -47,7 +54,8 @@
                class="nav-link"
                (click)="closeMenu()">
               <span class="nav-icon">🔧</span>
-              <span>Travail du Peuple</span>
+              <span *ngIf="communistMode$ | async; else maintenanceText">Travail du Peuple</span>
+              <ng-template #maintenanceText><span>Maintenance</span></ng-template>
             </a>
           </li>
           <li class="nav-item">
@@ -55,19 +63,29 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">�</span>
-              <span>Sabotage Capitaliste</span>
+              <span class="nav-icon" *ngIf="communistMode$ | async; else problemsIcon">🚩</span>
+              <ng-template #problemsIcon><span class="nav-icon">🔍</span></ng-template>
+              <span *ngIf="communistMode$ | async; else problemsText">Sabotage Capitaliste</span>
+              <ng-template #problemsText><span>Problèmes</span></ng-template>
             </a>
           </li>
         </ul>
         
         <!-- User Menu -->
         <div class="user-menu" *ngIf="currentUser$ | async as user; else authButtons">
+          <!-- Communist Mode Toggle -->
+          <button 
+            class="communist-toggle" 
+            (click)="toggleCommunistMode()"
+            [attr.aria-label]="(communistMode$ | async) ? 'Désactiver le mode communiste' : 'Rejoindre la révolution!'">
+            <span class="communist-icon">{{ (communistMode$ | async) ? '🚩' : '⭐' }}</span>
+          </button>
+          
           <!-- Theme toggle - Mode Jour/Nuit Communiste -->
           <button 
             class="theme-toggle" 
             (click)="toggleTheme()"
-            [attr.aria-label]="(theme$ | async) === 'dark' ? 'Mode Soleil Soviétique' : 'Mode Nuit de Moscou'">
+            [attr.aria-label]="(theme$ | async) === 'dark' ? (communistMode$ | async) ? 'Mode Soleil Soviétique' : 'Activer le mode clair' : (communistMode$ | async) ? 'Mode Nuit de Moscou' : 'Activer le mode sombre'">
             <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
           </button>
           
@@ -80,17 +98,27 @@
             
             <div class="dropdown-menu" [class.open]="isUserMenuOpen">
               <a routerLink="/admin/dashboard" class="dropdown-item" (click)="closeMenus()" *ngIf="isAdmin()">
-                <span>⭐</span> Bureau du Parti
+                <span *ngIf="communistMode$ | async; else adminIcon">⭐</span>
+                <ng-template #adminIcon><span>👨‍💼</span></ng-template>
+                <span *ngIf="communistMode$ | async; else adminText"> Bureau du Parti</span>
+                <ng-template #adminText> Dashboard Admin</ng-template>
               </a>
               <a href="#" class="dropdown-item" (click)="closeMenus()">
-                <span>⚙️</span> Configuration
+                <span>⚙️</span>
+                <span *ngIf="communistMode$ | async; else settingsText"> Configuration</span>
+                <ng-template #settingsText> Paramètres</ng-template>
               </a>
               <a href="#" class="dropdown-item" (click)="closeMenus()">
-                <span>🪪</span> Carte du Parti
+                <span *ngIf="communistMode$ | async; else profileIcon">🪪</span>
+                <ng-template #profileIcon><span>👤</span></ng-template>
+                <span *ngIf="communistMode$ | async; else profileText"> Carte du Parti</span>
+                <ng-template #profileText> Profil</ng-template>
               </a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item" (click)="logout()">
-                <span>🚪</span> Quitter le Parti
+                <span>🚪</span>
+                <span *ngIf="communistMode$ | async; else logoutText"> Quitter le Parti</span>
+                <ng-template #logoutText> Déconnexion</ng-template>
               </a>
             </div>
           </div>
@@ -98,20 +126,30 @@
         
         <ng-template #authButtons>
           <div class="user-menu">
+            <!-- Communist Mode Toggle -->
+            <button 
+              class="communist-toggle" 
+              (click)="toggleCommunistMode()"
+              [attr.aria-label]="(communistMode$ | async) ? 'Désactiver le mode communiste' : 'Rejoindre la révolution!'">
+              <span class="communist-icon">{{ (communistMode$ | async) ? '🚩' : '⭐' }}</span>
+            </button>
+            
             <!-- Theme toggle - Mode Jour/Nuit Communiste -->
             <button 
               class="theme-toggle" 
               (click)="toggleTheme()"
-              [attr.aria-label]="(theme$ | async) === 'dark' ? 'Mode Soleil Soviétique' : 'Mode Nuit de Moscou'">
+              [attr.aria-label]="(theme$ | async) === 'dark' ? (communistMode$ | async) ? 'Mode Soleil Soviétique' : 'Activer le mode clair' : (communistMode$ | async) ? 'Mode Nuit de Moscou' : 'Activer le mode sombre'">
               <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
             </button>
             
             <div class="auth-buttons">
               <a routerLink="/auth/login" class="btn btn-ghost btn-sm" (click)="closeMenu()">
-                Rejoindre le Parti
+                <span *ngIf="communistMode$ | async; else loginText">Rejoindre le Parti</span>
+                <ng-template #loginText>Connexion</ng-template>
               </a>
               <a routerLink="/auth/register" class="btn btn-primary btn-sm" (click)="closeMenu()">
-                Devenir Camarade
+                <span *ngIf="communistMode$ | async; else registerText">Devenir Camarade</span>
+                <ng-template #registerText>S'inscrire</ng-template>
               </a>
             </div>
           </div>
@@ -131,7 +169,8 @@
   
   <footer class="footer">
     <div class="footer-content">
-      <p>⚒️ 2025 Petit Tonnerre - Propriété du Peuple - Pour la gloire de l'URSS et les enseignements de Karl Marx 🚩</p>
+      <p *ngIf="communistMode$ | async; else normalFooter">⚒️ 2025 Petit Tonnerre - Propriété du Peuple - Pour la gloire de l'URSS et les enseignements de Karl Marx 🚩</p>
+      <ng-template #normalFooter><p>&copy; 2025 Petit Tonnerre - Gestion d'entretien intelligente</p></ng-template>
     </div>
   </footer>
 </div>

@@ -20,6 +20,14 @@ body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--bg-secondary);
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-base);
+  min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+/* Communist Mode Background */
+html[data-communist="true"] body {
   background-image: 
     repeating-linear-gradient(
       45deg,
@@ -28,9 +36,6 @@ body {
       rgba(204, 0, 0, 0.03) 35px,
       rgba(204, 0, 0, 0.03) 70px
     );
-  line-height: var(--line-height-normal);
-  font-size: var(--font-size-base);
-  min-height: 100vh;
 }
 
 // Typography

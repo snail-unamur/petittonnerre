@@ -4,14 +4,22 @@
   flex-direction: column;
 }
 
-/* Header - Glory to the Soviet Union! 🚩 */
+/* Header */
 .header {
-  background: linear-gradient(135deg, #CC0000 0%, #990000 100%);
-  color: #FFD700;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Header - Communist Mode 🚩 */
+:host-context([data-communist="true"]) .header {
+  background: linear-gradient(135deg, #CC0000 0%, #990000 100%);
+  color: #FFD700;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   border-bottom: 3px solid #FFD700;
 }
 
@@ -25,17 +33,63 @@
   min-height: 64px;
 }
 
-/* Logo - Soviet Glory! ⚒️� */
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
   z-index: 1001;
+  transition: transform 0.3s ease;
   
   &:hover {
     transform: scale(1.05);
   }
-  
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  object-fit: contain;
   transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Communist Mode Toggle */
+.communist-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 0.75rem;
+}
+
+.communist-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: rotate(15deg);
+}
+
+:host-context([data-communist="true"]) .communist-toggle {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #FFD700;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+}
+
+.communist-icon {
+  font-size: 1.25rem;
+  display: block;
+  line-height: 1;
 }
 
 /* Theme Toggle */
@@ -164,11 +218,15 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  color: #FFD700;
+  color: white;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.2s ease;
+}
+
+:host-context([data-communist="true"]) .nav-link {
+  color: #FFD700;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
@@ -284,12 +342,23 @@
 }
 
 .btn-primary {
+  background: white;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #f8f9ff;
+  box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+}
+
+:host-context([data-communist="true"]) .btn-primary {
   background: #FFD700;
   color: #CC0000;
   font-weight: 700;
 }
 
-.btn-primary:hover {
+:host-context([data-communist="true"]) .btn-primary:hover {
   background: #FFA500;
   box-shadow: 0 2px 8px rgba(255,215,0,0.5);
 }
@@ -455,18 +524,25 @@
   }
 }
 
-/* Footer - Glory to the Workers! */
+/* Footer */
 .footer {
-  background: linear-gradient(135deg, #990000 0%, #660000 100%);
-  color: #FFD700;
+  background: #1e293b;
+  color: white;
   padding: 1.5rem 1rem;
   margin-top: auto;
+  transition: all 0.3s ease;
+}
+
+/* Footer - Communist Mode */
+:host-context([data-communist="true"]) .footer {
+  background: linear-gradient(135deg, #990000 0%, #660000 100%);
+  color: #FFD700;
   border-top: 3px solid #FFD700;
   position: relative;
   overflow: hidden;
 }
 
-.footer::before {
+:host-context([data-communist="true"]) .footer::before {
   content: "⚒️";
   position: absolute;
   font-size: 120px;
@@ -487,6 +563,11 @@
 .footer-content p {
   margin: 0;
   font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+:host-context([data-communist="true"]) .footer-content p {
   font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  opacity: 1;
 }
