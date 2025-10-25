@@ -6,6 +6,14 @@
         <h1 class="logo-text">Petit Tonnerre</h1>
       </div>
       
+      <!-- Theme toggle -->
+      <button 
+        class="theme-toggle" 
+        (click)="toggleTheme()"
+        [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
+        <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
+      </button>
+      
       <!-- Menu burger (mobile) -->
       <button 
         class="menu-toggle" 

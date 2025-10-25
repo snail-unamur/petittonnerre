@@ -173,13 +173,14 @@
 ### US5.2: En tant qu'utilisateur, je peux activer le mode sombre
 **Dépendances:** Aucune  
 **Priorité:** Basse
+**Statut:** ✅ Done
 
-- [ ] 5.2.1 Créer un thème dark dans les styles SCSS
-- [ ] 5.2.2 Ajouter un toggle dark/light mode dans le header
-- [ ] 5.2.3 Sauvegarder la préférence dans localStorage
-- [ ] 5.2.4 Appliquer le thème au chargement de l'application
-- [ ] 5.2.5 Adapter tous les composants au dark mode
-- [ ] 5.2.6 Tester le switch entre les modes
+- [x] 5.2.1 Créer un thème dark dans les styles SCSS
+- [x] 5.2.2 Ajouter un toggle dark/light mode dans le header
+- [x] 5.2.3 Sauvegarder la préférence dans localStorage
+- [x] 5.2.4 Appliquer le thème au chargement de l'application
+- [x] 5.2.5 Adapter tous les composants au dark mode
+- [x] 5.2.6 Tester le switch entre les modes
 
 ## Epic 6: Administration Avancée 👨‍💼
 

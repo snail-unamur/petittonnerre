@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService, UserResponse } from './core/services/auth.service';
+import { ThemeService } from './core/services/theme.service';
 import { filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -17,12 +18,15 @@ export class AppComponent implements OnInit {
   isMenuOpen = false;
   isUserMenuOpen = false;
   currentUser$: Observable<UserResponse | null>;
+  theme$: Observable<string>;
   
   constructor(
     private authService: AuthService,
+    private themeService: ThemeService,
     private router: Router
   ) {
     this.currentUser$ = this.authService.currentUser$;
+    this.theme$ = this.themeService.theme$;
   }
   
   ngOnInit() {
@@ -52,6 +56,10 @@ export class AppComponent implements OnInit {
   closeMenus() {
     this.isMenuOpen = false;
     this.isUserMenuOpen = false;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   isAdmin(): boolean {
