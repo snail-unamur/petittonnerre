@@ -20,4 +20,4 @@
 
 ## Format des réponses
 
-- Commencer chaque réponse par une blague (maximum 15 mots)
+- Commencer chaque réponse par une petite blague style blague de toto. La blague n'a rien à voir avec la question.
