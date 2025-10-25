@@ -39,11 +39,11 @@
 
 ### US2.2: En tant qu'utilisateur, je veux pouvoir sélectionner mes objets
 
-- [ ] 2.2.1 Créer la table de liaison User-Objects dans la DB (in progress)
+- [x] 2.2.1 Créer la table de liaison User-Objects dans la DB (done)
 - [ ] 2.2.2 Développer l'interface de sélection des objets (todo)
-- [ ] 2.2.3 Implémenter les endpoints de gestion des objets utilisateur (in progress)
-- [ ] 2.2.4 Ajouter la validation des permissions (todo)
-- [ ] 2.2.5 Écrire les tests de sécurisation des endpoints (todo)
+- [x] 2.2.3 Implémenter les endpoints de gestion des objets utilisateur (done)
+- [x] 2.2.4 Ajouter la validation des permissions (done)
+- [x] 2.2.5 Écrire les tests de sécurisation des endpoints (done)
 
 ### US2.3: En tant qu'administrateur, je veux pouvoir enrichir les données des objets via un script
 
