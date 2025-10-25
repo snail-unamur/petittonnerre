@@ -19,6 +19,7 @@ interface Problem {
   reported_by: number;
   created_at: string;
   updated_at: string;
+  deleted_at?: string | null;
 }
 
 interface ProblemResolution {
@@ -50,6 +51,11 @@ export class ProblemsComponent implements OnInit {
   resolutions: ProblemResolution[] = [];
   userObjects: ObjectItem[] = [];
   currentUserId: number | null = null;
+  isAdmin: boolean = false;
+  
+  // Vue admin des problèmes supprimés
+  showDeletedProblems: boolean = false;
+  deletedProblems: Problem[] = [];
   
   // Filtres
   filterStatus: string = 'all';
@@ -86,6 +92,7 @@ export class ProblemsComponent implements OnInit {
   
   ngOnInit() {
     this.currentUserId = this.authService.getUserId();
+    this.isAdmin = this.authService.isAdmin();
     this.loadProblems();
     this.loadAllObjects();
   }
@@ -301,6 +308,104 @@ export class ProblemsComponent implements OnInit {
 
   isOwner(): boolean {
     return this.selectedProblem?.reported_by === this.currentUserId;
+  }
+
+  // ===== ADMIN OPERATIONS =====
+  adminSoftDeleteProblem(problem: Problem) {
+    if (!this.isAdmin || !this.currentUserId) {
+      alert('❌ Vous devez être administrateur pour effectuer cette action');
+      return;
+    }
+
+    if (confirm(`⚠️ Êtes-vous sûr de vouloir supprimer le problème "${problem.title}" ?\n\nCette action peut être annulée depuis la vue "Problèmes supprimés".`)) {
+      this.apiService.adminSoftDeleteProblem(problem.id, this.currentUserId).subscribe({
+        next: (response) => {
+          // Retirer le problème de la liste active
+          this.problems = this.problems.filter(p => p.id !== problem.id);
+          
+          // Si c'est le problème sélectionné, revenir à la liste
+          if (this.selectedProblem?.id === problem.id) {
+            this.backToList();
+          }
+          
+          alert(`✅ Problème "${problem.title}" supprimé avec succès`);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression:', error);
+          if (error.status === 403) {
+            alert('❌ Accès refusé. Action réservée aux administrateurs.');
+          } else if (error.status === 404) {
+            alert('❌ Problème non trouvé ou déjà supprimé.');
+          } else {
+            alert('❌ Erreur lors de la suppression du problème.');
+          }
+        }
+      });
+    }
+  }
+
+  loadDeletedProblems() {
+    if (!this.isAdmin || !this.currentUserId) {
+      return;
+    }
+
+    this.apiService.adminGetDeletedProblems(this.currentUserId).subscribe({
+      next: (data: Problem[]) => {
+        this.deletedProblems = data;
+        this.showDeletedProblems = true;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des problèmes supprimés:', error);
+        alert('❌ Erreur lors du chargement des problèmes supprimés.');
+      }
+    });
+  }
+
+  adminRestoreProblem(problem: Problem) {
+    if (!this.isAdmin || !this.currentUserId) {
+      alert('❌ Vous devez être administrateur pour effectuer cette action');
+      return;
+    }
+
+    if (confirm(`Restaurer le problème "${problem.title}" ?`)) {
+      this.apiService.adminRestoreProblem(problem.id, this.currentUserId).subscribe({
+        next: (response) => {
+          // Retirer de la liste des supprimés
+          this.deletedProblems = this.deletedProblems.filter(p => p.id !== problem.id);
+          
+          // Recharger la liste active pour y inclure le problème restauré
+          this.loadProblems();
+          
+          alert(`✅ Problème "${problem.title}" restauré avec succès`);
+          
+          // Si plus aucun problème supprimé, retourner à la vue normale
+          if (this.deletedProblems.length === 0) {
+            this.showDeletedProblems = false;
+          }
+        },
+        error: (error) => {
+          console.error('Erreur lors de la restauration:', error);
+          if (error.status === 403) {
+            alert('❌ Accès refusé. Action réservée aux administrateurs.');
+          } else if (error.status === 404) {
+            alert('❌ Problème non trouvé.');
+          } else if (error.status === 400) {
+            alert('❌ Ce problème n\'est pas supprimé.');
+          } else {
+            alert('❌ Erreur lors de la restauration du problème.');
+          }
+        }
+      });
+    }
+  }
+
+  toggleDeletedView() {
+    if (this.showDeletedProblems) {
+      this.showDeletedProblems = false;
+      this.deletedProblems = [];
+    } else {
+      this.loadDeletedProblems();
+    }
   }
   
   getSeverityClass(severity: string): string {

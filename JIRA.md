@@ -188,16 +188,17 @@
 
 ## Epic 6: Administration Avancée 👨‍💼
 
-### US6.1: En tant qu'admin, je peux supprimer des problèmes (soft delete)
+### US6.1: En tant qu'admin, je peux supprimer des problèmes (soft delete) ✅
 **Dépendances:** US1.3  
-**Priorité:** Moyenne
+**Priorité:** Moyenne  
+**Statut:** Done
 
-- [ ] 6.1.1 Ajouter un champ deleted_at dans le modèle Problem
-- [ ] 6.1.2 Créer l'endpoint admin DELETE /admin/problems/{id}
-- [ ] 6.1.3 Implémenter le soft delete (mettre deleted_at = now())
-- [ ] 6.1.4 Exclure les problèmes supprimés des requêtes normales
-- [ ] 6.1.5 Ajouter une interface admin pour voir/restaurer les problèmes supprimés
-- [ ] 6.1.6 Tester le soft delete et la restauration
+- [x] 6.1.1 Ajouter un champ deleted_at dans le modèle Problem
+- [x] 6.1.2 Créer l'endpoint admin DELETE /admin/problems/{id}
+- [x] 6.1.3 Implémenter le soft delete (mettre deleted_at = now())
+- [x] 6.1.4 Exclure les problèmes supprimés des requêtes normales
+- [x] 6.1.5 Ajouter une interface admin pour voir/restaurer les problèmes supprimés
+- [x] 6.1.6 Tester le soft delete et la restauration
 
 ### US6.2: En tant qu'admin, je peux supprimer des commentaires (soft delete)
 **Dépendances:** US6.1  

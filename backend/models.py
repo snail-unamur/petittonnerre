@@ -231,6 +231,7 @@ class Problem(Base):
     possible_causes = Column(Text)  # Causes possibles
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
+    deleted_at = Column(DateTime, nullable=True)  # Soft delete
     
     # Clés étrangères
     object_id = Column(Integer, ForeignKey("objects.id"), nullable=False)

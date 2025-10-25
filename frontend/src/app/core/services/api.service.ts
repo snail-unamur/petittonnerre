@@ -296,6 +296,26 @@ export class ApiService {
     );
   }
 
+  // ===== ADMIN PROBLEM OPERATIONS =====
+  adminSoftDeleteProblem(problemId: number, adminId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/problems/admin/${problemId}?admin_id=${adminId}`
+    );
+  }
+
+  adminGetDeletedProblems(adminId: number, skip: number = 0, limit: number = 100): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/problems/admin/deleted?admin_id=${adminId}&skip=${skip}&limit=${limit}`
+    );
+  }
+
+  adminRestoreProblem(problemId: number, adminId: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/problems/admin/${problemId}/restore?admin_id=${adminId}`,
+      {}
+    );
+  }
+
   // ===== OBJECT REQUESTS =====
   createObjectRequest(
     request: Partial<ObjectRequest>,

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from datetime import datetime, UTC
 from database import get_db
 import models
 import schemas
@@ -55,7 +56,7 @@ def get_problems(
     db: Session = Depends(get_db)
 ):
     """Récupérer la liste des problèmes avec filtres optionnels"""
-    query = db.query(models.Problem)
+    query = db.query(models.Problem).filter(models.Problem.deleted_at == None)
     
     if object_id:
         query = query.filter(models.Problem.object_id == object_id)
@@ -76,7 +77,10 @@ def get_problems(
 @router.get("/{problem_id}", response_model=schemas.Problem)
 def get_problem(problem_id: int, db: Session = Depends(get_db)):
     """Récupérer un problème spécifique par son ID"""
-    problem = db.query(models.Problem).filter(models.Problem.id == problem_id).first()
+    problem = db.query(models.Problem).filter(
+        models.Problem.id == problem_id,
+        models.Problem.deleted_at == None
+    ).first()
     
     if not problem:
         raise HTTPException(
@@ -356,4 +360,113 @@ def reopen_problem(
         "message": "Problème rouvert avec succès",
         "problem_id": problem.id,
         "problem_status": problem.status
+    }
+
+
+# ====== ENDPOINTS ADMIN ======
+
+@router.delete("/admin/{problem_id}", status_code=status.HTTP_200_OK)
+def admin_soft_delete_problem(
+    problem_id: int,
+    admin_id: int,
+    db: Session = Depends(get_db)
+):
+    """Soft delete d'un problème (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer le problème (même s'il est déjà supprimé)
+    problem = db.query(models.Problem).filter(models.Problem.id == problem_id).first()
+    
+    if not problem:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Problème non trouvé"
+        )
+    
+    # Si déjà supprimé, empêcher une nouvelle suppression
+    if problem.deleted_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Le problème est déjà supprimé"
+        )
+    
+    # Soft delete : mettre la date de suppression
+    problem.deleted_at = datetime.now(UTC)
+    db.commit()
+    db.refresh(problem)
+    
+    return {
+        "message": "Problème supprimé avec succès",
+        "problem_id": problem.id,
+        "deleted_at": problem.deleted_at
+    }
+
+
+@router.get("/admin/deleted", response_model=List[schemas.Problem])
+def admin_get_deleted_problems(
+    admin_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Récupérer tous les problèmes supprimés (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer uniquement les problèmes supprimés
+    problems = db.query(models.Problem)\
+        .filter(models.Problem.deleted_at != None)\
+        .order_by(models.Problem.deleted_at.desc())\
+        .offset(skip).limit(limit).all()
+    
+    return problems
+
+
+@router.post("/admin/{problem_id}/restore", status_code=status.HTTP_200_OK)
+def admin_restore_problem(
+    problem_id: int,
+    admin_id: int,
+    db: Session = Depends(get_db)
+):
+    """Restaurer un problème supprimé (admin uniquement)"""
+    # Vérifier que l'admin existe et a le bon rôle
+    admin = db.query(models.User).filter(models.User.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="Administrateur non trouvé")
+    if admin.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Accès réservé aux administrateurs")
+    
+    # Récupérer le problème supprimé
+    problem = db.query(models.Problem).filter(models.Problem.id == problem_id).first()
+    
+    if not problem:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Problème non trouvé"
+        )
+    
+    # Vérifier qu'il est bien supprimé
+    if problem.deleted_at is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Le problème n'est pas supprimé"
+        )
+    
+    # Restaurer : retirer la date de suppression
+    problem.deleted_at = None
+    db.commit()
+    db.refresh(problem)
+    
+    return {
+        "message": "Problème restauré avec succès",
+        "problem_id": problem.id
     }

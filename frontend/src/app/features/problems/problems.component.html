@@ -5,12 +5,18 @@
       <h1>🔧 Problèmes & Solutions</h1>
       <p class="page-subtitle">Consultez et partagez des solutions aux problèmes rencontrés</p>
     </div>
-    <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm" *ngIf="!selectedProblem">
-      ➕ Signaler un problème
-    </button>
-    <button class="btn btn-secondary" (click)="backToList()" *ngIf="selectedProblem">
-      ← Retour à la liste
-    </button>
+    <div class="page-header-actions">
+      <button class="btn btn-warning" (click)="toggleDeletedView()" *ngIf="isAdmin && !selectedProblem">
+        <span *ngIf="!showDeletedProblems">🗑️ Voir les supprimés ({{ deletedProblems.length }})</span>
+        <span *ngIf="showDeletedProblems">← Retour aux problèmes</span>
+      </button>
+      <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm" *ngIf="!selectedProblem && !showDeletedProblems">
+        ➕ Signaler un problème
+      </button>
+      <button class="btn btn-secondary" (click)="backToList()" *ngIf="selectedProblem">
+        ← Retour à la liste
+      </button>
+    </div>
   </div>
 
   <!-- Formulaire de création de problème -->
@@ -166,8 +172,8 @@
     </div>
 
     <!-- Liste des problèmes -->
-    <div class="grid grid-2" *ngIf="filteredProblems.length > 0">
-      <div class="card" *ngFor="let problem of filteredProblems" (click)="selectProblem(problem)" style="cursor: pointer;">
+    <div class="grid grid-2" *ngIf="filteredProblems.length > 0 && !showDeletedProblems">
+      <div class="card" *ngFor="let problem of filteredProblems">
         <div class="flex flex-between items-start mb-md">
           <div class="flex gap-sm flex-wrap">
             <span class="badge" [ngClass]="getStatusClass(problem.status)">
@@ -177,20 +183,71 @@
               {{ getSeverityLabel(problem.severity) }}
             </span>
           </div>
+          <button 
+            *ngIf="isAdmin" 
+            class="btn btn-sm btn-error" 
+            (click)="adminSoftDeleteProblem(problem); $event.stopPropagation()"
+            title="Supprimer ce problème (Admin)">
+            🗑️
+          </button>
         </div>
         
-        <h3 class="mb-sm">{{ problem.title }}</h3>
-        
-        <p class="text-sm text-secondary mb-md">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
-        
-        <div class="flex gap-sm text-sm text-tertiary">
-          <span>📅 {{ problem.created_at | date:'short' }}</span>
+        <div (click)="selectProblem(problem)" style="cursor: pointer;">
+          <h3 class="mb-sm">{{ problem.title }}</h3>
+          
+          <p class="text-sm text-secondary mb-md">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
+          
+          <div class="flex gap-sm text-sm text-tertiary">
+            <span>📅 {{ problem.created_at | date:'short' }}</span>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Liste des problèmes supprimés (Admin seulement) -->
+    <div *ngIf="showDeletedProblems && isAdmin">
+      <div class="alert alert-warning mb-lg">
+        <h3>🗑️ Problèmes supprimés</h3>
+        <p>Ces problèmes ont été supprimés par un administrateur mais peuvent être restaurés.</p>
+      </div>
+
+      <div class="grid grid-2" *ngIf="deletedProblems.length > 0">
+        <div class="card card-deleted" *ngFor="let problem of deletedProblems">
+          <div class="flex flex-between items-start mb-md">
+            <div class="flex gap-sm flex-wrap">
+              <span class="badge badge-error">🗑️ Supprimé</span>
+              <span class="badge" [ngClass]="getSeverityClass(problem.severity)">
+                {{ getSeverityLabel(problem.severity) }}
+              </span>
+            </div>
+            <button 
+              class="btn btn-sm btn-success" 
+              (click)="adminRestoreProblem(problem)"
+              title="Restaurer ce problème">
+              ↩️ Restaurer
+            </button>
+          </div>
+          
+          <h3 class="mb-sm">{{ problem.title }}</h3>
+          
+          <p class="text-sm text-secondary mb-md">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
+          
+          <div class="flex gap-sm text-sm text-tertiary">
+            <span>📅 Créé le {{ problem.created_at | date:'short' }}</span>
+            <span *ngIf="problem.deleted_at">🗑️ Supprimé le {{ problem.deleted_at | date:'short' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="deletedProblems.length === 0">
+        <div class="empty-icon">✅</div>
+        <h3 class="empty-title">Aucun problème supprimé</h3>
+        <p class="empty-description">La corbeille est vide.</p>
+      </div>
+    </div>
+
     <!-- État vide -->
-    <div class="empty-state" *ngIf="filteredProblems.length === 0">
+    <div class="empty-state" *ngIf="filteredProblems.length === 0 && !showDeletedProblems">
       <div class="empty-icon">🔍</div>
       <h3 class="empty-title">Aucun problème trouvé</h3>
       <p class="empty-description">
@@ -216,21 +273,32 @@
           </span>
         </div>
         
-        <!-- Actions du créateur -->
-        <div class="flex gap-sm" *ngIf="isOwner()">
+        <div class="flex gap-sm">
+          <!-- Actions du créateur -->
+          <div class="flex gap-sm" *ngIf="isOwner()">
+            <button 
+              class="btn btn-sm btn-warning" 
+              (click)="reopenProblem()"
+              *ngIf="selectedProblem.status === 'resolved' || selectedProblem.status === 'closed'"
+              title="Rouvrir le problème">
+              🔓 Rouvrir
+            </button>
+            <button 
+              class="btn btn-sm btn-secondary" 
+              (click)="closeProblem()"
+              *ngIf="selectedProblem.status !== 'closed'"
+              title="Fermer définitivement le problème">
+              🔒 Fermer
+            </button>
+          </div>
+          
+          <!-- Action admin : Supprimer -->
           <button 
-            class="btn btn-sm btn-warning" 
-            (click)="reopenProblem()"
-            *ngIf="selectedProblem.status === 'resolved' || selectedProblem.status === 'closed'"
-            title="Rouvrir le problème">
-            🔓 Rouvrir
-          </button>
-          <button 
+            *ngIf="isAdmin" 
             class="btn btn-sm btn-error" 
-            (click)="closeProblem()"
-            *ngIf="selectedProblem.status !== 'closed'"
-            title="Fermer définitivement le problème">
-            🔒 Fermer
+            (click)="adminSoftDeleteProblem(selectedProblem)"
+            title="Supprimer ce problème (Admin)">
+            🗑️ Supprimer
           </button>
         </div>
       </div>
