@@ -49,4 +49,11 @@ export const routes: Routes = [
         (m) => m.CommunityComponent
       ),
   },
+  {
+    path: "problems",
+    loadComponent: () =>
+      import("./features/problems/problems.component").then(
+        (m) => m.ProblemsComponent
+      ),
+  },
 ];

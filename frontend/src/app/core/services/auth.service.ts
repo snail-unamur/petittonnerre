@@ -82,4 +82,9 @@ export class AuthService {
   getUsername(): string | null {
     return localStorage.getItem('username');
   }
+
+  getUserId(): number | null {
+    const userId = localStorage.getItem('userId');
+    return userId ? parseInt(userId, 10) : null;
+  }
 }

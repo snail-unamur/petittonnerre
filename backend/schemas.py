@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, ConfigDict, validator
 from datetime import datetime
 from typing import Optional, List
-from models import ObjectCategory, MaintenanceStatus, ContributionStatus
+from models import ObjectCategory, MaintenanceStatus, ContributionStatus, ProblemStatus, ProblemSeverity, ProblemCategory
 
 
 # User Schemas
@@ -55,7 +55,6 @@ class ObjectBase(BaseModel):
     purchase_date: Optional[datetime] = None
     manual_url: Optional[str] = None
     notes: Optional[str] = None
-    parent_id: Optional[int] = None
 
 class ObjectCreate(ObjectBase):
     pass
@@ -64,7 +63,6 @@ class Object(ObjectBase):
     id: int
     owner_id: int
     created_at: datetime
-    children: List['Object'] = []
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -147,5 +145,70 @@ class TagCreate(TagBase):
 
 class Tag(TagBase):
     id: int
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Problem Schemas
+class ProblemBase(BaseModel):
+    title: str
+    description: str
+    category: ProblemCategory
+    severity: Optional[ProblemSeverity] = ProblemSeverity.MEDIUM
+    symptoms: Optional[str] = None
+    possible_causes: Optional[str] = None
+
+class ProblemCreate(ProblemBase):
+    object_id: int
+
+class ProblemUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    severity: Optional[ProblemSeverity] = None
+    status: Optional[ProblemStatus] = None
+    symptoms: Optional[str] = None
+    possible_causes: Optional[str] = None
+
+class Problem(ProblemBase):
+    id: int
+    status: ProblemStatus
+    object_id: int
+    reported_by: int
+    created_at: datetime
+    updated_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ProblemResolution Schemas
+class ProblemResolutionBase(BaseModel):
+    solution: str
+    steps: Optional[str] = None
+    cost_estimate: Optional[str] = None
+    time_estimate: Optional[str] = None
+    feedback: Optional[str] = None
+    images: Optional[str] = None  # URLs séparées par des virgules
+
+class ProblemResolutionCreate(ProblemResolutionBase):
+    problem_id: int
+
+class ProblemResolutionUpdate(BaseModel):
+    solution: Optional[str] = None
+    steps: Optional[str] = None
+    cost_estimate: Optional[str] = None
+    time_estimate: Optional[str] = None
+    was_successful: Optional[bool] = None
+    feedback: Optional[str] = None
+    images: Optional[str] = None
+
+class ProblemResolution(ProblemResolutionBase):
+    id: int
+    problem_id: int
+    resolved_by: int
+    was_successful: Optional[bool]
+    helpfulness_score: int
+    images: Optional[str]
+    created_at: datetime
+    updated_at: datetime
     
     model_config = ConfigDict(from_attributes=True)

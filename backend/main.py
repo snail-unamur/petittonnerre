@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine, SessionLocal
-from api import users, objects, maintenance, community
+from api import users, objects, maintenance, community, problems
 from enrich_objects import auto_enrich_on_startup
 import logging
 
@@ -47,6 +47,7 @@ app.include_router(users.router)
 app.include_router(objects.router)
 app.include_router(maintenance.router)
 app.include_router(community.router)
+app.include_router(problems.router)
 
 
 @app.get("/")

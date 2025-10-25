@@ -23,6 +23,28 @@ class ContributionStatus(str, enum.Enum):
     APPROVED = "approved"
     REJECTED = "rejected"
 
+class ProblemStatus(str, enum.Enum):
+    OPEN = "open"
+    IN_PROGRESS = "in_progress"
+    RESOLVED = "resolved"
+    CLOSED = "closed"
+
+class ProblemSeverity(str, enum.Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+class ProblemCategory(str, enum.Enum):
+    ELECTRICAL = "electrical"  # Problème électrique
+    LEAK = "leak"  # Fuite d'eau
+    MECHANICAL = "mechanical"  # Panne mécanique
+    NOISE = "noise"  # Bruit anormal
+    HEATING_COOLING = "heating_cooling"  # Problème de chauffage/refroidissement
+    WEAR = "wear"  # Usure
+    SAFETY = "safety"  # Problème de sécurité
+    OTHER = "other"  # Autre
+
 
 # Table association pour les tags
 object_tags = Table(
@@ -34,8 +56,8 @@ object_tags = Table(
 
 
 class UserRole(str, enum.Enum):
-    USER = "user"
-    ADMIN = "admin"
+    user = "user"
+    admin = "admin"
 
 class User(Base):
     __tablename__ = "users"
@@ -44,7 +66,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
+    role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     location = Column(String)  # Pour l'aide locale
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -71,17 +93,12 @@ class Object(Base):
     
     # Clés étrangères
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)
     
     # Relations
     owner = relationship("User", back_populates="objects")
     maintenance_tasks = relationship("MaintenanceTask", back_populates="object")
     maintenance_advice = relationship("MaintenanceAdvice", back_populates="object_type")
     tags = relationship("Tag", secondary=object_tags, back_populates="objects")
-    
-    # Relations hiérarchiques (self-referential)
-    parent = relationship("Object", remote_side=[id], back_populates="children")
-    children = relationship("Object", back_populates="parent", cascade="all, delete-orphan")
 
 
 class MaintenanceAdvice(Base):
@@ -153,3 +170,51 @@ class Tag(Base):
     
     # Relations
     objects = relationship("Object", secondary=object_tags, back_populates="tags")
+
+
+class Problem(Base):
+    __tablename__ = "problems"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
+    category = Column(Enum(ProblemCategory), nullable=False)
+    severity = Column(Enum(ProblemSeverity), default=ProblemSeverity.MEDIUM)
+    status = Column(Enum(ProblemStatus), default=ProblemStatus.OPEN)
+    symptoms = Column(Text)  # Symptômes du problème
+    possible_causes = Column(Text)  # Causes possibles
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
+    
+    # Clés étrangères
+    object_id = Column(Integer, ForeignKey("objects.id"), nullable=False)
+    reported_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Relations
+    object = relationship("Object")
+    reporter = relationship("User", foreign_keys=[reported_by])
+    resolutions = relationship("ProblemResolution", back_populates="problem", cascade="all, delete-orphan")
+
+
+class ProblemResolution(Base):
+    __tablename__ = "problem_resolutions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    solution = Column(Text, nullable=False)
+    steps = Column(Text)  # Étapes détaillées de résolution
+    cost_estimate = Column(String)  # Estimation du coût
+    time_estimate = Column(String)  # Temps estimé
+    was_successful = Column(Boolean)
+    feedback = Column(Text)  # Retour d'expérience
+    helpfulness_score = Column(Integer, default=0)  # Score d'utilité (upvotes)
+    images = Column(Text)  # URLs des images séparées par des virgules
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
+    
+    # Clés étrangères
+    problem_id = Column(Integer, ForeignKey("problems.id"), nullable=False)
+    resolved_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Relations
+    problem = relationship("Problem", back_populates="resolutions")
+    resolver = relationship("User")

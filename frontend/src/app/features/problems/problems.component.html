@@ -1,0 +1,456 @@
+<div class="container">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>🔧 Problèmes & Solutions</h1>
+      <p class="page-subtitle">Consultez et partagez des solutions aux problèmes rencontrés</p>
+    </div>
+    <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm" *ngIf="!selectedProblem">
+      ➕ Signaler un problème
+    </button>
+    <button class="btn btn-secondary" (click)="backToList()" *ngIf="selectedProblem">
+      ← Retour à la liste
+    </button>
+  </div>
+
+  <!-- Formulaire de création de problème -->
+  <div class="card mb-xl" *ngIf="showCreateForm && !selectedProblem">
+    <div class="card-header">
+      <h3>Signaler un nouveau problème</h3>
+      <p class="card-subtitle">Décrivez le problème rencontré avec votre équipement</p>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="createProblem()" class="form">
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="title">Titre du problème *</label>
+            <input
+              type="text"
+              id="title"
+              [(ngModel)]="newProblem.title"
+              name="title"
+              required
+              placeholder="Ex: Chaudière ne démarre plus"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="object_id">Objet concerné *</label>
+            <select id="object_id" [(ngModel)]="newProblem.object_id" name="object_id" required>
+              <option [ngValue]="null" disabled>Sélectionnez un objet</option>
+              <option *ngFor="let obj of userObjects" [ngValue]="obj.id">
+                {{ obj.name }} 
+                <span *ngIf="obj.brand || obj.model">({{ obj.brand }} {{ obj.model }})</span>
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="severity">Sévérité *</label>
+            <select id="severity" [(ngModel)]="newProblem.severity" name="severity" required>
+              <option value="low">Faible</option>
+              <option value="medium">Moyen</option>
+              <option value="high">Élevé</option>
+              <option value="critical">Critique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Type de problème *</label>
+            <select id="category" [(ngModel)]="newProblem.category" name="category" required>
+              <option value="electrical">⚡ Électrique</option>
+              <option value="leak">💧 Fuite d'eau</option>
+              <option value="mechanical">⚙️ Panne mécanique</option>
+              <option value="noise">🔊 Bruit anormal</option>
+              <option value="heating_cooling">🌡️ Chauffage/Refroidissement</option>
+              <option value="wear">📉 Usure</option>
+              <option value="safety">⚠️ Sécurité</option>
+              <option value="other">❓ Autre</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea
+            id="description"
+            [(ngModel)]="newProblem.description"
+            name="description"
+            required
+            rows="4"
+            placeholder="Décrivez le problème en détail..."
+          ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="symptoms">Symptômes observés</label>
+          <textarea
+            id="symptoms"
+            [(ngModel)]="newProblem.symptoms"
+            name="symptoms"
+            rows="3"
+            placeholder="Quels sont les symptômes ? Bruits, odeurs, comportements anormaux..."
+          ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="possible_causes">Causes possibles</label>
+          <textarea
+            id="possible_causes"
+            [(ngModel)]="newProblem.possible_causes"
+            name="possible_causes"
+            rows="3"
+            placeholder="Avez-vous une idée de ce qui pourrait causer le problème ?"
+          ></textarea>
+        </div>
+        
+        <div class="flex gap-sm">
+          <button type="submit" class="btn btn-primary">Créer le problème</button>
+          <button type="button" class="btn btn-secondary" (click)="showCreateForm = false">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Vue Liste des problèmes -->
+  <div *ngIf="!selectedProblem">
+    <!-- Filtres -->
+    <div class="filters-section mb-xl">
+      <div class="filters-header mb-md">
+        <h3>🔍 Filtrer les problèmes</h3>
+      </div>
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label class="filter-label">Statut</label>
+          <select [(ngModel)]="filterStatus" class="filter-select">
+            <option value="all">📋 Tous les statuts</option>
+            <option value="open">🆕 Ouvert</option>
+            <option value="in_progress">🔄 En cours</option>
+            <option value="resolved">✅ Résolu</option>
+            <option value="closed">🔒 Fermé</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Sévérité</label>
+          <select [(ngModel)]="filterSeverity" class="filter-select">
+            <option value="all">📊 Toutes les sévérités</option>
+            <option value="low">🟢 Faible</option>
+            <option value="medium">🟡 Moyen</option>
+            <option value="high">🟠 Élevé</option>
+            <option value="critical">🔴 Critique</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Type de problème</label>
+          <select [(ngModel)]="filterCategory" class="filter-select">
+            <option value="all">🏷️ Tous les types</option>
+            <option value="electrical">⚡ Électrique</option>
+            <option value="leak">💧 Fuite d'eau</option>
+            <option value="mechanical">⚙️ Panne mécanique</option>
+            <option value="noise">🔊 Bruit anormal</option>
+            <option value="heating_cooling">🌡️ Chauffage/Refroidissement</option>
+            <option value="wear">📉 Usure</option>
+            <option value="safety">⚠️ Sécurité</option>
+            <option value="other">❓ Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters-summary" *ngIf="filterStatus !== 'all' || filterSeverity !== 'all' || filterCategory !== 'all'">
+        <span class="text-sm text-secondary">
+          {{ filteredProblems.length }} problème(s) trouvé(s)
+        </span>
+      </div>
+    </div>
+
+    <!-- Liste des problèmes -->
+    <div class="grid grid-2" *ngIf="filteredProblems.length > 0">
+      <div class="card" *ngFor="let problem of filteredProblems" (click)="selectProblem(problem)" style="cursor: pointer;">
+        <div class="flex flex-between items-start mb-md">
+          <div class="flex gap-sm flex-wrap">
+            <span class="badge" [ngClass]="getStatusClass(problem.status)">
+              {{ getStatusLabel(problem.status) }}
+            </span>
+            <span class="badge" [ngClass]="getSeverityClass(problem.severity)">
+              {{ getSeverityLabel(problem.severity) }}
+            </span>
+          </div>
+        </div>
+        
+        <h3 class="mb-sm">{{ problem.title }}</h3>
+        
+        <p class="text-sm text-secondary mb-md">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
+        
+        <div class="flex gap-sm text-sm text-tertiary">
+          <span>📅 {{ problem.created_at | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- État vide -->
+    <div class="empty-state" *ngIf="filteredProblems.length === 0">
+      <div class="empty-icon">🔍</div>
+      <h3 class="empty-title">Aucun problème trouvé</h3>
+      <p class="empty-description">
+        {{ problems.length === 0 ? 'Aucun problème signalé pour le moment.' : 'Aucun problème ne correspond aux filtres sélectionnés.' }}
+      </p>
+      <button class="btn btn-primary" (click)="showCreateForm = true" *ngIf="problems.length === 0">
+        ➕ Signaler le premier problème
+      </button>
+    </div>
+  </div>
+
+  <!-- Vue Détail d'un problème -->
+  <div *ngIf="selectedProblem">
+    <!-- Détails du problème -->
+    <div class="card mb-xl">
+      <div class="flex flex-between items-start mb-md">
+        <div class="flex gap-sm flex-wrap">
+          <span class="badge" [ngClass]="getStatusClass(selectedProblem.status)">
+            {{ getStatusLabel(selectedProblem.status) }}
+          </span>
+          <span class="badge" [ngClass]="getSeverityClass(selectedProblem.severity)">
+            {{ getSeverityLabel(selectedProblem.severity) }}
+          </span>
+        </div>
+        
+        <!-- Actions du créateur -->
+        <div class="flex gap-sm" *ngIf="isOwner()">
+          <button 
+            class="btn btn-sm btn-warning" 
+            (click)="reopenProblem()"
+            *ngIf="selectedProblem.status === 'resolved' || selectedProblem.status === 'closed'"
+            title="Rouvrir le problème">
+            🔓 Rouvrir
+          </button>
+          <button 
+            class="btn btn-sm btn-error" 
+            (click)="closeProblem()"
+            *ngIf="selectedProblem.status !== 'closed'"
+            title="Fermer définitivement le problème">
+            🔒 Fermer
+          </button>
+        </div>
+      </div>
+      
+      <h2 class="mb-md">{{ selectedProblem.title }}</h2>
+      
+      <div class="divider"></div>
+      
+      <div class="mb-md">
+        <h4 class="mb-sm">Description</h4>
+        <p class="text-secondary">{{ selectedProblem.description }}</p>
+      </div>
+      
+      <div class="grid grid-2" *ngIf="selectedProblem.symptoms || selectedProblem.possible_causes">
+        <div *ngIf="selectedProblem.symptoms">
+          <h4 class="mb-sm">Symptômes</h4>
+          <p class="text-sm text-secondary">{{ selectedProblem.symptoms }}</p>
+        </div>
+        
+        <div *ngIf="selectedProblem.possible_causes">
+          <h4 class="mb-sm">Causes possibles</h4>
+          <p class="text-sm text-secondary">{{ selectedProblem.possible_causes }}</p>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <div class="flex gap-sm text-sm text-tertiary">
+        <span>📅 Signalé le {{ selectedProblem.created_at | date:'short' }}</span>
+        <span>🔄 Mis à jour le {{ selectedProblem.updated_at | date:'short' }}</span>
+      </div>
+    </div>
+
+    <!-- Section Résolutions -->
+    <div class="card">
+      <div class="card-header">
+        <div class="flex flex-between items-center">
+          <div>
+            <h3>Solutions proposées</h3>
+            <p class="card-subtitle">{{ resolutions.length }} solution(s) disponible(s)</p>
+          </div>
+          <button 
+            class="btn btn-primary btn-sm" 
+            (click)="showResolutionForm = !showResolutionForm"
+            *ngIf="selectedProblem.status !== 'closed'"
+            [disabled]="selectedProblem.status === 'closed'">
+            ➕ Proposer une solution
+          </button>
+          <span class="badge badge-error" *ngIf="selectedProblem.status === 'closed'">
+            🔒 Problème fermé - Aucune nouvelle solution ne peut être ajoutée
+          </span>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <!-- Formulaire nouvelle résolution -->
+        <div class="card card-flat mb-lg" *ngIf="showResolutionForm">
+          <h4 class="mb-md">Proposer une nouvelle solution</h4>
+          <form (ngSubmit)="createResolution()" class="form">
+            <div class="form-group">
+              <label for="solution">Solution *</label>
+              <textarea
+                id="solution"
+                [(ngModel)]="newResolution.solution"
+                name="solution"
+                required
+                rows="4"
+                placeholder="Décrivez la solution que vous proposez..."
+              ></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="steps">Étapes détaillées</label>
+              <textarea
+                id="steps"
+                [(ngModel)]="newResolution.steps"
+                name="steps"
+                rows="4"
+                placeholder="1. Première étape&#10;2. Deuxième étape&#10;3. ..."
+              ></textarea>
+            </div>
+            
+            <div class="grid grid-2">
+              <div class="form-group">
+                <label for="cost_estimate">Coût estimé</label>
+                <input
+                  type="text"
+                  id="cost_estimate"
+                  [(ngModel)]="newResolution.cost_estimate"
+                  name="cost_estimate"
+                  placeholder="Ex: 50-100€"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label for="time_estimate">Temps estimé</label>
+                <input
+                  type="text"
+                  id="time_estimate"
+                  [(ngModel)]="newResolution.time_estimate"
+                  name="time_estimate"
+                  placeholder="Ex: 1-2 heures"
+                />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="images">Images (URLs séparées par des virgules)</label>
+              <textarea
+                id="images"
+                [(ngModel)]="newResolution.images"
+                name="images"
+                rows="2"
+                placeholder="https://exemple.com/image1.jpg, https://exemple.com/image2.jpg"
+              ></textarea>
+              <small class="text-tertiary">💡 Ajoutez des photos pour illustrer votre solution</small>
+            </div>
+            
+            <div class="flex gap-sm">
+              <button type="submit" class="btn btn-primary btn-sm">Publier la solution</button>
+              <button type="button" class="btn btn-ghost btn-sm" (click)="showResolutionForm = false">Annuler</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Liste des résolutions -->
+        <div class="list" *ngIf="resolutions.length > 0">
+          <div class="card card-flat mb-md" *ngFor="let resolution of resolutions">
+            <div class="flex flex-between items-start mb-md">
+              <div class="flex gap-sm items-center">
+                <h4 class="text-lg">💡 Solution proposée</h4>
+                <span 
+                  class="badge badge-warning" 
+                  *ngIf="resolution.helpfulness_score >= 10"
+                  style="padding: 6px 12px; font-size: 0.75rem;">
+                  ⭐ Solution populaire
+                </span>
+              </div>
+              <div class="flex gap-sm">
+                <button class="btn btn-sm btn-ghost" (click)="upvoteResolution(resolution)">
+                  👍 {{ resolution.helpfulness_score }}
+                </button>
+                <button 
+                  class="btn btn-sm btn-success" 
+                  (click)="markAsResolved(resolution)"
+                  *ngIf="!resolution.was_successful && selectedProblem?.status !== 'resolved'"
+                  title="Cette solution a résolu mon problème">
+                  ✅ Marquer comme résolu
+                </button>
+                <span 
+                  class="badge badge-success" 
+                  *ngIf="resolution.was_successful"
+                  style="padding: 8px 12px;">
+                  ✅ Solution validée
+                </span>
+              </div>
+            </div>
+            
+            <div class="mb-md">
+              <p class="text-secondary">{{ resolution.solution }}</p>
+            </div>
+            
+            <div *ngIf="resolution.steps" class="mb-md">
+              <h5 class="mb-xs">Étapes :</h5>
+              <pre class="text-sm text-secondary" style="white-space: pre-wrap;">{{ resolution.steps }}</pre>
+            </div>
+            
+            <div class="grid grid-2 mb-md" *ngIf="resolution.cost_estimate || resolution.time_estimate">
+              <div *ngIf="resolution.cost_estimate">
+                <span class="text-sm text-tertiary">💰 Coût :</span>
+                <span class="text-sm font-medium ml-xs">{{ resolution.cost_estimate }}</span>
+              </div>
+              <div *ngIf="resolution.time_estimate">
+                <span class="text-sm text-tertiary">⏱️ Durée :</span>
+                <span class="text-sm font-medium ml-xs">{{ resolution.time_estimate }}</span>
+              </div>
+            </div>
+            
+            <!-- Galerie d'images -->
+            <div *ngIf="resolution.images && resolution.images.trim()" class="mb-md">
+              <h5 class="mb-sm">📸 Photos de la solution :</h5>
+              <div class="images-gallery">
+                <div *ngFor="let imageUrl of resolution.images.split(',')">
+                  <img 
+                    [src]="imageUrl.trim()" 
+                    [alt]="'Image de la solution'" 
+                    class="gallery-image"
+                    (error)="$any($event.target).style.display='none'"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="resolution.feedback" class="alert alert-info">
+              <div class="alert-icon">💬</div>
+              <div class="alert-content">
+                <div class="alert-title">Retour d'expérience</div>
+                {{ resolution.feedback }}
+              </div>
+            </div>
+            
+            <div class="flex gap-sm text-xs text-tertiary mt-md">
+              <span>📅 {{ resolution.created_at | date:'short' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- État vide résolutions -->
+        <div class="empty-state" *ngIf="resolutions.length === 0 && !showResolutionForm">
+          <div class="empty-icon">💡</div>
+          <h4 class="empty-title">Aucune solution proposée</h4>
+          <p class="empty-description">
+            Soyez le premier à proposer une solution à ce problème !
+          </p>
+          <button class="btn btn-primary" (click)="showResolutionForm = true">
+            ➕ Proposer une solution
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

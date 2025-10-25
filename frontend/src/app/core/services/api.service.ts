@@ -144,4 +144,72 @@ export class ApiService {
       {}
     );
   }
+
+  // ===== PROBLEMS =====
+  getProblems(filters?: any): Observable<any[]> {
+    let url = `${this.apiUrl}/problems/`;
+    const params = new URLSearchParams();
+    
+    if (filters) {
+      if (filters.object_id) params.append('object_id', filters.object_id);
+      if (filters.category) params.append('category', filters.category);
+      if (filters.status) params.append('status', filters.status);
+      if (filters.severity) params.append('severity', filters.severity);
+    }
+    
+    const queryString = params.toString();
+    if (queryString) {
+      url += `?${queryString}`;
+    }
+    
+    return this.http.get<any[]>(url);
+  }
+
+  getProblem(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/problems/${id}`);
+  }
+
+  createProblem(problem: any, userId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/problems/?user_id=${userId}`, problem);
+  }
+
+  updateProblem(id: number, problem: Partial<any>): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/problems/${id}`, problem);
+  }
+
+  deleteProblem(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/problems/${id}`);
+  }
+
+  // ===== PROBLEM RESOLUTIONS =====
+  getProblemResolutions(problemId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/problems/${problemId}/resolutions`);
+  }
+
+  createProblemResolution(problemId: number, resolution: any, userId: number): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/problems/${problemId}/resolutions?user_id=${userId}`,
+      resolution
+    );
+  }
+
+  updateProblemResolution(resolutionId: number, resolution: Partial<any>): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/problems/resolutions/${resolutionId}`, resolution);
+  }
+
+  upvoteProblemResolution(resolutionId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/problems/resolutions/${resolutionId}/upvote`, {});
+  }
+
+  markResolutionSuccessful(resolutionId: number, userId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/problems/resolutions/${resolutionId}/mark-successful?user_id=${userId}`, {});
+  }
+
+  closeProblem(problemId: number, userId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/problems/${problemId}/close?user_id=${userId}`, {});
+  }
+
+  reopenProblem(problemId: number, userId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/problems/${problemId}/reopen?user_id=${userId}`, {});
+  }
 }

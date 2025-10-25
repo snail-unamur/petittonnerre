@@ -81,10 +81,10 @@
 
 ### US4.2: En tant qu'utilisateur, je veux pouvoir consulter et résoudre les problèmes
 
-- [ ] 4.2.1 Créer l'interface de consultation des problèmes (todo)
-- [ ] 4.2.2 Implémenter le suivi de résolution (todo)
-- [ ] 4.2.3 Ajouter le partage d'expérience (todo)
-- [ ] 4.2.4 Écrire les tests de résolution de problèmes (todo)
+- [x] 4.2.1 Créer l'interface de consultation des problèmes (done)
+- [x] 4.2.2 Implémenter le suivi de résolution (done)
+- [x] 4.2.3 Ajouter le partage d'expérience (done)
+- [x] 4.2.4 Écrire les tests de résolution de problèmes (done)
 
 ## Epic 5: Amélioration visuelle 🎨
 
