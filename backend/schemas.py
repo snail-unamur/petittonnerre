@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional, List
 from models import ObjectCategory, MaintenanceStatus, ContributionStatus
@@ -17,8 +17,7 @@ class User(UserBase):
     id: int
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Object Schemas
@@ -39,8 +38,7 @@ class Object(ObjectBase):
     owner_id: int
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Maintenance Advice Schemas
@@ -58,8 +56,7 @@ class MaintenanceAdvice(MaintenanceAdviceBase):
     is_validated: bool
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Maintenance Task Schemas
@@ -88,8 +85,7 @@ class MaintenanceTask(MaintenanceTaskBase):
     user_id: int
     advice_id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Contribution Schemas
@@ -111,8 +107,7 @@ class Contribution(ContributionBase):
     author_id: int
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Tag Schemas
@@ -125,5 +120,4 @@ class TagCreate(TagBase):
 class Tag(TagBase):
     id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

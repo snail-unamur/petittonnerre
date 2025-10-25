@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Boolean, Enum, Table
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, UTC
 from database import Base
 import enum
 
@@ -40,7 +40,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=False)
     location = Column(String)  # Pour l'aide locale
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     
     # Relations
     objects = relationship("Object", back_populates="owner")
@@ -59,7 +59,7 @@ class Object(Base):
     purchase_date = Column(DateTime)
     manual_url = Column(String)  # Lien vers le manuel
     notes = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     
     # Clé étrangère
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -80,7 +80,7 @@ class MaintenanceAdvice(Base):
     frequency_days = Column(Integer)  # Fréquence en jours
     category = Column(Enum(ObjectCategory), nullable=False)
     is_validated = Column(Boolean, default=False)  # Validé par la communauté
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     
     # Clé étrangère (optionnelle si conseil spécifique à un objet)
     object_type_id = Column(Integer, ForeignKey("objects.id"), nullable=True)
@@ -123,7 +123,7 @@ class Contribution(Base):
     category = Column(Enum(ObjectCategory), nullable=False)
     status = Column(Enum(ContributionStatus), default=ContributionStatus.PENDING)
     upvotes = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     
     # Clé étrangère
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
