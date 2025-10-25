@@ -54,10 +54,11 @@ backend-test:
     POSTGRES_DB: test_db
     POSTGRES_USER: test_user
     POSTGRES_PASSWORD: test_password
+    PYTHONPATH: "$CI_PROJECT_DIR/backend"
   script:
     - cd backend
     - source .venv/bin/activate
-    - pytest tests/ -v
+    - python -m pytest tests/ -v
   dependencies:
     - backend-setup
 
