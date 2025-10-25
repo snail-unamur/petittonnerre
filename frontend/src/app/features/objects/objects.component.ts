@@ -383,18 +383,21 @@ import { ObjectItem } from "../../core/models/models";
       <!-- Delete Confirmation Modal -->
       <div class="modal" *ngIf="objectToDelete" (click)="cancelDelete()">
         <div class="modal-content" (click)="$event.stopPropagation()">
-          <h3 class="mb-md">🗑️ Confirmer la suppression</h3>
+          <h3 class="mb-md">� Retirer cet objet</h3>
           <p class="mb-lg">
-            Êtes-vous sûr de vouloir supprimer
-            <strong>{{ objectToDelete.name }}</strong> ? Cette action est
-            irréversible.
+            Êtes-vous sûr de vouloir retirer
+            <strong>{{ objectToDelete.name }}</strong> de votre liste ?
+          </p>
+          <p class="text-sm text-secondary mb-lg">
+            ℹ️ L'objet sera retiré de votre compte mais restera disponible dans
+            la base de données pour les autres utilisateurs qui l'utilisent.
           </p>
           <div class="flex gap-md justify-end">
             <button class="btn btn-secondary" (click)="cancelDelete()">
               Annuler
             </button>
-            <button class="btn btn-error" (click)="deleteObject()">
-              🗑️ Supprimer
+            <button class="btn btn-warning" (click)="deleteObject()">
+              � Retirer de ma liste
             </button>
           </div>
         </div>
@@ -486,6 +489,15 @@ import { ObjectItem } from "../../core/models/models";
 
       .btn-error:hover {
         opacity: 0.9;
+      }
+
+      .btn-warning {
+        background: #ff9800;
+        color: white;
+      }
+
+      .btn-warning:hover {
+        background: #f57c00;
       }
 
       /* Nouveaux styles pour US2.1 */
@@ -715,7 +727,7 @@ export class ObjectsComponent implements OnInit {
           this.cancelDelete();
           this.loading = false;
         },
-    });
+      });
   }
 
   getCategoryLabel(category: string): string {

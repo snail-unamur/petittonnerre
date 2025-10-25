@@ -435,10 +435,14 @@ def auto_enrich_on_startup(db: Session):
             brand=obj_data.get("brand"),
             model=obj_data.get("model"),
             notes=obj_data.get("notes"),
-            owner_id=admin_user.id,
+            created_by=admin_user.id,
             created_at=datetime.now(UTC)
         )
         db.add(obj)
+        db.flush()  # Pour avoir l'ID de l'objet
+        
+        # Ajouter l'admin comme propriétaire
+        obj.owners.append(admin_user)
         created_objects.append(obj)
     
     db.commit()
