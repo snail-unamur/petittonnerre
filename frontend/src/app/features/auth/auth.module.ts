@@ -5,10 +5,11 @@ import { RouterModule } from "@angular/router";
 import { RegisterComponent } from "./register.component";
 
 @NgModule({
-  declarations: [RegisterComponent],
+  declarations: [],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RegisterComponent,
     RouterModule.forChild([{ path: "register", component: RegisterComponent }]),
   ],
 })
