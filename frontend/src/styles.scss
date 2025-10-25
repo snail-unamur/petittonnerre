@@ -20,6 +20,14 @@ body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--bg-secondary);
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(204, 0, 0, 0.03) 35px,
+      rgba(204, 0, 0, 0.03) 70px
+    );
   line-height: var(--line-height-normal);
   font-size: var(--font-size-base);
   min-height: 100vh;

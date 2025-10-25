@@ -3,18 +3,19 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } fro
 import { CommonModule } from '@angular/common';
 import { AuthService, UserResponse } from './core/services/auth.service';
 import { ThemeService } from './core/services/theme.service';
+import { SovietLogoComponent } from './shared/components/soviet-logo/soviet-logo.component';
 import { filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, SovietLogoComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Petit Tonnerre';
+  title = 'Petit Tonnerre - Soviet Suprême de la Maintenance Populaire';
   isMenuOpen = false;
   isUserMenuOpen = false;
   currentUser$: Observable<UserResponse | null>;

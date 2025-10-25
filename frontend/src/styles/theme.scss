@@ -1,13 +1,13 @@
-// Theme variables - Modern flat design
+// Theme variables - Soviet Communist USSR Style 🚩⚒️
 :root {
-  // Primary palette - Purple/Blue gradient
-  --primary-color: #667eea;
-  --primary-dark: #5568d3;
-  --primary-light: #8b9ff8;
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  // Primary palette - Soviet Red & Gold
+  --primary-color: #CC0000;
+  --primary-dark: #990000;
+  --primary-light: #FF0000;
+  --primary-gradient: linear-gradient(135deg, #CC0000 0%, #990000 100%);
   
-  --secondary-color: #764ba2;
-  --accent-color: #f093fb;
+  --secondary-color: #FFD700;
+  --accent-color: #FFA500;
   
   // Semantic colors
   --success-color: #10b981;
@@ -100,16 +100,16 @@
               box-shadow var(--transition-base);
 }
 
-// Dark theme
+// Dark theme - Soviet Night Mode 🌙
 [data-theme="dark"] {
-  // Primary palette - Keep the vibrant colors
-  --primary-color: #8b9ff8;
-  --primary-dark: #667eea;
-  --primary-light: #a5b4fc;
-  --primary-gradient: linear-gradient(135deg, #8b9ff8 0%, #9f7aea 100%);
+  // Primary palette - Soviet Red & Gold
+  --primary-color: #FF0000;
+  --primary-dark: #CC0000;
+  --primary-light: #FF3333;
+  --primary-gradient: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
   
-  --secondary-color: #9f7aea;
-  --accent-color: #f093fb;
+  --secondary-color: #FFD700;
+  --accent-color: #FFA500;
   
   // Semantic colors - Slightly brighter for dark backgrounds
   --success-color: #34d399;

@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header-content">
       <a routerLink="/dashboard" class="logo">
-        <img class="logo-icon" src="assets/logo.png" alt="Petit Tonnerre logo" />
+        <app-soviet-logo></app-soviet-logo>
       </a>
       
       <!-- Menu burger (mobile) - visible uniquement si connecté -->
@@ -28,8 +28,8 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">📊</span>
-              <span>Dashboard</span>
+              <span class="nav-icon">⚒️</span>
+              <span>Soviet Suprême</span>
             </a>
           </li>
           <li class="nav-item">
@@ -37,8 +37,8 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">📦</span>
-              <span>Mes Objets</span>
+              <span class="nav-icon">🏭</span>
+              <span>Propriété Collective</span>
             </a>
           </li>
           <li class="nav-item">
@@ -47,7 +47,7 @@
                class="nav-link"
                (click)="closeMenu()">
               <span class="nav-icon">🔧</span>
-              <span>Maintenance</span>
+              <span>Travail du Peuple</span>
             </a>
           </li>
           <li class="nav-item">
@@ -55,19 +55,19 @@
                routerLinkActive="active" 
                class="nav-link"
                (click)="closeMenu()">
-              <span class="nav-icon">🔍</span>
-              <span>Problèmes</span>
+              <span class="nav-icon">�</span>
+              <span>Sabotage Capitaliste</span>
             </a>
           </li>
         </ul>
         
         <!-- User Menu -->
         <div class="user-menu" *ngIf="currentUser$ | async as user; else authButtons">
-          <!-- Theme toggle -->
+          <!-- Theme toggle - Mode Jour/Nuit Communiste -->
           <button 
             class="theme-toggle" 
             (click)="toggleTheme()"
-            [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
+            [attr.aria-label]="(theme$ | async) === 'dark' ? 'Mode Soleil Soviétique' : 'Mode Nuit de Moscou'">
             <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
           </button>
           
@@ -80,17 +80,17 @@
             
             <div class="dropdown-menu" [class.open]="isUserMenuOpen">
               <a routerLink="/admin/dashboard" class="dropdown-item" (click)="closeMenus()" *ngIf="isAdmin()">
-                <span>👨‍💼</span> Dashboard Admin
+                <span>⭐</span> Bureau du Parti
               </a>
               <a href="#" class="dropdown-item" (click)="closeMenus()">
-                <span>⚙️</span> Paramètres
+                <span>⚙️</span> Configuration
               </a>
               <a href="#" class="dropdown-item" (click)="closeMenus()">
-                <span>👤</span> Profil
+                <span>🪪</span> Carte du Parti
               </a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item" (click)="logout()">
-                <span>🚪</span> Déconnexion
+                <span>🚪</span> Quitter le Parti
               </a>
             </div>
           </div>
@@ -98,20 +98,20 @@
         
         <ng-template #authButtons>
           <div class="user-menu">
-            <!-- Theme toggle -->
+            <!-- Theme toggle - Mode Jour/Nuit Communiste -->
             <button 
               class="theme-toggle" 
               (click)="toggleTheme()"
-              [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'">
+              [attr.aria-label]="(theme$ | async) === 'dark' ? 'Mode Soleil Soviétique' : 'Mode Nuit de Moscou'">
               <span class="theme-icon">{{ (theme$ | async) === 'dark' ? '☀️' : '🌙' }}</span>
             </button>
             
             <div class="auth-buttons">
               <a routerLink="/auth/login" class="btn btn-ghost btn-sm" (click)="closeMenu()">
-                Connexion
+                Rejoindre le Parti
               </a>
               <a routerLink="/auth/register" class="btn btn-primary btn-sm" (click)="closeMenu()">
-                S'inscrire
+                Devenir Camarade
               </a>
             </div>
           </div>
@@ -131,7 +131,7 @@
   
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2025 Petit Tonnerre - Gestion d'entretien intelligente</p>
+      <p>⚒️ 2025 Petit Tonnerre - Propriété du Peuple - Pour la gloire de l'URSS et les enseignements de Karl Marx 🚩</p>
     </div>
   </footer>
 </div>
