@@ -276,14 +276,15 @@
 
 ## Epic 8: Navigation et UX 🎯
 
-### US8.1: Supprimer l'onglet Communauté du menu
+### US8.1: Supprimer l'onglet Communauté du menu ✅
 **Dépendances:** Aucune  
-**Priorité:** Haute
+**Priorité:** Haute  
+**Statut:** Done
 
-- [ ] 8.1.1 Retirer le lien Communauté du composant de navigation
-- [ ] 8.1.2 Supprimer ou désactiver la route /community
-- [ ] 8.1.3 Supprimer le composant CommunityComponent si non utilisé
-- [ ] 8.1.4 Tester que le menu ne contient plus Communauté
+- [x] 8.1.1 Retirer le lien Communauté du composant de navigation ✅
+- [x] 8.1.2 Supprimer ou désactiver la route /community ✅
+- [x] 8.1.3 Supprimer le composant CommunityComponent si non utilisé ✅
+- [x] 8.1.4 Tester que le menu ne contient plus Communauté ✅
 
 ## Epic 9: IoT et Raspberry Pi 🤖
 

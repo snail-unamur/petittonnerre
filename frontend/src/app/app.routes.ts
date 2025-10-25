@@ -51,14 +51,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: "community",
-    loadComponent: () =>
-      import("./features/community/community.component").then(
-        (m) => m.CommunityComponent
-      ),
-    canActivate: [authGuard],
-  },
-  {
     path: "problems",
     loadComponent: () =>
       import("./features/problems/problems.component").then(
