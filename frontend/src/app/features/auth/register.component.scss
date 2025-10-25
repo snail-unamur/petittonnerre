@@ -306,3 +306,83 @@
 .auth-footer a:hover {
   text-decoration: underline;
 }
+
+// Dark Mode Styles
+[data-theme="dark"] {
+  .auth-wrapper {
+    background: var(--bg-primary);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+
+  .auth-form-container {
+    background: var(--bg-primary);
+  }
+
+  .auth-header h2 {
+    color: var(--text-primary);
+  }
+
+  .auth-header p {
+    color: var(--text-secondary);
+  }
+
+  /* Alert */
+  .alert-error {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--error-color);
+    border-color: rgba(220, 38, 38, 0.3);
+  }
+
+  .alert-success {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--success-color);
+    border-color: rgba(22, 163, 74, 0.3);
+  }
+
+  /* Form */
+  .form-group label {
+    color: var(--text-primary);
+  }
+
+  .form-group input {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+
+  .form-group input:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+  }
+
+  .form-group input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .form-error {
+    color: var(--error-color);
+  }
+
+  /* Button */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+  }
+
+  /* Footer */
+  .auth-footer p {
+    color: var(--text-secondary);
+  }
+
+  .auth-footer a {
+    color: var(--primary-light);
+  }
+}
