@@ -55,6 +55,7 @@ class ObjectBase(BaseModel):
     purchase_date: Optional[datetime] = None
     manual_url: Optional[str] = None
     notes: Optional[str] = None
+    parent_id: Optional[int] = None
 
 class ObjectCreate(ObjectBase):
     pass
@@ -63,6 +64,7 @@ class Object(ObjectBase):
     id: int
     owner_id: int
     created_at: datetime
+    children: List['Object'] = []
     
     model_config = ConfigDict(from_attributes=True)
 

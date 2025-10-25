@@ -14,6 +14,12 @@ def create_object(obj: schemas.ObjectCreate, user_id: int, db: Session = Depends
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     
+    # Vérifier que le parent existe s'il est spécifié
+    if obj.parent_id:
+        parent_obj = db.query(models.Object).filter(models.Object.id == obj.parent_id).first()
+        if not parent_obj:
+            raise HTTPException(status_code=404, detail="Parent object not found")
+    
     db_object = models.Object(**obj.model_dump(), owner_id=user_id)
     db.add(db_object)
     db.commit()

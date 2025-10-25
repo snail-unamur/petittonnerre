@@ -69,14 +69,19 @@ class Object(Base):
     notes = Column(Text)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     
-    # Clé étrangère
+    # Clés étrangères
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)
     
     # Relations
     owner = relationship("User", back_populates="objects")
     maintenance_tasks = relationship("MaintenanceTask", back_populates="object")
     maintenance_advice = relationship("MaintenanceAdvice", back_populates="object_type")
     tags = relationship("Tag", secondary=object_tags, back_populates="objects")
+    
+    # Relations hiérarchiques (self-referential)
+    parent = relationship("Object", remote_side=[id], back_populates="children")
+    children = relationship("Object", back_populates="parent", cascade="all, delete-orphan")
 
 
 class MaintenanceAdvice(Base):

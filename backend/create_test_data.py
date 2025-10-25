@@ -16,19 +16,23 @@ def create_test_data():
         {
             "email": "alice@example.com",
             "username": "alice",
+            "password": "Password123!",
+            "password_confirm": "Password123!",
             "location": "Bruxelles"
         },
         {
             "email": "bob@example.com",
             "username": "bob",
+            "password": "Password123!",
+            "password_confirm": "Password123!",
             "location": "Liège"
         }
     ]
     
     created_users = []
     for user_data in users:
-        response = requests.post(f"{BASE_URL}/users/", json=user_data)
-        if response.status_code == 200:
+        response = requests.post(f"{BASE_URL}/users/register", json=user_data)
+        if response.status_code == 201:
             created_users.append(response.json())
             print(f"✅ Utilisateur créé: {user_data['username']}")
         else:
@@ -59,6 +63,53 @@ def create_test_data():
             "notes": "Terrasse extérieure 20m²"
         }
     ]
+    
+    # Créer les objets et stocker leurs IDs
+    created_objects = []
+    for obj_data in objects:
+        response = requests.post(
+            f"{BASE_URL}/objects/",
+            params={"user_id": created_users[0]["id"]},
+            json=obj_data
+        )
+        if response.status_code == 200:
+            created_objects.append(response.json())
+            print(f"✅ Objet créé: {obj_data['name']}")
+        else:
+            print(f"❌ Erreur: {response.text}")
+            
+    # Créer des objets enfants
+    if created_objects:
+        print("\n🔗 Création d'objets enfants (hiérarchie)...")
+        child_objects = [
+            {
+                "name": "Thermostat connecté",
+                "category": "heating",
+                "brand": "Nest",
+                "model": "T3007ES",
+                "notes": "Thermostat lié à la chaudière",
+                "parent_id": created_objects[0]["id"]  # Enfant de la chaudière
+            },
+            {
+                "name": "Sonde de température",
+                "category": "heating",
+                "brand": "Vaillant",
+                "model": "VR 920",
+                "notes": "Sonde sans fil",
+                "parent_id": created_objects[0]["id"]  # Enfant de la chaudière
+            }
+        ]
+        
+        for child_data in child_objects:
+            response = requests.post(
+                f"{BASE_URL}/objects/",
+                params={"user_id": created_users[0]["id"]},
+                json=child_data
+            )
+            if response.status_code == 200:
+                print(f"✅ Objet enfant créé: {child_data['name']}")
+            else:
+                print(f"❌ Erreur: {response.text}")
     
     created_objects = []
     for obj_data in objects:
