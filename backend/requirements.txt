@@ -15,3 +15,8 @@ bcrypt>=4.0.1   # Pour le hachage des mots de passe
 # Dépendances additionnelles pour la compatibilité Python 3.14
 typing-extensions>=4.8.0
 anyio>=4.0.0
+
+# Dépendances de test
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+httpx>=0.25.0  # Pour les tests HTTP async
