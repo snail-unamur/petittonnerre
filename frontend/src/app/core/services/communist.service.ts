@@ -7,11 +7,28 @@ import { BehaviorSubject } from 'rxjs';
 export class CommunistService {
   private readonly STORAGE_KEY = 'communist-mode';
   private communistModeSubject = new BehaviorSubject<boolean>(this.getStoredMode());
+  private audio: HTMLAudioElement | null = null;
   
   public communistMode$ = this.communistModeSubject.asObservable();
 
   constructor() {
-    this.applyCommunistMode(this.communistModeSubject.value);
+    this.initAudio();
+    const currentMode = this.communistModeSubject.value;
+    this.applyCommunistMode(currentMode);
+    
+    // Si le mode communiste était déjà activé, jouer l'hymne
+    if (currentMode) {
+      this.handleAudio(true);
+    }
+  }
+
+  /**
+   * Initialize the audio element
+   */
+  private initAudio(): void {
+    this.audio = new Audio('assets/audio/hymne-URSS.mp3');
+    this.audio.loop = true;
+    this.audio.volume = 1.0; // VOLUME MAXIMUM POUR LA RÉVOLUTION ! 🚩🔊
   }
 
   /**
@@ -36,6 +53,7 @@ export class CommunistService {
     this.communistModeSubject.next(enabled);
     this.applyCommunistMode(enabled);
     this.storeMode(enabled);
+    this.handleAudio(enabled);
   }
 
   /**
@@ -48,6 +66,24 @@ export class CommunistService {
       root.setAttribute('data-communist', 'true');
     } else {
       root.removeAttribute('data-communist');
+    }
+  }
+
+  /**
+   * Handle audio playback based on communist mode
+   */
+  private handleAudio(enabled: boolean): void {
+    if (!this.audio) return;
+
+    if (enabled) {
+      // Jouer l'hymne de l'URSS
+      this.audio.play().catch(error => {
+        console.warn('Impossible de jouer l\'hymne de l\'URSS:', error);
+      });
+    } else {
+      // Arrêter l'hymne
+      this.audio.pause();
+      this.audio.currentTime = 0; // Remettre au début
     }
   }
 
