@@ -1,7 +1,25 @@
-from pydantic import BaseModel, EmailStr, ConfigDict, validator
+from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 from datetime import datetime
 from typing import Optional, List
 from models import ObjectCategory, MaintenanceStatus, ContributionStatus, ProblemStatus, ProblemSeverity, ProblemCategory
+
+
+# Auth Schemas
+class Token(BaseModel):
+    """Schéma pour le token JWT"""
+    access_token: str
+    token_type: str = "bearer"
+
+
+class TokenData(BaseModel):
+    """Données extraites du token"""
+    email: str | None = None
+
+
+class LoginData(BaseModel):
+    """Données de connexion"""
+    email: EmailStr
+    password: str
 
 
 # User Schemas
@@ -14,19 +32,19 @@ class UserCreate(UserBase):
     password: str
     password_confirm: str
 
-    # Ajout de validation sur la longueur du mot de passe
-    @validator('password')
-    def validate_password(cls, v):
-        if len(v.encode('utf-8')) > 72:  # bcrypt limite à 72 bytes
-            raise ValueError('Le mot de passe ne peut pas dépasser 72 caractères')
+    # Ajout de validation sur la longueur du mot de passe (argon2 n'a pas de limite stricte)
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
         if len(v) < 8:
             raise ValueError('Le mot de passe doit faire au moins 8 caractères')
         return v
 
     # Validation que les mots de passe correspondent
-    @validator('password_confirm')
-    def passwords_match(cls, v, values, **kwargs):
-        if 'password' in values and v != values['password']:
+    @field_validator('password_confirm')
+    @classmethod
+    def passwords_match(cls, v: str, info) -> str:
+        if 'password' in info.data and v != info.data['password']:
             raise ValueError('Les mots de passe ne correspondent pas')
         return v
 

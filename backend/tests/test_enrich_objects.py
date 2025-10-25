@@ -421,7 +421,7 @@ class TestAutoEnrichOnStartup:
         from enrich_objects import auto_enrich_on_startup
         from passlib.context import CryptContext
         
-        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
         
         # Créer un admin manuellement
         existing_admin = User(

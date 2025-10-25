@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine, SessionLocal
-from api import users, objects, maintenance, community, problems
+from api import users, objects, maintenance, community, problems, auth
 from enrich_objects import auto_enrich_on_startup
 import logging
 
@@ -43,6 +43,7 @@ app.add_middleware(
 )
 
 # Inclure les routers
+app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(objects.router)
 app.include_router(maintenance.router)
