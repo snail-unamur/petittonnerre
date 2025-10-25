@@ -72,6 +72,9 @@ export class ProblemsComponent implements OnInit {
   showCreateForm: boolean = false;
   showResolutionForm: boolean = false;
   
+  // Audio Boris Galère
+  private borisAudio: HTMLAudioElement | null = null;
+  
   newProblem = {
     title: '',
     description: '',
@@ -198,6 +201,10 @@ export class ProblemsComponent implements OnInit {
       next: (problem: Problem) => {
         this.problems.unshift(problem);
         this.showCreateForm = false;
+        
+        // Détection de "Boris Galere" pour jouer la musique 🎵
+        this.checkForBorisGalere(problem);
+        
         this.resetNewProblem();
       },
       error: (error) => {
@@ -343,6 +350,9 @@ export class ProblemsComponent implements OnInit {
     }
 
     if (confirm(`⚠️ Êtes-vous sûr de vouloir supprimer le problème "${problem.title}" ?\n\nCette action peut être annulée depuis la vue "Problèmes supprimés".`)) {
+      // Arrêter la musique Boris Galère si c'est un problème Boris
+      this.checkAndStopBorisMusic(problem);
+      
       this.apiService.adminSoftDeleteProblem(problem.id, this.currentUserId).subscribe({
         next: (response) => {
           // Retirer le problème de la liste active
@@ -579,5 +589,75 @@ export class ProblemsComponent implements OnInit {
     this.selectedProblem = null;
     this.resolutions = [];
     this.showResolutionForm = false;
+  }
+
+  /**
+   * Détecte si le problème contient "Boris Galere" et joue la musique
+   */
+  private checkForBorisGalere(problem: Problem) {
+    const searchText = `${problem.title} ${problem.description}`.toLowerCase();
+    const borisVariations = [
+      'boris galere',
+      'boris galère',
+      'boris-galere',
+      'boris-galère',
+      'borisgalere',
+      'borisgalère'
+    ];
+    
+    const containsBoris = borisVariations.some(variation => 
+      searchText.includes(variation)
+    );
+    
+    if (containsBoris) {
+      this.playBorisGalereMusic();
+    }
+  }
+
+  /**
+   * Joue la musique Boris Galère 🎵
+   */
+  private playBorisGalereMusic() {
+    try {
+      // Arrêter la musique précédente si elle existe
+      if (this.borisAudio) {
+        this.borisAudio.pause();
+        this.borisAudio.currentTime = 0;
+      }
+      
+      this.borisAudio = new Audio('assets/audio/boris-galere.mp3');
+      this.borisAudio.volume = 0.7; // Volume à 70%
+      this.borisAudio.play().catch(error => {
+        console.warn('Impossible de jouer la musique Boris Galère:', error);
+      });
+    } catch (error) {
+      console.error('Erreur lors de la lecture de la musique:', error);
+    }
+  }
+
+  /**
+   * Vérifie si le problème est un Boris Galère et arrête la musique si nécessaire
+   */
+  private checkAndStopBorisMusic(problem: Problem) {
+    const searchText = `${problem.title} ${problem.description}`.toLowerCase();
+    const borisVariations = [
+      'boris galere',
+      'boris galère',
+      'boris-galere',
+      'boris-galère',
+      'borisgalere',
+      'borisgalère'
+    ];
+    
+    const containsBoris = borisVariations.some(variation => 
+      searchText.includes(variation)
+    );
+    
+    if (containsBoris && this.borisAudio) {
+      this.borisAudio.pause();
+      this.borisAudio.currentTime = 0;
+      this.borisAudio = null;
+      console.log('🔇 Musique Boris Galère arrêtée');
+    }
   }
 }

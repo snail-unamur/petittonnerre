@@ -31,14 +31,21 @@ export class ApiService {
 
   // ===== OBJECTS =====
   getObjects(userId?: number, skip: number = 0, limit?: number): Observable<ObjectItem[]> {
-    let url = userId
-      ? `${this.apiUrl}/objects/?user_id=${userId}`
-      : `${this.apiUrl}/objects/`;
+    let url = `${this.apiUrl}/objects/`;
+    const params: string[] = [];
     
-    // Ajouter skip et limit aux paramètres
-    url += `&skip=${skip}`;
+    if (userId) {
+      params.push(`user_id=${userId}`);
+    }
+    
+    params.push(`skip=${skip}`);
+    
     if (limit) {
-      url += `&limit=${limit}`;
+      params.push(`limit=${limit}`);
+    }
+    
+    if (params.length > 0) {
+      url += `?${params.join('&')}`;
     }
     
     return this.http.get<ObjectItem[]>(url);
