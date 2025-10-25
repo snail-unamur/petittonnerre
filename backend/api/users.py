@@ -70,33 +70,18 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     
     # Hasher le mot de passe avec gestion d'erreur détaillée
     try:
-<<<<<<< HEAD
-        # Vérifier que bcrypt est disponible
-        if not pwd_context.schemes():
-            raise RuntimeError("No hashing schemes available")
-            
-        hashed_password = pwd_context.hash(user.password)
-        if not hashed_password:
-            raise ValueError("Password hashing failed - empty hash")
-            
-=======
         hashed_password = hash_password(user.password)
->>>>>>> 573e9ba (feat(US5.1): Améliorer authentification avec design flat et menu utilisateur)
     except Exception as e:
         error_msg = f"Password hashing error: {str(e)}"
         print(error_msg)  # TODO: Use proper logging
         if "cannot be longer than 72 bytes" in str(e):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Password cannot be longer than 72 bytes"
+                detail="Le mot de passe ne peut pas dépasser 72 octets"
             )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-<<<<<<< HEAD
-            detail="An error occurred during password hashing"
-=======
             detail="Une erreur s'est produite lors du traitement de votre demande"
->>>>>>> 573e9ba (feat(US5.1): Améliorer authentification avec design flat et menu utilisateur)
         )
     
     # Créer l'utilisateur
