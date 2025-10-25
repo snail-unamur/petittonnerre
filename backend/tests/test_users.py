@@ -39,14 +39,16 @@ def test_db():
 def test_create_user(test_db):
     """Test la création d'un nouvel utilisateur"""
     response = client.post(
-        "/users/",
+        "/users/register",
         json={
             "email": "test@example.com",
             "username": "testuser",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!",
             "location": "Test City"
         }
     )
-    assert response.status_code == 200
+    assert response.status_code == 201  # Created
     data = response.json()
     assert data["email"] == "test@example.com"
     assert data["username"] == "testuser"
@@ -58,20 +60,24 @@ def test_create_user_duplicate_email(test_db):
     """Test la tentative de création d'un utilisateur avec un email déjà existant"""
     # Créer le premier utilisateur
     client.post(
-        "/users/",
+        "/users/register",
         json={
             "email": "test@example.com",
             "username": "testuser1",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!",
             "location": "Test City"
         }
     )
     
     # Tenter de créer un utilisateur avec le même email
     response = client.post(
-        "/users/",
+        "/users/register",
         json={
             "email": "test@example.com",
             "username": "testuser2",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!",
             "location": "Another City"
         }
     )
@@ -81,10 +87,12 @@ def test_create_user_duplicate_email(test_db):
 def test_create_user_invalid_email(test_db):
     """Test la création d'un utilisateur avec un email invalide"""
     response = client.post(
-        "/users/",
+        "/users/register",
         json={
             "email": "invalid-email",
             "username": "testuser",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!",
             "location": "Test City"
         }
     )
@@ -94,10 +102,12 @@ def test_get_user(test_db):
     """Test la récupération d'un utilisateur existant"""
     # Créer un utilisateur
     create_response = client.post(
-        "/users/",
+        "/users/register",
         json={
             "email": "test@example.com",
             "username": "testuser",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!",
             "location": "Test City"
         }
     )
@@ -127,7 +137,10 @@ def test_get_users_list(test_db):
     ]
     
     for user_data in users_data:
-        client.post("/users/", json=user_data)
+        user_data_with_password = user_data.copy()
+        user_data_with_password["password"] = "TestPass123!"
+        user_data_with_password["password_confirm"] = "TestPass123!"
+        client.post("/users/register", json=user_data_with_password)
     
     # Récupérer la liste des utilisateurs
     response = client.get("/users/")
@@ -139,9 +152,11 @@ def test_get_users_list(test_db):
 def test_create_user_missing_required_fields(test_db):
     """Test la création d'un utilisateur avec des champs requis manquants"""
     response = client.post(
-        "/users/",
+        "/users/register",
         json={
-            "email": "test@example.com"
+            "email": "test@example.com",
+            "password": "TestPass123!",
+            "password_confirm": "TestPass123!"
             # username manquant
         }
     )
