@@ -190,6 +190,9 @@
             <span class="badge" [ngClass]="getSeverityClass(problem.severity)">
               {{ getSeverityLabel(problem.severity) }}
             </span>
+            <span class="badge badge-info" *ngIf="isFromAnotherUser(problem)" title="Ce problème a été signalé par un autre utilisateur sur un objet partagé">
+              👥 Problème partagé
+            </span>
           </div>
           <button 
             *ngIf="isAdmin" 
@@ -269,6 +272,15 @@
 
   <!-- Vue Détail d'un problème -->
   <div *ngIf="selectedProblem">
+    <!-- Alerte si c'est un problème d'un autre utilisateur -->
+    <div class="alert alert-info mb-lg" *ngIf="!isOwner()">
+      <div class="alert-icon">👥</div>
+      <div class="alert-content">
+        <div class="alert-title">Problème partagé</div>
+        <p>Ce problème a été signalé par un autre utilisateur sur un objet que vous possédez également. Vous pouvez proposer des solutions mais seul le créateur peut fermer le problème.</p>
+      </div>
+    </div>
+
     <!-- Détails du problème -->
     <div class="card mb-xl">
       <div class="flex flex-between items-start mb-md">

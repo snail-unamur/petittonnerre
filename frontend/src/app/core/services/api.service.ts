@@ -217,6 +217,7 @@ export class ApiService {
       if (filters.severity) params.append("severity", filters.severity);
       if (filters.user_id) params.append("user_id", filters.user_id);
       if (filters.my_problems !== undefined) params.append("my_problems", filters.my_problems.toString());
+      if (filters.include_shared !== undefined) params.append("include_shared", filters.include_shared.toString());
     }
 
     const queryString = params.toString();

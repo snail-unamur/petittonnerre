@@ -53,6 +53,7 @@ def get_problems(
     severity: Optional[models.ProblemSeverity] = None,
     user_id: Optional[int] = None,
     my_problems: Optional[bool] = None,
+    include_shared: Optional[bool] = True,  # Nouveau paramètre pour inclure les problèmes des objets partagés
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db)
@@ -61,7 +62,8 @@ def get_problems(
     
     Args:
         my_problems: Si True et user_id fourni, ne retourne que les problèmes signalés par cet utilisateur
-        user_id: ID de l'utilisateur (requis si my_problems=True)
+        include_shared: Si True et user_id fourni, inclut les problèmes sur les objets partagés avec l'utilisateur
+        user_id: ID de l'utilisateur (requis si my_problems=True ou include_shared=True)
     """
     query = db.query(models.Problem).filter(models.Problem.deleted_at == None)
     
@@ -80,6 +82,15 @@ def get_problems(
     # Filtre "mes problèmes" - ne retourne que ceux signalés par l'utilisateur
     if my_problems and user_id:
         query = query.filter(models.Problem.reported_by == user_id)
+    # Filtre pour inclure les problèmes sur les objets partagés
+    elif include_shared and user_id:
+        # Récupérer les IDs des objets appartenant à l'utilisateur
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        if user:
+            # Obtenir les IDs des objets de l'utilisateur
+            user_object_ids = [obj.id for obj in user.objects]
+            # Filtrer les problèmes dont l'objet appartient à l'utilisateur
+            query = query.filter(models.Problem.object_id.in_(user_object_ids))
     
     problems = query.order_by(models.Problem.created_at.desc()).offset(skip).limit(limit).all()
     return problems

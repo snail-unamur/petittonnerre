@@ -176,6 +176,38 @@ def create_test_data():
         for obj in objects:
             db.refresh(obj)
         
+        # AJOUT D'OBJETS PARTAGÉS pour tester Epic 3.1
+        print("\n" + "🤝" + " CRÉATION DES OBJETS PARTAGÉS")
+        print("=" * 60)
+        
+        # Alice et Bob partagent le "Système de chauffage central" de l'admin
+        # (ex: copropriété, immeuble commun)
+        chauffage_central = objects[0]  # Système de chauffage central (admin)
+        if users[0] not in chauffage_central.owners:
+            chauffage_central.owners.append(users[0])  # Alice
+        if users[1] not in chauffage_central.owners:
+            chauffage_central.owners.append(users[1])  # Bob
+        print(f"✅ Objet partagé: {chauffage_central.name} (Admin, Alice, Bob)")
+        
+        # Alice et Bob partagent la "Chaudière Vaillant" d'Alice
+        # (ex: appartement partagé, colocation)
+        chaudiere_alice = objects[15]  # Chaudière Vaillant (Alice)
+        if users[1] not in chaudiere_alice.owners:
+            chaudiere_alice.owners.append(users[1])  # Bob
+        print(f"✅ Objet partagé: {chaudiere_alice.name} (Alice, Bob)")
+        
+        # Admin et Bob partagent le "Lave-vaisselle Bosch" d'Alice
+        # (ex: équipement de cuisine commune)
+        lave_vaisselle = objects[17]  # Lave-vaisselle Bosch (Alice)
+        if admin not in lave_vaisselle.owners:
+            lave_vaisselle.owners.append(admin)  # Admin
+        if users[1] not in lave_vaisselle.owners:
+            lave_vaisselle.owners.append(users[1])  # Bob
+        print(f"✅ Objet partagé: {lave_vaisselle.name} (Alice, Admin, Bob)")
+        
+        db.commit()
+
+        
         print("\n" + "=" * 60)
         print("🚨 CRÉATION DES PROBLÈMES")
         print("=" * 60)
@@ -187,8 +219,8 @@ def create_test_data():
                 "category": ProblemCategory.NOISE,
                 "severity": ProblemSeverity.MEDIUM,
                 "status": ProblemStatus.OPEN,
-                "object_id": objects[0].id,
-                "reported_by": users[0].id
+                "object_id": objects[15].id,  # Chaudière Vaillant (partagée Alice/Bob)
+                "reported_by": users[0].id  # Alice
             },
             {
                 "title": "Four ne chauffe pas uniformément",
@@ -196,8 +228,8 @@ def create_test_data():
                 "category": ProblemCategory.HEATING_COOLING,
                 "severity": ProblemSeverity.MEDIUM,
                 "status": ProblemStatus.OPEN,
-                "object_id": objects[1].id,
-                "reported_by": users[0].id
+                "object_id": objects[16].id,  # Four Samsung (Alice uniquement)
+                "reported_by": users[0].id  # Alice
             },
             {
                 "title": "Lave-vaisselle ne vidange plus",
@@ -205,8 +237,26 @@ def create_test_data():
                 "category": ProblemCategory.LEAK,
                 "severity": ProblemSeverity.HIGH,
                 "status": ProblemStatus.IN_PROGRESS,
-                "object_id": objects[2].id,
-                "reported_by": users[0].id
+                "object_id": objects[17].id,  # Lave-vaisselle (partagé Alice/Admin/Bob)
+                "reported_by": admin.id  # Admin
+            },
+            {
+                "title": "Bruit anormal au démarrage du chauffage",
+                "description": "Depuis une semaine, le système fait des claquements à l'allumage",
+                "category": ProblemCategory.NOISE,
+                "severity": ProblemSeverity.MEDIUM,
+                "status": ProblemStatus.OPEN,
+                "object_id": objects[0].id,  # Système chauffage central (partagé Admin/Alice/Bob)
+                "reported_by": users[1].id  # Bob
+            },
+            {
+                "title": "Perte de pression dans le circuit",
+                "description": "Manomètre indique 0.5 bar, devrait être à 1.5 bar",
+                "category": ProblemCategory.MECHANICAL,
+                "severity": ProblemSeverity.HIGH,
+                "status": ProblemStatus.OPEN,
+                "object_id": objects[0].id,  # Système chauffage central (partagé Admin/Alice/Bob)
+                "reported_by": admin.id  # Admin
             },
         ]
         

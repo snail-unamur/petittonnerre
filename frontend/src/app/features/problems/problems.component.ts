@@ -121,6 +121,10 @@ export class ProblemsComponent implements OnInit {
     if (this.filterMyProblems && this.currentUserId) {
       filters.my_problems = true;
       filters.user_id = this.currentUserId;
+    } else if (this.currentUserId) {
+      // Par défaut, inclure les problèmes des objets partagés
+      filters.include_shared = true;
+      filters.user_id = this.currentUserId;
     }
     
     this.apiService.getProblems(filters).subscribe({
@@ -325,6 +329,10 @@ export class ProblemsComponent implements OnInit {
 
   isOwner(): boolean {
     return this.selectedProblem?.reported_by === this.currentUserId;
+  }
+
+  isFromAnotherUser(problem: Problem): boolean {
+    return problem.reported_by !== this.currentUserId;
   }
 
   // ===== ADMIN OPERATIONS =====

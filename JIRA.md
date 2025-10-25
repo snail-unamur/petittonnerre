@@ -117,12 +117,13 @@
 ### US3.1: En tant qu'utilisateur, je vois les problèmes des autres pour mes objets
 
 **Dépendances:** US2.4  
-**Priorité:** Haute
+**Priorité:** Haute  
+**Statut:** ✅ Done
 
-- [ ] 3.1.1 Modifier l'endpoint GET /problems pour inclure les problèmes des objets partagés
-- [ ] 3.1.2 Filtrer les problèmes par objets de l'utilisateur
-- [ ] 3.1.3 Ajouter une indication visuelle "Problème d'un autre utilisateur"
-- [ ] 3.1.4 Tester l'affichage des problèmes partagés
+- [x] 3.1.1 Modifier l'endpoint GET /problems pour inclure les problèmes des objets partagés
+- [x] 3.1.2 Filtrer les problèmes par objets de l'utilisateur
+- [x] 3.1.3 Ajouter une indication visuelle "Problème d'un autre utilisateur"
+- [x] 3.1.4 Tester l'affichage des problèmes partagés
 
 ### US3.2: En tant qu'utilisateur, je peux répondre aux problèmes des autres
 
