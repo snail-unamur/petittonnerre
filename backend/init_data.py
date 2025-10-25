@@ -153,10 +153,22 @@ def create_test_data():
         
         objects = []
         for obj_data in objects_data:
+            # Récupérer owner_id et le retirer des données
+            owner_id = obj_data.pop('owner_id')
+            # Ajouter created_by
+            obj_data['created_by'] = owner_id
+            
             obj = Object(**obj_data)
             db.add(obj)
+            db.flush()  # Pour avoir l'ID de l'objet
+            
+            # Ajouter le propriétaire à la relation many-to-many
+            owner = db.query(User).filter(User.id == owner_id).first()
+            if owner:
+                obj.owners.append(owner)
+            
             objects.append(obj)
-            print(f"✅ Objet: {obj_data['name']}")
+            print(f"✅ Objet: {obj.name}")
         
         db.commit()
         

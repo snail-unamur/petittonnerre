@@ -29,10 +29,16 @@ import { DateTimePickerComponent } from "../../shared/components/date-time-picke
           </p>
         </div>
         <div class="flex gap-sm">
-          <button class="btn btn-ghost" (click)="exportToIcal()" title="Exporter au format iCalendar">
+          <button
+            class="btn btn-ghost"
+            (click)="exportToIcal()"
+            title="Exporter au format iCalendar"
+          >
             📅 Exporter
           </button>
-          <button class="btn btn-primary" (click)="openCreateForm()">➕ Nouvelle tâche</button>
+          <button class="btn btn-primary" (click)="openCreateForm()">
+            ➕ Nouvelle tâche
+          </button>
         </div>
       </div>
 
@@ -613,7 +619,7 @@ export class MaintenanceComponent implements OnInit {
       next: (blob: Blob) => {
         // Créer un lien de téléchargement
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
         link.download = `maintenances-petit-tonnerre-${userId}.ics`;
         document.body.appendChild(link);
@@ -623,7 +629,9 @@ export class MaintenanceComponent implements OnInit {
       },
       error: (err) => {
         console.error("Erreur lors de l'export iCalendar:", err);
-        alert("Une erreur est survenue lors de l'export. Assurez-vous d'avoir des maintenances à exporter.");
+        alert(
+          "Une erreur est survenue lors de l'export. Assurez-vous d'avoir des maintenances à exporter."
+        );
       },
     });
   }
