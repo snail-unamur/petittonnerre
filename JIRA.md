@@ -4,10 +4,10 @@
 
 ### US1.1: En tant qu'utilisateur, je veux pouvoir créer un compte
 
-- [ ] 1.1.1 Créer le modèle User dans la base de données (in progress)
-- [ ] 1.1.2 Implémenter l'API d'inscription avec validation des données (in progress)
-- [ ] 1.1.3 Créer le formulaire d'inscription frontend (todo)
-- [ ] 1.1.4 Ajouter la validation côté frontend (todo)
+- [x] 1.1.1 Créer le modèle User dans la base de données (done)
+- [x] 1.1.2 Implémenter l'API d'inscription avec validation des données (done)
+- [x] 1.1.3 Créer le formulaire d'inscription frontend (done)
+- [x] 1.1.4 Ajouter la validation côté frontend (done)
 - [ ] 1.1.5 Écrire les tests unitaires backend (todo)
 - [ ] 1.1.6 Écrire les tests e2e frontend (todo)
 
