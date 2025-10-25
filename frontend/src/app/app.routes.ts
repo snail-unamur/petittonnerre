@@ -1,21 +1,52 @@
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { 
-    path: 'dashboard', 
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  { path: "", redirectTo: "/auth/login", pathMatch: "full" },
+  {
+    path: "auth",
+    children: [
+      {
+        path: "register",
+        loadComponent: () =>
+          import("./features/auth/register.component").then(
+            (m) => m.RegisterComponent
+          ),
+      },
+      {
+        path: "login",
+        loadComponent: () =>
+          import("./features/auth/login.component").then(
+            (m) => m.LoginComponent
+          ),
+      },
+    ],
   },
-  { 
-    path: 'objects', 
-    loadComponent: () => import('./features/objects/objects.component').then(m => m.ObjectsComponent)
+  {
+    path: "dashboard",
+    loadComponent: () =>
+      import("./features/dashboard/dashboard.component").then(
+        (m) => m.DashboardComponent
+      ),
   },
-  { 
-    path: 'maintenance', 
-    loadComponent: () => import('./features/maintenance/maintenance.component').then(m => m.MaintenanceComponent)
+  {
+    path: "objects",
+    loadComponent: () =>
+      import("./features/objects/objects.component").then(
+        (m) => m.ObjectsComponent
+      ),
   },
-  { 
-    path: 'community', 
-    loadComponent: () => import('./features/community/community.component').then(m => m.CommunityComponent)
-  }
+  {
+    path: "maintenance",
+    loadComponent: () =>
+      import("./features/maintenance/maintenance.component").then(
+        (m) => m.MaintenanceComponent
+      ),
+  },
+  {
+    path: "community",
+    loadComponent: () =>
+      import("./features/community/community.component").then(
+        (m) => m.CommunityComponent
+      ),
+  },
 ];
