@@ -1,11 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models
-from database import engine
+from database import engine, SessionLocal
 from api import users, objects, maintenance, community
+from enrich_objects import auto_enrich_on_startup
+import logging
+
+# Configuration du logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Créer les tables
 models.Base.metadata.create_all(bind=engine)
+
+# Enrichissement automatique au démarrage
+try:
+    db = SessionLocal()
+    auto_enrich_on_startup(db)
+except Exception as e:
+    logger.error(f"Erreur lors de l'enrichissement automatique: {e}")
+finally:
+    if 'db' in locals():
+        db.close()
 
 app = FastAPI(
     title="Petit Tonnerre API",

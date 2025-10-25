@@ -47,10 +47,10 @@
 
 ### US2.3: En tant qu'administrateur, je veux pouvoir enrichir les données des objets via un script
 
-- [ ] 2.3.1 Créer le script d'enrichissement de données (todo)
-- [ ] 2.3.2 Implémenter la validation des données enrichies (todo)
-- [ ] 2.3.3 Ajouter des logs pour le suivi d'enrichissement (todo)
-- [ ] 2.3.4 Écrire les tests du script d'enrichissement (todo)
+- [x] 2.3.1 Créer le script d'enrichissement de données (done)
+- [x] 2.3.2 Implémenter la validation des données enrichies (done)
+- [x] 2.3.3 Ajouter des logs pour le suivi d'enrichissement (done)
+- [x] 2.3.4 Écrire les tests du script d'enrichissement (done)
 
 ## Epic 3: Tâches de maintenance 📋
 
