@@ -107,14 +107,18 @@ class MaintenanceAdvice(MaintenanceAdviceBase):
 
 # Maintenance Task Schemas
 class MaintenanceTaskBase(BaseModel):
+    name: str
     scheduled_date: datetime
     notes: Optional[str] = None
 
 class MaintenanceTaskCreate(MaintenanceTaskBase):
     object_id: int
     advice_id: int
+    status: Optional[MaintenanceStatus] = MaintenanceStatus.PENDING
 
 class MaintenanceTaskUpdate(BaseModel):
+    name: Optional[str] = None
+    scheduled_date: Optional[datetime] = None
     status: Optional[MaintenanceStatus] = None
     completed_date: Optional[datetime] = None
     notes: Optional[str] = None

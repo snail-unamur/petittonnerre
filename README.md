@@ -135,7 +135,7 @@ petit-tonnerre/
 ## 💻 Installation
 
 ### Prérequis
-- **Python 3.10+** ✅
+- **Python 3.11+** ✅ (requis pour datetime.UTC)
 - **Docker Desktop** → [Télécharger](https://www.docker.com/products/docker-desktop/)
 - Node.js 18+ (pour le frontend, optionnel)
 

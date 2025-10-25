@@ -136,6 +136,7 @@ class MaintenanceTask(Base):
     __tablename__ = "maintenance_tasks"
     
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
     scheduled_date = Column(DateTime, nullable=False)
     completed_date = Column(DateTime)
     status = Column(Enum(MaintenanceStatus), default=MaintenanceStatus.PENDING)

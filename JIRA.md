@@ -38,6 +38,7 @@
 - [x] 2.1.5 Écrire les tests des endpoints objets (done)
 
 **Détails de l'implémentation (2.1.2 & 2.1.3):**
+
 - ✅ Nouveau modèle `ObjectRequest` pour les demandes d'objets
 - ✅ Endpoints API complets (création, approbation, rejet, suppression)
 - ✅ Composant Angular `AdminDashboardComponent` avec interface intuitive
@@ -69,11 +70,12 @@
 
 ### US3.1: En tant qu'utilisateur, je veux voir ma todo-list de maintenance
 
-- [ ] 3.1.1 Créer le modèle Task dans la DB (in progress)
-- [ ] 3.1.2 Développer l'interface de la todo-list (todo)
-- [ ] 3.1.3 Implémenter les endpoints de gestion des tâches (in progress)
-- [ ] 3.1.4 Ajouter le filtrage et le tri des tâches (todo)
-- [ ] 3.1.5 Écrire les tests des endpoints tâches (todo)
+- [x] 3.1.1 Créer le modèle Task dans la DB (done)
+- [x] 3.1.2 Développer l'interface de la todo-list (done)
+- [x] 3.1.3 Implémenter les endpoints de gestion des tâches (done)
+- [x] 3.1.4 Ajouter le filtrage et le tri des tâches (done)
+- [x] 3.1.5 Écrire les tests des endpoints tâches (done)
+- [x] 3.1.6 Permettre la modification du statut d'une tâche terminée vers en attente (done)
 
 ### US3.2: En tant que système, je veux générer automatiquement les tâches de maintenance
 

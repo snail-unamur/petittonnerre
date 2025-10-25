@@ -104,15 +104,15 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem("token");
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   }
 
   getUsername(): string | null {
-    return localStorage.getItem('username');
+    return localStorage.getItem("username");
   }
 
   getUserId(): number | null {

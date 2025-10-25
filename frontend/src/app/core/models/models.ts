@@ -9,7 +9,13 @@ export interface User {
 export interface ObjectItem {
   id: number;
   name: string;
-  category: 'heating' | 'appliance' | 'kitchen' | 'bathroom' | 'flooring' | 'other';
+  category:
+    | "heating"
+    | "appliance"
+    | "kitchen"
+    | "bathroom"
+    | "flooring"
+    | "other";
   brand?: string;
   model?: string;
   purchase_date?: Date;
@@ -31,15 +37,17 @@ export interface MaintenanceAdvice {
 
 export interface MaintenanceTask {
   id: number;
+  name: string;
   scheduled_date: Date;
   completed_date?: Date;
-  status: 'pending' | 'completed' | 'skipped' | 'issue_reported';
+  status: "pending" | "completed" | "skipped" | "issue_reported";
   notes?: string;
   was_successful?: boolean;
   issues_encountered?: string;
   object_id: number;
   user_id: number;
   advice_id: number;
+  object?: ObjectItem;
 }
 
 export interface Contribution {
@@ -47,7 +55,7 @@ export interface Contribution {
   title: string;
   content: string;
   category: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   upvotes: number;
   author_id: number;
   created_at: Date;

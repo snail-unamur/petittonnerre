@@ -16,9 +16,9 @@ import {
   providedIn: "root",
 })
 export class ApiService {
-  private apiUrl = environment.apiUrl;
+  private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // ===== USERS =====
   getUsers(): Observable<User[]> {
@@ -113,11 +113,21 @@ export class ApiService {
     return this.http.get<MaintenanceTask[]>(url);
   }
 
+  createMaintenanceTask(
+    task: Partial<MaintenanceTask>,
+    userId: number
+  ): Observable<MaintenanceTask> {
+    return this.http.post<MaintenanceTask>(
+      `${this.apiUrl}/maintenance/tasks?user_id=${userId}`,
+      task
+    );
+  }
+
   updateMaintenanceTask(
     id: number,
     task: Partial<MaintenanceTask>
   ): Observable<MaintenanceTask> {
-    return this.http.put<MaintenanceTask>(
+    return this.http.patch<MaintenanceTask>(
       `${this.apiUrl}/maintenance/tasks/${id}`,
       task
     );

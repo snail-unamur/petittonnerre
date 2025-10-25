@@ -328,6 +328,7 @@ def create_test_data():
         for i, obj in enumerate(created_objects[:3]):  # Seulement les 3 premiers
             if i < len(created_advice):
                 task_data = {
+                    "name": f"Entretien {obj['name']}",
                     "scheduled_date": (datetime.now() + timedelta(days=7 + i*3)).isoformat(),
                     "notes": f"Tâche planifiée pour {obj['name']}",
                     "object_id": obj["id"],
@@ -395,7 +396,8 @@ def create_test_data():
 if __name__ == "__main__":
     try:
         create_test_data()
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as e:
+        print(f"❌ Erreur: {e}")
         print("❌ Erreur: Impossible de se connecter à l'API")
         print("Assurez-vous que le serveur FastAPI est lancé sur http://localhost:8000")
         print("Commande: docker-compose up ou ./start-docker.sh")

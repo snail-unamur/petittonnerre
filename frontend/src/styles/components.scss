@@ -251,6 +251,16 @@
   }
 }
 
+// Object info badge
+.object-info {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 // Stats card
 .stat-card {
   background: var(--bg-primary);
