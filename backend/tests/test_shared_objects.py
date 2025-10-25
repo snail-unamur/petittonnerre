@@ -413,8 +413,8 @@ def test_delete_object_removes_user_link_only(test_users):
     assert object_id not in user1_obj_ids
 
 
-def test_delete_object_removes_from_db_when_no_owners(test_users):
-    """Test que l'objet est supprimé de la BD quand il n'a plus de propriétaires"""
+def test_delete_object_keeps_in_db_when_no_owners(test_users):
+    """Test que l'objet reste dans la BD même quand il n'a plus de propriétaires (pour pouvoir être retrouvé)"""
     user1_id = test_users["user1"]["id"]
     
     # User1 crée un objet
@@ -422,14 +422,21 @@ def test_delete_object_removes_from_db_when_no_owners(test_users):
     create_response = client.post(f"/objects/?user_id={user1_id}", json=object_data)
     object_id = create_response.json()["id"]
     
-    # User1 supprime l'objet
+    # User1 supprime l'objet (retire le lien)
     delete_response = client.delete(f"/objects/{object_id}?user_id={user1_id}")
     assert delete_response.status_code == 200
-    assert "supprimé de la base" in delete_response.json()["message"]
+    assert "reste disponible" in delete_response.json()["message"]
     
-    # Vérifier que l'objet n'existe plus du tout
+    # Vérifier que l'objet existe toujours dans la BD (peut être retrouvé via recherche)
     get_response = client.get(f"/objects/{object_id}")
-    assert get_response.status_code == 404
+    assert get_response.status_code == 200
+    assert get_response.json()["name"] == "Objet solo"
+    
+    # Vérifier que l'objet peut être retrouvé via la recherche
+    search_response = client.get("/objects/search?name=Objet solo")
+    assert search_response.status_code == 200
+    assert len(search_response.json()) == 1
+    assert search_response.json()[0]["id"] == object_id
 
 
 def test_delete_object_not_owner(test_users):

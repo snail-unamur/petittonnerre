@@ -46,14 +46,15 @@
 
 ### US2.2: En tant qu'utilisateur, je vois d'abord les objets existants avant de créer
 **Dépendances:** US2.1  
-**Priorité:** Haute
+**Priorité:** Haute  
+**Statut:** ✅ Done
 
-- [ ] 2.2.1 Créer un composant de recherche d'objets existants
-- [ ] 2.2.2 Implémenter la recherche par nom/catégorie/marque/modèle
-- [ ] 2.2.3 Afficher les résultats avec possibilité de sélection
-- [ ] 2.2.4 Ajouter un bouton "Créer un nouvel objet" si aucun résultat
-- [ ] 2.2.5 Lier l'objet sélectionné au compte utilisateur
-- [ ] 2.2.6 Tester le workflow complet
+- [x] 2.2.1 Créer un composant de recherche d'objets existants
+- [x] 2.2.2 Implémenter la recherche par nom/catégorie/marque/modèle
+- [x] 2.2.3 Afficher les résultats avec possibilité de sélection
+- [x] 2.2.4 Ajouter un bouton "Créer un nouvel objet" si aucun résultat
+- [x] 2.2.5 Lier l'objet sélectionné au compte utilisateur
+- [x] 2.2.6 Tester le workflow complet
 
 ### US2.3: En tant qu'utilisateur, ma création d'objet nécessite une approbation admin
 **Dépendances:** US2.2  

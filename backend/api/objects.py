@@ -122,12 +122,10 @@ def delete_object(object_id: int, user_id: int, db: Session = Depends(get_db)):
     db_object.owners.remove(user)
     db.commit()
     
-    # Si l'objet n'a plus de propriétaires, on peut le supprimer de la BD
-    # (optionnel, selon la logique métier souhaitée)
+    # Ne PAS supprimer l'objet de la BD même s'il n'a plus de propriétaires
+    # Cela permet de le retrouver via la recherche et de le lier à nouveau
     if len(db_object.owners) == 0:
-        db.delete(db_object)
-        db.commit()
-        return {"message": "Objet retiré de votre liste et supprimé de la base (plus aucun propriétaire)"}
+        return {"message": "Objet retiré de votre liste. L'objet reste disponible dans la base pour être lié à nouveau."}
     
     return {"message": "Objet retiré de votre liste avec succès"}
 

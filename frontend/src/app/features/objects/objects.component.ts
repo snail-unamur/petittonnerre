@@ -162,14 +162,29 @@ import { ObjectItem } from "../../core/models/models";
             </div>
 
             <div class="divider my-lg"></div>
-            <p class="text-center text-secondary">
-              Vous n'avez pas trouvé votre objet ? Créez-le ci-dessous.
-            </p>
+
+            <div class="text-center">
+              <p class="text-secondary mb-md">
+                Vous n'avez pas trouvé votre objet ?
+              </p>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="showCreateFormSection()"
+                *ngIf="!showCreateForm"
+              >
+                ✨ Créer un nouvel objet
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Formulaire de création/modification -->
-        <form (ngSubmit)="saveObject()" class="form">
+        <form
+          (ngSubmit)="saveObject()"
+          class="form"
+          *ngIf="editingObject || showCreateForm"
+        >
           <h4 class="mb-md" *ngIf="!editingObject">✨ Créer un nouvel objet</h4>
           <div class="form-grid">
             <div class="form-group">
@@ -691,6 +706,7 @@ export class ObjectsComponent implements OnInit {
   sortedObjects: ObjectItem[] = [];
   showAddForm = false;
   showSearchResults = false;
+  showCreateForm = false; // Nouvelle variable pour US2.2
   searchResults: ObjectItem[] = [];
   searchQuery = {
     name: "",
@@ -756,6 +772,7 @@ export class ObjectsComponent implements OnInit {
     this.showAddForm = !this.showAddForm;
     if (!this.showAddForm) {
       this.cancelEdit();
+      this.showCreateForm = false; // Réinitialiser aussi showCreateForm
     }
   }
 
@@ -775,6 +792,7 @@ export class ObjectsComponent implements OnInit {
   cancelEdit() {
     this.showAddForm = false;
     this.editingObject = null;
+    this.showCreateForm = false; // Réinitialiser showCreateForm
     this.formData = {
       name: "",
       category: undefined,
@@ -851,6 +869,7 @@ export class ObjectsComponent implements OnInit {
           this.objects = this.objects.filter(
             (o) => o.id !== this.objectToDelete!.id
           );
+          this.sortObjects(); // Mettre à jour aussi sortedObjects
           this.cancelDelete();
           this.loading = false;
         },
@@ -925,11 +944,12 @@ export class ObjectsComponent implements OnInit {
         next: (results) => {
           this.searchResults = results;
           this.showSearchResults = true;
+          this.showCreateForm = false; // Cacher le formulaire de création jusqu'à ce que l'utilisateur clique
           this.loading = false;
 
           if (results.length === 0) {
-            this.error =
-              "Aucun objet trouvé. Vous pouvez créer un nouvel objet ci-dessous.";
+            this.successMessage =
+              "Aucun objet trouvé correspondant à vos critères. Vous pouvez créer un nouvel objet en cliquant sur le bouton ci-dessous.";
           }
         },
         error: (err) => {
@@ -953,6 +973,7 @@ export class ObjectsComponent implements OnInit {
         this.successMessage = `L'objet "${linkedObject.name}" a été ajouté à votre compte avec succès !`;
         this.resetSearch();
         this.showAddForm = false;
+        this.showCreateForm = false; // Réinitialiser aussi le formulaire de création
 
         // Faire défiler vers le haut pour voir le message de succès
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -982,6 +1003,18 @@ export class ObjectsComponent implements OnInit {
     };
     this.searchResults = [];
     this.showSearchResults = false;
+    this.showCreateForm = false; // Masquer le formulaire de création aussi
+  }
+
+  showCreateFormSection() {
+    this.showCreateForm = true;
+    // Faire défiler vers le formulaire de création
+    setTimeout(() => {
+      const formElement = document.querySelector("form.form");
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
   }
 
   isObjectAlreadyLinked(objectId: number): boolean {
