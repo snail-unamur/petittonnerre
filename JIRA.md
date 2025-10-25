@@ -142,12 +142,13 @@
 ### US4.1: En tant qu'utilisateur, je vois des boutons d'actions rapides sur le dashboard
 **Dépendances:** Aucune  
 **Priorité:** Haute
+**Statut:** ✅ Done
 
-- [ ] 4.1.1 Créer des cards avec actions rapides (Nouvelle maintenance, Nouveau problème, etc.)
-- [ ] 4.1.2 Afficher les statistiques (nombre d'objets, maintenances à venir, problèmes en cours)
-- [ ] 4.1.3 Ajouter des raccourcis vers les pages principales
-- [ ] 4.1.4 Implémenter les actions directement depuis le dashboard
-- [ ] 4.1.5 Tester toutes les actions rapides
+- [x] 4.1.1 Créer des cards avec actions rapides (Nouvelle maintenance, Nouveau problème, etc.)
+- [x] 4.1.2 Afficher les statistiques (nombre d'objets, maintenances à venir, problèmes en cours)
+- [x] 4.1.3 Ajouter des raccourcis vers les pages principales
+- [x] 4.1.4 Implémenter les actions directement depuis le dashboard
+- [x] 4.1.5 Tester toutes les actions rapides
 
 ### US4.2: En tant qu'utilisateur, quand je change de page, la page scroll en haut
 **Dépendances:** Aucune  

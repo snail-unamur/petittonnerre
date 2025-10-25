@@ -13,6 +13,9 @@
 
 ## Workflow
 
+- **Au démarrage d'une nouvelle branche** :
+  - Toujours lancer `docker exec -it petit_tonnerre_backend python init_data.py` pour réinitialiser la base de données proprement
+  - Cela garantit un état de départ propre avec des données de test cohérentes
 - Quand on dit "commit et push" :
   - S'assurer d'être sur une branche feature (sinon la créer)
   - Commiter avec un message de commit clair et descriptif

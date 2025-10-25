@@ -258,4 +258,9 @@ export class ApiService {
   adminDeleteRequest(requestId: number, adminId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/objects/admin/requests/${requestId}?admin_id=${adminId}`);
   }
+
+  // ===== DASHBOARD =====
+  getDashboardStats(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/dashboard/stats?user_id=${userId}`);
+  }
 }

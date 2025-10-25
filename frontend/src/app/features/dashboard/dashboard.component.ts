@@ -1,12 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { Router, RouterModule } from "@angular/router";
 import { ApiService } from "../../core/services/api.service";
+import { AuthService } from "../../core/services/auth.service";
 import { ObjectItem, MaintenanceTask } from "../../core/models/models";
 
 @Component({
   selector: "app-dashboard",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="container">
       <div class="page-header">
@@ -19,27 +21,27 @@ import { ObjectItem, MaintenanceTask } from "../../core/models/models";
         <div class="stat-card">
           <div class="stat-icon">📦</div>
           <div class="stat-label">Mes Objets</div>
-          <div class="stat-value">{{ objects.length }}</div>
-          <div class="stat-change positive" *ngIf="objects.length > 0">
-            ↗ +{{ objects.length }} objets enregistrés
+          <div class="stat-value">{{ stats?.total_objects || 0 }}</div>
+          <div class="stat-change positive" *ngIf="(stats?.total_objects || 0) > 0">
+            ↗ +{{ stats?.total_objects || 0 }} objets enregistrés
           </div>
         </div>
         
         <div class="stat-card">
           <div class="stat-icon">⏳</div>
           <div class="stat-label">Tâches en attente</div>
-          <div class="stat-value">{{ pendingTasks.length }}</div>
-          <div class="stat-change" [class.positive]="pendingTasks.length === 0" [class.negative]="pendingTasks.length > 0">
-            {{ pendingTasks.length === 0 ? '✓ Tout est à jour' : '! Nécessite attention' }}
+          <div class="stat-value">{{ stats?.pending_tasks || 0 }}</div>
+          <div class="stat-change" [class.positive]="(stats?.pending_tasks || 0) === 0" [class.negative]="(stats?.pending_tasks || 0) > 0">
+            {{ (stats?.pending_tasks || 0) === 0 ? '✓ Tout est à jour' : '! Nécessite attention' }}
           </div>
         </div>
         
         <div class="stat-card">
-          <div class="stat-icon">✅</div>
-          <div class="stat-label">Tâches terminées</div>
-          <div class="stat-value">{{ completedTasks.length }}</div>
-          <div class="stat-change positive" *ngIf="completedTasks.length > 0">
-            ↗ Excellent travail!
+          <div class="stat-icon">🔧</div>
+          <div class="stat-label">Problèmes ouverts</div>
+          <div class="stat-value">{{ stats?.open_problems || 0 }}</div>
+          <div class="stat-change" [class.positive]="(stats?.open_problems || 0) === 0" [class.negative]="(stats?.open_problems || 0) > 0">
+            {{ (stats?.open_problems || 0) === 0 ? '✓ Aucun problème' : '! À résoudre' }}
           </div>
         </div>
       </div>
@@ -93,9 +95,10 @@ import { ObjectItem, MaintenanceTask } from "../../core/models/models";
           <div class="card-body">
             <h4>🎯 Actions Rapides</h4>
             <div class="flex flex-column gap-sm mt-md">
-              <button class="btn btn-outline w-full">➕ Ajouter un objet</button>
-              <button class="btn btn-outline w-full">📝 Créer une tâche</button>
-              <button class="btn btn-outline w-full">👥 Rejoindre la communauté</button>
+              <button class="btn btn-outline w-full" (click)="goToObjects()">➕ Ajouter un objet</button>
+              <button class="btn btn-outline w-full" (click)="goToMaintenance()">📝 Voir mes maintenances</button>
+              <button class="btn btn-outline w-full" (click)="goToProblems()">🔧 Signaler un problème</button>
+              <button class="btn btn-outline w-full" (click)="goToCommunity()">👥 Rejoindre la communauté</button>
             </div>
           </div>
         </div>
@@ -132,11 +135,17 @@ export class DashboardComponent implements OnInit {
   tasks: MaintenanceTask[] = [];
   pendingTasks: MaintenanceTask[] = [];
   completedTasks: MaintenanceTask[] = [];
+  stats: any = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadData();
+    this.loadStats();
   }
 
   loadData() {
@@ -149,6 +158,36 @@ export class DashboardComponent implements OnInit {
       this.pendingTasks = data.filter((t) => t.status === "pending");
       this.completedTasks = data.filter((t) => t.status === "completed");
     });
+  }
+
+  loadStats() {
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.apiService.getDashboardStats(userId).subscribe({
+        next: (data) => {
+          this.stats = data;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des stats:', err);
+        }
+      });
+    }
+  }
+  
+  goToObjects() {
+    this.router.navigate(['/objects']);
+  }
+
+  goToMaintenance() {
+    this.router.navigate(['/maintenance']);
+  }
+
+  goToProblems() {
+    this.router.navigate(['/problems']);
+  }
+
+  goToCommunity() {
+    this.router.navigate(['/community']);
   }
   
   getTaskIcon(status: string): string {
