@@ -24,22 +24,24 @@
   min-height: 64px;
 }
 
-/* Logo */
+/* Logo - Ultra Modern & Clean 🔥 */
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   z-index: 1001;
+  
+  &:hover .logo-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
 }
 
 .logo-icon {
-  font-size: 1.75rem;
-}
-
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0;
+  width: 48px;
+  height: 48px;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 /* Theme Toggle */
