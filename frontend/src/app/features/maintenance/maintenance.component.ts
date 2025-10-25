@@ -3,11 +3,13 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ApiService } from "../../core/services/api.service";
 import { MaintenanceTask, ObjectItem, MaintenanceAdvice } from "../../core/models/models";
+import { ObjectTreeSelectComponent } from "../../shared/components/object-tree-select/object-tree-select.component";
+import { DateTimePickerComponent } from "../../shared/components/date-time-picker/date-time-picker.component";
 
 @Component({
   selector: "app-maintenance",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ObjectTreeSelectComponent, DateTimePickerComponent],
   template: `
     <div class="container">
       <div class="page-header">
@@ -82,29 +84,22 @@ import { MaintenanceTask, ObjectItem, MaintenanceAdvice } from "../../core/model
           <!-- Sélection de l'objet -->
           <div>
             <label class="form-label">Objet concerné *</label>
-            <select
-              class="form-control"
+            <app-object-tree-select
+              [objects]="objects"
               [(ngModel)]="newTask.object_id"
               name="objectId"
-              required
-            >
-              <option value="0" disabled>Sélectionnez un objet</option>
-              <option *ngFor="let obj of objects" [value]="obj.id">
-                {{ obj.name }} ({{ obj.category }})
-              </option>
-            </select>
+              placeholder="Sélectionnez un objet"
+            ></app-object-tree-select>
           </div>
 
           <!-- Date planifiée -->
           <div>
             <label class="form-label">Date planifiée *</label>
-            <input
-              type="datetime-local"
-              class="form-control"
+            <app-date-time-picker
               [(ngModel)]="newTask.scheduled_date"
               name="scheduledDate"
-              required
-            />
+              placeholder="Sélectionnez une date et heure"
+            ></app-date-time-picker>
           </div>
 
           <!-- Notes (optionnel) -->

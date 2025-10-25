@@ -23,11 +23,14 @@ def create_object(obj: schemas.ObjectCreate, user_id: int, db: Session = Depends
 
 
 @router.get("/", response_model=List[schemas.Object])
-def get_objects(user_id: int = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_objects(user_id: int = None, skip: int = 0, limit: int = None, db: Session = Depends(get_db)):
     query = db.query(models.Object)
     if user_id:
         query = query.filter(models.Object.owner_id == user_id)
-    objects = query.offset(skip).limit(limit).all()
+    if limit:
+        objects = query.offset(skip).limit(limit).all()
+    else:
+        objects = query.offset(skip).all()
     return objects
 
 

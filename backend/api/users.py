@@ -112,19 +112,6 @@ def add_user_object(user_id: int, obj: schemas.ObjectCreate, db: Session = Depen
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur non trouvé")
     
-    # Vérifier que le parent existe s'il est spécifié
-    if obj.parent_id:
-        parent_obj = db.query(Object).filter(Object.id == obj.parent_id).first()
-        if not parent_obj:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Objet parent non trouvé")
-        
-        # Vérifier que le parent appartient bien au même utilisateur
-        if parent_obj.owner_id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, 
-                detail="L'objet parent doit appartenir au même utilisateur"
-            )
-    
     # Créer le nouvel objet
     db_object = Object(**obj.model_dump(), owner_id=user_id)
     db.add(db_object)
@@ -167,18 +154,6 @@ def update_user_object(user_id: int, object_id: int, obj_update: schemas.ObjectC
             status_code=status.HTTP_404_NOT_FOUND, 
             detail="Objet non trouvé ou n'appartient pas à cet utilisateur"
         )
-    
-    # Vérifier le parent si spécifié
-    if obj_update.parent_id and obj_update.parent_id != db_object.parent_id:
-        parent_obj = db.query(Object).filter(Object.id == obj_update.parent_id).first()
-        if not parent_obj:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Objet parent non trouvé")
-        
-        if parent_obj.owner_id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, 
-                detail="L'objet parent doit appartenir au même utilisateur"
-            )
     
     # Mettre à jour l'objet
     for key, value in obj_update.model_dump().items():

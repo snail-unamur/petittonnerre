@@ -81,7 +81,6 @@ class Object(ObjectBase):
     id: int
     owner_id: int
     created_at: datetime
-    parent_id: Optional[int] = None
     status: Optional[str] = "active"
     
     model_config = ConfigDict(from_attributes=True)
@@ -182,7 +181,6 @@ class ObjectRequestBase(BaseModel):
     purchase_date: Optional[datetime] = None
     manual_url: Optional[str] = None
     notes: Optional[str] = None
-    parent_id: Optional[int] = None
 
 class ObjectRequestCreate(ObjectRequestBase):
     pass

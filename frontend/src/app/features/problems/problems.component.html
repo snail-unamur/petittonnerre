@@ -36,13 +36,12 @@
           
           <div class="form-group">
             <label for="object_id">Objet concerné *</label>
-            <select id="object_id" [(ngModel)]="newProblem.object_id" name="object_id" required>
-              <option [ngValue]="null" disabled>Sélectionnez un objet</option>
-              <option *ngFor="let obj of userObjects" [ngValue]="obj.id">
-                {{ obj.name }} 
-                <span *ngIf="obj.brand || obj.model">({{ obj.brand }} {{ obj.model }})</span>
-              </option>
-            </select>
+            <app-object-tree-select
+              [objects]="userObjects"
+              [(ngModel)]="newProblem.object_id"
+              name="object_id"
+              placeholder="Sélectionnez un objet"
+            ></app-object-tree-select>
           </div>
         </div>
 

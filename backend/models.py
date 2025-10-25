@@ -100,7 +100,6 @@ class Object(Base):
     manual_url = Column(String)  # Lien vers le manuel
     notes = Column(Text)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
-    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)  # Pour les objets liés
     status = Column(String, nullable=False, default="active")  # Statut de l'objet
     
     # Clés étrangères
@@ -200,7 +199,6 @@ class ObjectRequest(Base):
     admin_notes = Column(Text)  # Notes de l'admin lors de la décision
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     reviewed_at = Column(DateTime)
-    parent_id = Column(Integer, ForeignKey("objects.id"), nullable=True)
     
     # Clé étrangère
     requester_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -209,7 +207,6 @@ class ObjectRequest(Base):
     # Relations
     requester = relationship("User", foreign_keys=[requester_id])
     reviewer = relationship("User", foreign_keys=[reviewed_by])
-    parent = relationship("Object", foreign_keys=[parent_id])
 
 
 class Problem(Base):

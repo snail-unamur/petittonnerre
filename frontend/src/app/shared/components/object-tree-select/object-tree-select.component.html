@@ -1,0 +1,73 @@
+<div class="object-tree-select" [class.open]="isOpen">
+  <!-- Selected value or trigger -->
+  <div class="select-trigger" (click)="toggleDropdown()">
+    <span class="selected-value" *ngIf="selectedObjectName">
+      {{ selectedObjectName }}
+    </span>
+    <span class="placeholder" *ngIf="!selectedObjectName">
+      {{ placeholder }}
+    </span>
+    <div class="select-actions">
+      <button 
+        type="button" 
+        class="clear-btn" 
+        *ngIf="selectedObjectName" 
+        (click)="clearSelection($event)"
+        title="Effacer"
+      >
+        ✕
+      </button>
+      <span class="dropdown-icon">▼</span>
+    </div>
+  </div>
+
+  <!-- Dropdown panel -->
+  <div class="select-panel" *ngIf="isOpen">
+    <!-- Search input -->
+    <div class="search-box">
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchText"
+        placeholder="🔍 Rechercher..."
+        (click)="$event.stopPropagation()"
+      />
+    </div>
+
+    <!-- Tree structure -->
+    <div class="tree-container">
+      <div *ngIf="filteredGroups.length === 0" class="no-results">
+        Aucun objet trouvé
+      </div>
+
+      <div class="category-group" *ngFor="let group of filteredGroups">
+        <!-- Category header -->
+        <div class="category-header" (click)="toggleCategory(group)">
+          <span class="expand-icon">{{ group.expanded ? '▼' : '▶' }}</span>
+          <span class="category-icon">{{ group.icon }}</span>
+          <span class="category-label">{{ group.label }}</span>
+          <span class="category-count">({{ group.objects.length }})</span>
+        </div>
+
+        <!-- Category items -->
+        <div class="category-items" *ngIf="group.expanded">
+          <div
+            class="object-item"
+            *ngFor="let obj of group.objects"
+            (click)="selectObject(obj)"
+            [class.selected]="selectedObjectId === obj.id"
+          >
+            <div class="object-name">{{ obj.name }}</div>
+            <div class="object-details" *ngIf="obj.brand || obj.model">
+              <span *ngIf="obj.brand">{{ obj.brand }}</span>
+              <span *ngIf="obj.model"> {{ obj.model }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay to close dropdown when clicking outside -->
+<div class="select-overlay" *ngIf="isOpen" (click)="toggleDropdown()"></div>

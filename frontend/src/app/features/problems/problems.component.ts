@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ObjectTreeSelectComponent } from '../../shared/components/object-tree-select/object-tree-select.component';
+import { ObjectItem } from '../../core/models/models';
 
 interface Problem {
   id: number;
@@ -35,18 +37,10 @@ interface ProblemResolution {
   updated_at: string;
 }
 
-interface UserObject {
-  id: number;
-  name: string;
-  category: string;
-  brand?: string;
-  model?: string;
-}
-
 @Component({
   selector: 'app-problems',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ObjectTreeSelectComponent],
   templateUrl: './problems.component.html',
   styleUrls: ['./problems.component.scss']
 })
@@ -54,7 +48,7 @@ export class ProblemsComponent implements OnInit {
   problems: Problem[] = [];
   selectedProblem: Problem | null = null;
   resolutions: ProblemResolution[] = [];
-  userObjects: UserObject[] = [];
+  userObjects: ObjectItem[] = [];
   currentUserId: number | null = null;
   
   // Filtres
@@ -99,7 +93,7 @@ export class ProblemsComponent implements OnInit {
   loadAllObjects() {
     // Charge TOUS les objets disponibles (pas de filtre utilisateur)
     this.apiService.getObjects().subscribe({
-      next: (data: UserObject[]) => {
+      next: (data: ObjectItem[]) => {
         this.userObjects = data;
       },
       error: (error) => {
