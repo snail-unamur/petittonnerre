@@ -19,8 +19,6 @@ Caractéristiques techniques :
 - réalisé en un weekend en octobre 2025
 - 4 développeurs
 
-Le code source du projet analysé est privé.
-
 ## Méthodologie
 
 ### Outils utilisés :
@@ -48,10 +46,10 @@ Le nom des développeurs ont été anonymisés.
 | dataset_radon.Commentaires | Nombre de commentaires présents | entier | Radon
 | dataset_typescript.Erreurs_TypeScript |  | entier | Radon
 | dataset_duplication.Duplication_Pourcentage | | pourcentage | JSCPD
-| dataset_sonarqube_V2.Sonar_Dette_Technique_Min | | entier | Sonarqube
+| dataset_sonarqube_V2.Sonar_Dette_Technique_Min | Nombre de minutes nécessaires à la résolution des code smells | entier | Sonarqube
 | dataset_sonarqube_V2.Sonar_Duplication_Pct | Densité de lignes dupliquées | pourcentage | Sonarqube
-| dataset_sonarqube_V2.Sonar_Code_Smells | | entier | Sonarqube
-| dataset_sonarqube_V2.Sonar_Bugs | | entier | SonarQube
+| dataset_sonarqube_V2.Sonar_Code_Smells | Nombre de problèmes correspondant à des code smells | entier | Sonarqube
+| dataset_sonarqube_V2.Sonar_Bugs | Nombre de bugs trouvés | entier | SonarQube
 
 ## Licence et Utilisation
 ...
