@@ -1,412 +1,346 @@
 [
     {
         "number": 45,
-        "hash": "3d99f2ea6440b9010fbdb0009661f253ec825812",
+        "hash": "ca79809a56c9d7b051118e9420b3a8ad5dcc6625",
         "titre": "feat(US3.4): Implémentation du chat sur les pages de problèmes",
         "commits_inclus": [
-            "27e47764d045011e15571c25f3bfd2b276a0d1c4",
-            "050a31e6773809d12cf4a027927b34e87d54a670",
-            "fd723c61a90343acd5e6085c2a81083ac56e4ba0",
-            "2a1ad10916e2f6775ac669f26cd9c47ea7761b29",
-            "28e55bdae827b86506ee15db55df56e774bd6450"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Backend:\n  * Ajout du modèle ProblemChat avec soft delete\n  * Création des schémas Pydantic ProblemChatCreate et ProblemChatResponse\n  * Implémentation des endpoints GET /problems/{id}/chat et POST /problems/{id}/chat\n  * Vérification des droits d'accès (utilisateurs avec l'objet partagé)\n  * Exclusion des messages supprimés de la liste\n  * 9 tests unitaires complets avec couverture des cas d'erreur\n\n- Frontend:\n  * Création du composant ProblemChatComponent standalone\n  * Interface TypeScript ProblemChat dans models.ts\n  * Méthodes API pour récupérer et envoyer des messages\n  * Design responsive avec différenciation messages propres/autres\n  * Polling automatique toutes les 5 secondes pour rafraîchir\n  * Formatage intelligent des dates (relative time)\n  * Intégration dans la page de détail des problèmes\n\n- Fonctionnalités:\n  * Chat en temps réel (polling) entre utilisateurs partageant un objet\n  * Messages horodatés avec nom d'utilisateur\n  * Envoi avec Enter (Shift+Enter pour nouvelle ligne)\n  * Support du dark mode\n  * Messages triés chronologiquement\n  * Gestion des erreurs d'accès et problèmes inexistants",
         "commentaires": []
     },
     {
         "number": 44,
-        "hash": "0a9321e6e6781288334d4add10129b5ac533475c",
+        "hash": "1bc34b62b5b441258896b8edff09cfbff682a27b",
         "titre": "feat: Ajout de l'hymne de l'URSS lors de l'activation du mode communiste",
         "commits_inclus": [
-            "92139c669aeeefcc3ea491baa1bb727162067b76",
-            "3dd9561efe4501b4c644f2a77ef81cfb3d015644"
+            "The commits were squashed during the merge process"
         ],
         "description": "- CommunistService: Ajout de la gestion audio avec HTMLAudioElement\n- Lecture automatique de assets/audio/hymne-URSS.mp3 en boucle\n- Volume réglé à 30% pour ne pas être trop fort\n- Pause et reset de l'audio lors de la désactivation du mode\n- Support du mode communiste persistant au chargement de la page\n- Gestion des erreurs de lecture audio (autoplay policy)\n\nGloire au Parti et à l'Hymne Soviétique!",
         "commentaires": []
     },
     {
         "number": 43,
-        "hash": "f1aaa37e31009fb18d54b3df40f30fea674154ec",
+        "hash": "3e490ded2d51e1d5de5d855e40a4b42fe7188230",
         "titre": "feat: Ajout de la musique Boris Galère 🎵",
         "commits_inclus": [
-            "96cfc7bedd7bebbe7108e27117bbf0ac608602a2"
+            "3e490ded2d51e1d5de5d855e40a4b42fe7188230"
         ],
         "description": "- Lecture automatique de boris-galere.mp3 quand un problème contient 'Boris Galere'\n- Détection insensible à la casse et aux variations d'orthographe\n- Arrêt automatique de la musique lors de la suppression du problème\n- Ajout du fichier audio dans assets/audio/\n- Fix: Correction de la construction d'URL dans getObjects (paramètres mal formés)\n- Gestion propre de l'instance audio pour éviter les doublons",
         "commentaires": []
     },
     {
         "number": 42,
-        "hash": "af2ad8ef3f005a38f2600a5f1ed9723099f4fd63",
+        "hash": "0e8f4360b651b7144a3bcea3470f5bedef225670",
         "titre": "feat(US3.1): Affichage des problèmes des objets partagés",
         "commits_inclus": [
-            "38215535c1575954a50b4d3721d1e7105388e74b",
-            "9fbba1ec70dda20376bd9b3be2a187c060173e94"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Backend: Ajout du paramètre include_shared à l'endpoint GET /problems\n- Backend: Filtrage des problèmes par objets possédés par l'utilisateur via user_objects\n- Frontend: Modification de loadProblems() pour utiliser include_shared\n- Frontend: Ajout de la méthode isFromAnotherUser() pour détecter les problèmes partagés\n- Frontend: Badge ' Problème partagé' sur les problèmes signalés par d'autres\n- Frontend: Alerte informative dans la vue détail pour les problèmes partagés\n- Frontend: Mise à jour de l'ApiService pour passer le paramètre include_shared\n- Data: Création d'objets partagés entre utilisateurs dans init_data.py\n- Data: Création de problèmes de test sur objets partagés\n\nCloses #US3.1",
         "commentaires": []
     },
     {
         "number": 41,
-        "hash": "b39bcc236121eecdb984466588dbc2c60df03c8f",
+        "hash": "2d3b8d1b4d09c95a7ac6e61e71396b1d21617827",
         "titre": "feat(US2.6): Implémenter le lazy loading et le tri par catégorie pour les objets",
         "commits_inclus": [
-            "c5505e91f3ae204a9b6c1a0e5037b1962d64ec04",
-            "972b29a8ee2f5d14382728a323af1200b1d09391",
-            "143ff7a65e12026bf2fb539800177c6da55e1874"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Ajout de la pagination dans api.service.ts (skip et limit)\n- Implémentation du lazy loading avec bouton \"Charger plus\" (30 objets par page)\n- Organisation des objets par catégorie avec accordéons\n- Ajout d'un spinner pour le chargement\n- Regroupement automatique par catégorie après filtrage\n- Créé test_pagination_objects.py avec 6 tests de validation\n- Tous les tests passent ✅\n\nBackend:\n- L'endpoint GET /objects supportait déjà skip et limit\n\nFrontend:\n- Modification de objects.component.ts pour afficher les accordéons\n- Ajout des styles pour les accordéons et le spinner\n- loadObjects() supporte maintenant l'ajout (append) pour le lazy loading\n- groupObjectsByCategory() regroupe les objets filtrés\n- toggleCategory() pour ouvrir/fermer les accordéons",
         "commentaires": []
     },
     {
         "number": 40,
-        "hash": "553ed1db96875da6f86e0f2cbf7bd0a24edc64ef",
+        "hash": "9e930acb92fad868b0776f86b209b35dda138a32",
         "titre": "feat(US2.4): Filtrer les objets par utilisateur - chaque utilisateur ne voit que ses propres objets",
         "commits_inclus": [
-            "5145df7b23452f66e9334fdc0bc8521a8833da61",
-            "e5df8a7395b8ac27ec8e0934ece3d5061166eab3"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Modifié maintenance.component.ts pour filtrer les objets par userId\n- Modifié dashboard.component.ts pour filtrer les objets par userId\n- Modifié problems.component.ts pour filtrer les objets par userId\n- Ajouté AuthService dans maintenance.component.ts\n- Créé test_filter_user_objects.py avec 6 tests de validation\n- Tous les tests passent ✅",
         "commentaires": []
     },
     {
         "number": 39,
-        "hash": "0409494ad1357b51642dfcb9412d79fbd8abcd87",
+        "hash": "1c517773b175ebd7204081fa63dfda03ddc49b4c",
         "titre": "feat: Mode communiste optionnel avec bouton de bascule",
         "commits_inclus": [
-            "52c29aac8e178a85377381cb03e4f40a097fce1d",
-            "a093d7756d5b92c37ed39dcfc45f5c71f6842c1b"
+            "The commits were squashed during the merge process"
         ],
         "description": "# 🚩⚒️ Rebranding Communiste URSS - Karl Marx Theme\n\n## Description\n\nTransformation révolutionnaire de l'interface utilisateur de **Petit Tonnerre** en un thème digne de l'Union Soviétique et des enseignements du grand Karl Marx ! Cette MR apporte une refonte visuelle complète dans le style communiste soviétique.\n\n## 🎨 Changements visuels\n\n### Palette de couleurs\n- **Rouge soviétique** : `#CC0000`, `#990000` (couleurs principales)\n- **Or communiste** : `#FFD700`, `#FFA500` (accents)\n- Gradient rouge foncé pour header et footer\n- Bordures dorées de 3px sur header et footer\n\n### Logo soviétique\n- ✅ Nouveau composant `SovietLogoComponent` créé\n- Étoile rouge tournante (rotation 360° en 20s)\n- Marteau et faucille au centre\n- Effet de brillance (glow) doré animé\n- Fond radial gradient or\n\n## 📝 Changements de terminologie\n\n### Menu principal\n| Avant | Après | Icône |\n|-------|-------|-------|\n| Dashboard | **Soviet Suprême** | ⚒️ |\n| Mes Objets | **Propriété Collective** | 🏭 |\n| Maintenance | **Travail du Peuple** | 🔧 |\n| Problèmes | **Sabotage Capitaliste** | 🚩 |\n\n### Menu utilisateur\n| Avant | Après | Icône |\n|-------|-------|-------|\n| Dashboard Admin | **Bureau du Parti** | ⭐ |\n| Paramètres | **Configuration** | ⚙️ |\n| Profil | **Carte du Parti** | 🪪 |\n| Déconnexion | **Quitter le Parti** | 🚪 |\n\n### Authentification\n- \"Connexion\" → **\"Rejoindre le Parti\"**\n- \"S'inscrire\" → **\"Devenir Camarade\"**\n\n## 🏗️ Fichiers modifiés\n\n### Frontend\n1. **`frontend/src/styles/theme.scss`**\n   - Variables de couleurs soviétiques (light & dark mode)\n   - Rouge communiste et or comme couleurs principales\n\n2. **`frontend/src/app/app.component.scss`**\n   - Header avec gradient rouge et bordure dorée\n   - Navigation avec texte doré et ombres portées\n   - Footer avec gradient rouge foncé et filigrane marteau-faucille\n   - Boutons primaires en or sur rouge\n\n3. **`frontend/src/app/app.component.html`**\n   - Remplacement du logo par `<app-soviet-logo>`\n   - Mise à jour de tous les textes de navigation\n   - Modification des labels de menu utilisateur\n   - Footer avec message révolutionnaire\n\n4. **`frontend/src/app/app.component.ts`**\n   - Import du `SovietLogoComponent`\n   - Titre mis à jour : \"Soviet Suprême de la Maintenance Populaire\"\n\n5. **`frontend/src/styles.scss`**\n   - Motif de fond diagonal rouge subtil (effet rayures)\n\n6. **`frontend/src/index.html`**\n   - Titre : \"Gestion Collective de l'Entretien Prolétarien - URSS\"\n\n### Nouveau composant\n7. **`frontend/src/app/shared/components/soviet-logo/soviet-logo.component.ts`** ⭐ NEW\n   - Composant standalone avec logo animé\n   - Étoile tournante et effet glow\n   - Marteau et faucille centrés\n\n## 🎯 Objectifs\n\n- ✅ Créer une identité visuelle communiste cohérente\n- ✅ Remplacer tous les textes par de la terminologie soviétique\n- ✅ Ajouter des animations et effets visuels thématiques\n- ✅ Maintenir la compatibilité avec le mode sombre/clair\n- ✅ Préserver toutes les fonctionnalités existantes\n\n## 🧪 Tests effectués\n\n- ✅ Compilation frontend sans erreurs\n- ✅ Logo animé s'affiche correctement\n- ✅ Tous les menus sont accessibles\n- ✅ Navigation fonctionnelle\n- ✅ Thème clair/sombre fonctionne\n- ✅ Responsive design préservé\n- ✅ Docker build réussi\n\n## 📸 Aperçu\n\n### Éléments clés\n- 🏭 Header rouge communiste avec texte doré\n- ⚒️ Logo soviétique animé avec étoile tournante\n- 🚩 Navigation avec icônes thématiques (marteau-faucille, usine, drapeau rouge)\n- 📜 Footer : \"⚒️ 2025 Petit Tonnerre - Propriété du Peuple - Pour la gloire de l'URSS et les enseignements de Karl Marx 🚩\"\n\n## 🚀 Déploiement\n\nAucune modification backend nécessaire. Le rebranding est purement visuel (frontend).\n\n## 📋 Checklist\n\n- [x] Code compilé sans erreurs\n- [x] Tests visuels effectués\n- [x] Responsive design vérifié\n- [x] Mode sombre/clair testé\n- [x] Navigation fonctionnelle\n- [x] Logo animé opérationnel\n- [x] Commit avec message descriptif\n- [x] Push vers GitLab\n\n## 🔗 Branche\n\n`feature/communist-ussr-rebrand` → `develop`\n\n## 👥 Reviewers\n\n@Dev3 (Dev3)\n\n## 🏷️ Labels\n\n- `frontend`\n- `ui/ux`\n- `rebranding`\n- `feature`\n- `soviet-style` 🚩\n\n---\n\n**Pour la gloire du prolétariat et les enseignements de Karl Marx !** ⚒️🚩⭐\n\n---\n\n> *\"Les travailleurs n'ont pas de patrie. On ne peut leur ravir ce qu'ils n'ont pas.\"* - Karl Marx",
         "commentaires": []
     },
     {
         "number": 38,
-        "hash": "d0feb307198b9ff9e55666056e37f0d5fa1c14cc",
+        "hash": "4023ec8b69783943710f783aa064ef3d1ed50839",
         "titre": "fix(frontend): amélioration affichage message de succès lors création objet",
         "commits_inclus": [
-            "632e7defa53edc028d76c2002e4ce39ea276c843"
+            "4023ec8b69783943710f783aa064ef3d1ed50839"
         ],
         "description": "- Déplace le message de succès sous le formulaire de création au lieu du haut de page\n- Sépare les messages de recherche (searchMessage) et de création (successMessage)\n- Le formulaire reste ouvert 8 secondes pour voir le message avant de se fermer\n- Corrige l'affichage du message 'Aucun objet trouvé' qui apparaît maintenant dans la section recherche",
         "commentaires": []
     },
     {
         "number": 37,
-        "hash": "99d7619cf3aa141915aede62e5191b182f2324d7",
+        "hash": "59f1fb3db0e4dd37b0c775fe9670c630f660417e",
         "titre": "feat: Communist USSR Karl Marx rebranding - Pour la gloire du prolétariat!",
         "commits_inclus": [
-            "99d7619cf3aa141915aede62e5191b182f2324d7"
+            "59f1fb3db0e4dd37b0c775fe9670c630f660417e"
         ],
         "description": "# 🚩⚒️ Rebranding Communiste URSS - Karl Marx Theme\n\n## Description\n\nTransformation révolutionnaire de l'interface utilisateur de **Petit Tonnerre** en un thème digne de l'Union Soviétique et des enseignements du grand Karl Marx ! Cette MR apporte une refonte visuelle complète dans le style communiste soviétique.\n\n## 🎨 Changements visuels\n\n### Palette de couleurs\n- **Rouge soviétique** : `#CC0000`, `#990000` (couleurs principales)\n- **Or communiste** : `#FFD700`, `#FFA500` (accents)\n- Gradient rouge foncé pour header et footer\n- Bordures dorées de 3px sur header et footer\n\n### Logo soviétique\n- ✅ Nouveau composant `SovietLogoComponent` créé\n- Étoile rouge tournante (rotation 360° en 20s)\n- Marteau et faucille au centre\n- Effet de brillance (glow) doré animé\n- Fond radial gradient or\n\n## 📝 Changements de terminologie\n\n### Menu principal\n| Avant | Après | Icône |\n|-------|-------|-------|\n| Dashboard | **Soviet Suprême** | ⚒️ |\n| Mes Objets | **Propriété Collective** | 🏭 |\n| Maintenance | **Travail du Peuple** | 🔧 |\n| Problèmes | **Sabotage Capitaliste** | 🚩 |\n\n### Menu utilisateur\n| Avant | Après | Icône |\n|-------|-------|-------|\n| Dashboard Admin | **Bureau du Parti** | ⭐ |\n| Paramètres | **Configuration** | ⚙️ |\n| Profil | **Carte du Parti** | 🪪 |\n| Déconnexion | **Quitter le Parti** | 🚪 |\n\n### Authentification\n- \"Connexion\" → **\"Rejoindre le Parti\"**\n- \"S'inscrire\" → **\"Devenir Camarade\"**\n\n## 🏗️ Fichiers modifiés\n\n### Frontend\n1. **`frontend/src/styles/theme.scss`**\n   - Variables de couleurs soviétiques (light & dark mode)\n   - Rouge communiste et or comme couleurs principales\n\n2. **`frontend/src/app/app.component.scss`**\n   - Header avec gradient rouge et bordure dorée\n   - Navigation avec texte doré et ombres portées\n   - Footer avec gradient rouge foncé et filigrane marteau-faucille\n   - Boutons primaires en or sur rouge\n\n3. **`frontend/src/app/app.component.html`**\n   - Remplacement du logo par `<app-soviet-logo>`\n   - Mise à jour de tous les textes de navigation\n   - Modification des labels de menu utilisateur\n   - Footer avec message révolutionnaire\n\n4. **`frontend/src/app/app.component.ts`**\n   - Import du `SovietLogoComponent`\n   - Titre mis à jour : \"Soviet Suprême de la Maintenance Populaire\"\n\n5. **`frontend/src/styles.scss`**\n   - Motif de fond diagonal rouge subtil (effet rayures)\n\n6. **`frontend/src/index.html`**\n   - Titre : \"Gestion Collective de l'Entretien Prolétarien - URSS\"\n\n### Nouveau composant\n7. **`frontend/src/app/shared/components/soviet-logo/soviet-logo.component.ts`** ⭐ NEW\n   - Composant standalone avec logo animé\n   - Étoile tournante et effet glow\n   - Marteau et faucille centrés\n\n## 🎯 Objectifs\n\n- ✅ Créer une identité visuelle communiste cohérente\n- ✅ Remplacer tous les textes par de la terminologie soviétique\n- ✅ Ajouter des animations et effets visuels thématiques\n- ✅ Maintenir la compatibilité avec le mode sombre/clair\n- ✅ Préserver toutes les fonctionnalités existantes\n\n## 🧪 Tests effectués\n\n- ✅ Compilation frontend sans erreurs\n- ✅ Logo animé s'affiche correctement\n- ✅ Tous les menus sont accessibles\n- ✅ Navigation fonctionnelle\n- ✅ Thème clair/sombre fonctionne\n- ✅ Responsive design préservé\n- ✅ Docker build réussi\n\n## 📸 Aperçu\n\n### Éléments clés\n- 🏭 Header rouge communiste avec texte doré\n- ⚒️ Logo soviétique animé avec étoile tournante\n- 🚩 Navigation avec icônes thématiques (marteau-faucille, usine, drapeau rouge)\n- 📜 Footer : \"⚒️ 2025 Petit Tonnerre - Propriété du Peuple - Pour la gloire de l'URSS et les enseignements de Karl Marx 🚩\"\n\n## 🚀 Déploiement\n\nAucune modification backend nécessaire. Le rebranding est purement visuel (frontend).\n\n## 📋 Checklist\n\n- [x] Code compilé sans erreurs\n- [x] Tests visuels effectués\n- [x] Responsive design vérifié\n- [x] Mode sombre/clair testé\n- [x] Navigation fonctionnelle\n- [x] Logo animé opérationnel\n- [x] Commit avec message descriptif\n- [x] Push vers GitLab\n\n## 🔗 Branche\n\n`feature/communist-ussr-rebrand` → `develop`\n\n## 👥 Reviewers\n\n@Dev3 (Dev3)\n\n## 🏷️ Labels\n\n- `frontend`\n- `ui/ux`\n- `rebranding`\n- `feature`\n- `soviet-style` 🚩\n\n---\n\n**Pour la gloire du prolétariat et les enseignements de Karl Marx !** ⚒️🚩⭐\n\n---\n\n> *\"Les travailleurs n'ont pas de patrie. On ne peut leur ravir ce qu'ils n'ont pas.\"* - Karl Marx",
         "commentaires": []
     },
     {
         "number": 36,
-        "hash": "537a19c3b3afd6dfcacc0788e30a4957afd54b1d",
+        "hash": "d4bc08ae1dd139e6f58b7b15d99dc393e912718e",
         "titre": "feat: Mise en place du mutation testing avec mutmut pour le backend",
         "commits_inclus": [
-            "537a19c3b3afd6dfcacc0788e30a4957afd54b1d"
+            "d4bc08ae1dd139e6f58b7b15d99dc393e912718e"
         ],
         "description": "# 🧬 Mutation Testing - Infrastructure Backend\n\n## 🎯 Objectif\n\nMise en place d'une infrastructure complète de **mutation testing** pour le backend afin de mesurer la qualité réelle des tests unitaires, au-delà de la simple couverture de code.\n\n---\n\n## 🔗 Informations\n\n- **Branche source :** `feature/mutation-testing-backend`\n- **Branche cible :** `develop`\n- **Type :** Infrastructure / Qualité\n- **Priorité :** Moyenne\n- **Assigné à :** @Dev3\n\n---\n\n## 🧬 Qu'est-ce que le Mutation Testing ?\n\nLe **mutation testing** est une technique avancée qui permet de tester **la qualité de vos tests** plutôt que juste leur couverture.\n\n### Comment ça marche ?\n\n1. L'outil modifie automatiquement votre code (mutations : `+` devient `-`, `==` devient `!=`, etc.)\n2. Il relance vos tests sur le code muté\n3. **Si les tests échouent** → ✅ Mutation \"tuée\" (bon signe)\n4. **Si les tests passent** → ❌ Mutation \"survivante\" (mauvais signe, vos tests n'ont pas détecté le bug)\n\n### Exemple concret\n\n```python\n# Code original\nif user.role == UserRole.ADMIN:\n    # Code admin\n\n# Mutation appliquée\nif user.role != UserRole.ADMIN:  # <= Changé !\n    # Code admin\n\n# Si vos tests passent quand même → vous n'avez pas de test \n# qui vérifie le comportement pour les non-admins !",
         "commentaires": []
     },
     {
         "number": 35,
-        "hash": "32508671077c84cd662b6aee0913ae2f390a66fb",
+        "hash": "b44b057f7240dc182b863d791e6404c56ec0a68d",
         "titre": "fix(dark-mode): amélioration du contraste et lisibilité en dark mode",
         "commits_inclus": [
-            "32508671077c84cd662b6aee0913ae2f390a66fb",
-            "59c2df412d761a2546237472d8eeff449b77d1e6"
+            "b44b057f7240dc182b863d791e6404c56ec0a68d",
+            "dfbb9b08e7963fc4e6d751534ef9862cc37fbccf"
         ],
         "description": "- Dashboard: amélioration du contraste des alertes et badges\n- Footer: adaptation de la couleur de fond au thème\n- Filtres problems: fond sombre avec texte blanc en dark mode\n- Admin dashboard: utilisation des variables CSS pour tous les textes et fonds\n- Login/Register: adaptation complète des formulaires au dark mode\n- Bouton S'inscrire: style adaptatif selon le mode\n- Bouton Ajouter objet: gradient violet amélioré\n- Amélioration générale de la visibilité du texte brand-subtitle",
         "commentaires": []
     },
     {
         "number": 34,
-        "hash": "df5adc0131d843da3252430bdc6a03c35a400976",
+        "hash": "dda3706c9926636037049cb00fa1d5bff8a0c432",
         "titre": "feat(US8.1): Suppression de l'onglet Communauté du menu de navigation",
         "commits_inclus": [
-            "a3471a9c0e0a36c91fc42bae195afb918d1f1b96",
-            "f3ced3f43756ddd15fab5a207d990529ebe08ec6"
+            "The commits were squashed during the merge process "
         ],
         "description": "# US8.1: Suppression de l'onglet Communauté du menu\n\n## 🎯 Objectif\nSimplifier la navigation en retirant l'onglet \"Communauté\" du menu principal, permettant aux utilisateurs de se concentrer sur les fonctionnalités essentielles de l'application.\n\n## 🔗 Informations\n- **Epic:** Epic 8 - Navigation et UX\n- **User Story:** US8.1\n- **Priorité:** Haute\n- **Assigné à:** @Dev3 (Dev3)\n\n## ✨ Modifications\n- ✅ Suppression du lien \"Communauté\" dans `app.component.html`\n- ✅ Désactivation de la route `/community` dans `app.routes.ts`\n- ✅ Mise à jour de la documentation JIRA\n- ℹ️ Le composant `CommunityComponent` reste disponible pour réutilisation future\n\n## 📊 Tests\n- ✅ Frontend compile sans erreur\n- ✅ Aucune erreur de navigation\n- ✅ Menu affiché correctement sans l'onglet Communauté\n- ✅ Bundle optimisé (réduction de ~350 bytes)\n\n## 📝 Fichiers modifiés\n- `frontend/src/app/app.component.html`\n- `frontend/src/app/app.routes.ts`\n- `JIRA.md`\n\n**Total:** 3 fichiers | +7 insertions | -23 suppressions\n\n## 🧪 Comment tester\n1. Lancer l'application en local\n2. Se connecter avec n'importe quel utilisateur\n3. Vérifier que le menu ne contient plus l'onglet \"Communauté\"\n4. Essayer d'accéder à `/community` directement → devrait afficher une erreur de route\n5. Vérifier que les autres onglets fonctionnent correctement\n\n## ✅ Critères d'acceptation\n- [x] Le lien \"Communauté\" n'apparaît plus dans le menu\n- [x] La route `/community` n'est plus accessible\n- [x] Aucune erreur de compilation\n- [x] Documentation à jour\n\n## 💡 Notes\nCette modification est réversible facilement si on souhaite réactiver la fonctionnalité Communauté à l'avenir. Le composant a été conservé dans le code source.",
         "commentaires": []
     },
     {
         "number": 33,
-        "hash": "2e4231a90c45b72404b4baebf5dab2725c020e32",
+        "hash": "b6a08dee4f8adf4c97629b6baabe04d4d2c98be0",
         "titre": "feat(US6.2): Implémentation du soft delete pour les résolutions (backend)",
         "commits_inclus": [
-            "ddf235ab6dda46dc6156585edbff2f33fbdd4791",
-            "a3c18d9b519e5463409b9b43d8ccac18465aecd6",
-            "873f0c87b1415f41d028afb35cca983281c7e9e5",
-            "b3909b8897c5410bd96d78d13c66c3a37081c792"
+            "The commits were squashed during the merge process"
         ],
         "description": "📋 Merge Request - US6.2: Soft Delete des Résolutions\n🎯 Objectif\nImplémentation du soft delete pour les résolutions de problèmes avec interface d'administration complète, permettant aux administrateurs de supprimer et restaurer des résolutions.\n\n🔗 Informations\nBranche source : feature/US6.2-soft-delete-resolutions\nBranche cible : develop\nUser Story : US6.2\nAssigné à : @Dev3 (Dev3)\nDépendances : US6.1 (Soft delete des problèmes)\n✨ Fonctionnalités implémentées\nBackend\n✅ Ajout du champ deleted_at au modèle ProblemResolution\n✅ Modification de l'endpoint GET pour exclure les résolutions supprimées\n✅ 3 nouveaux endpoints admin :\nDELETE /problems/admin/resolutions/{id} - Soft delete d'une résolution\nGET /problems/admin/resolutions/deleted - Liste des résolutions supprimées\nPOST /problems/admin/resolutions/{id}/restore - Restauration d'une résolution\n✅ Suite de tests complète (12 tests - 100% passing)\nFrontend\n✅ Boutons de suppression admin sur chaque résolution (🗑️)\n✅ Bouton \"Voir les résolutions supprimées\" dans l'interface\n✅ Affichage de \"[supprimé]\" pour les résolutions soft deleted\n✅ Interface dédiée pour visualiser et restaurer les résolutions supprimées\n✅ Confirmations et messages d'erreur appropriés\n📊 Tests\n📝 Fichiers modifiés\nmodels.py - Ajout champ deleted_at\nschemas.py - Ajout champ deleted_at au schéma\nproblems.py - 3 endpoints admin + modification GET\ntest_admin_resolutions.py - 12 tests (nouveau fichier)\napi.service.ts - 3 méthodes admin\nproblems.component.ts - Logique admin\nproblems.component.html - UI admin\nJIRA.md - Mise à jour statut US6.2\nTotal : 8 fichiers | +670 insertions | -16 suppressions\n\n🐛 Bugs corrigés\nFix des URLs des endpoints admin (commit ddf235a)\n🧪 Comment tester\nSe connecter avec le compte admin : admin@petittonnerre.com / Admin1234!\nAller sur un problème avec des résolutions\nVérifier la présence des boutons 🗑️ (admin uniquement)\nSupprimer une résolution et confirmer qu'elle disparaît\nCliquer sur \"Voir les résolutions supprimées\"\nVérifier l'affichage \"[supprimé]\" en rouge\nRestaurer une résolution avec ↩️\nVérifier qu'elle réapparaît dans la liste normale\n✅ Critères d'acceptation\n Les admins peuvent soft delete des résolutions\n Les résolutions supprimées sont exclues des listes normales\n Interface admin pour voir/restaurer les résolutions supprimées\n Affichage de \"[supprimé]\" pour les résolutions soft deleted\n Tests complets couvrant tous les scénarios\n Documentation à jour\n📦 Commits\nb3909b8 - feat(US6.2): Implémentation du soft delete pour les résolutions (backend)\n873f0c8 - feat(US6.2): Implémentation du frontend pour le soft delete des résolutions\na3c18d9 - docs(US6.2): Mise à jour de JIRA.md - US6.2 complète\nddf235a - fix(US6.2): Correction des URLs des endpoints admin resolutions\n🚀 Prochaines étapes\nAprès merge, les prochaines US disponibles :\n\nUS6.3 : Soft delete des messages de chat\nUS6.4 : Dashboard de modération admin\n📸 Screenshots (optionnel)\nTu peux ajouter des captures d'écran de l'interface si tu veux\n\n⚠️ Notes pour le reviewer\nLe pattern de soft delete suit exactement celui de US6.1 (problèmes)\nLes endpoints admin nécessitent un admin_id et vérifient le rôle ADMIN\nLa colonne deleted_at doit être présente en DB (via init_data.py)\nTous les tests backend passent avec 0 erreurs",
         "commentaires": []
     },
     {
         "number": 32,
-        "hash": "c06244c706cde6da76c0a5778db17a98a486547c",
+        "hash": "003aa6b05d83e62b744728c9c87860b546995c51",
         "titre": "fix(dashboard): Amélioration de l'affichage des tâches récentes",
         "commits_inclus": [
-            "2249fa00a365cc459d44ec91079671aa001718d5",
-            "47181f672ca9459d661bc48ef12ba64d7a7312f3",
-            "d67e01128eced7e27baeaa50cc166260806a9def"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Affichage du nom réel de la tâche au lieu de 'Tâche #X'\n- Ajout de la date programmée pour chaque tâche\n- Suppression du bouton 'Voir détails' non fonctionnel\n- Ajout de la navigation vers /maintenance sur 'Voir toutes les tâches'",
         "commentaires": [
-            "juste18 : ???\n\n *By Dev2 on 2025-10-25T20:18:01*"
+            "???\n\n *By Dev2 on 2025-10-25T20:18:01*"
         ]
     },
     {
         "number": 31,
-        "hash": "6d5e3f6907103eb3f6d7ebafb90821ca7c42a938",
+        "hash": "3f93649451ea86463b3055a51d764339c100ba0d",
         "titre": "feat(US6.1): Implémentation du soft delete pour les problèmes avec gestion admin",
         "commits_inclus": [
-            "b2dc5a960196955908f1ff13242d3cc88bb7d8ca",
-            "d64891aba36cd6b8001bd70086c625bed79fcb0c"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Ajout du champ deleted_at dans le modèle Problem\n- Création de 3 endpoints admin :\n  * DELETE /problems/admin/{id} - Soft delete avec vérification admin\n  * GET /problems/admin/deleted - Liste des problèmes supprimés\n  * POST /problems/admin/{id}/restore - Restauration d'un problème\n- Modification des endpoints GET pour exclure les problèmes supprimés\n- Validation du rôle admin avant toute opération\n- Suite de tests complète (14 tests) couvrant tous les cas :\n  * Validation du modèle\n  * Autorisation admin/non-admin\n  * Soft delete et restauration\n  * Exclusion des requêtes normales\n  * Workflow complet\n- Update JIRA.md : US6.1 Done\n\nTous les tests passent (14/14)\nL'API fonctionne correctement avec la base PostgreSQL",
         "commentaires": [
-            "juste18 : Pas mal tout ça!\n\n *By Dev2 on 2025-10-25T20:16:50*"
+            "Pas mal tout ça!\n\n *By Dev2 on 2025-10-25T20:16:50*"
         ]
     },
     {
         "number": 30,
-        "hash": "438f5ad57eb3f6d018d545afd99a301f636c9bb7",
+        "hash": "6f40246ee81958d5dacb473545def64d3fad5b9e",
         "titre": "feat(US2.5): Recherche en temps réel dans mes objets",
         "commits_inclus": [
-            "21e0e4623808ecb40da29cbe430f4dbfd21e26ac"
+            "6f40246ee81958d5dacb473545def64d3fad5b9e"
         ],
         "description": "- Ajout d'une barre de recherche au-dessus de la liste des objets\n- Filtre en temps réel sur nom, marque, modèle et catégorie\n- Affichage du nombre de résultats trouvés\n- Bouton pour effacer la recherche\n- Recherche insensible à la casse\n- filteredObjects mis à jour automatiquement après tri\n\nFrontend:\n- Variable myObjectsSearchTerm pour stocker le terme de recherche\n- Variable filteredObjects pour stocker les objets après filtrage\n- Méthode filterMyObjects() avec recherche multicritères\n- Méthode clearMyObjectsSearch() pour réinitialiser\n- UI avec icône de recherche, input et bouton clear\n- Compteur de résultats affiché pendant la recherche",
         "commentaires": [
-            "juste18 : C'est bien ma biche\n\n *By Dev1 on 2025-10-25T20:17:15*"
+            "C'est bien ma biche\n\n *By Dev1 on 2025-10-25T20:17:15*"
         ]
     },
     {
         "number": 29,
-        "hash": "1cb13125960e3cf4024e2ba1ad75db5b9a701556",
+        "hash": "53b9995800c80a5c094986aef8b9685afd31a67e",
         "titre": "docs(jira): Marquer US1.2 et US1.3 comme Done",
         "commits_inclus": [
-            "bcb37ae7823079009579e0c20f6f33f424e5a012"
+            "53b9995800c80a5c094986aef8b9685afd31a67e"
         ],
         "description": "- US1.2: Navigation adaptée aux utilisateurs non connectés ✅\n- US1.3: Lien Admin visible pour les administrateurs ✅\n- Toutes les sous-tâches complétées",
         "commentaires": []
     },
     {
         "number": 28,
-        "hash": "38ccece7833c0b7b11f076f46670954aa7f2ea3e",
+        "hash": "990d73b638056aa1e4505d19745b58e7a6a9c13e",
         "titre": "fix(dashboard): Corriger les requêtes stats pour utiliser la relation many-to-many user_objects",
         "commits_inclus": [
-            "38ccece7833c0b7b11f076f46670954aa7f2ea3e"
+            "990d73b638056aa1e4505d19745b58e7a6a9c13e"
         ],
         "description": "- Remplacer les références inexistantes à Object.owner_id par des jointures sur user_objects\n- Corriger le comptage des objets de l'utilisateur via la table d'association\n- Corriger le comptage des problèmes (ouverts et résolus) avec la bonne jointure\n- Résoudre l'erreur AttributeError: type object 'Object' has no attribute 'owner_id'\n- Fix erreur 500 Internal Server Error sur /dashboard/stats\n- Les requêtes retournent maintenant 200 OK avec les statistiques correctes",
         "commentaires": []
     },
     {
         "number": 27,
-        "hash": "593a1690bfa4ebdeb95a52ca0c3eafcac802cbdc",
+        "hash": "b2af7c81fa974841526ffbd7ade9b1148c4a8087",
         "titre": "fix(app): Remove duplicate methods and invalid properties in AppComponent",
         "commits_inclus": [
-            "9bd487eb0ccaf28040f92587a6c75e59732d7232"
+            "b2af7c81fa974841526ffbd7ade9b1148c4a8087"
         ],
         "description": "- Remove duplicate implementations of closeMenu(), toggleUserMenu(), closeMenus(), and logout()\n- Remove references to non-existent properties (isAuthenticated, username, currentUser)\n- Keep only the correct implementations using currentUser$ observable\n- Fix compilation errors in frontend",
         "commentaires": []
     },
     {
         "number": 26,
-        "hash": "bc0f7fe7705f158e174f2a7f50acc0b679fc9066",
+        "hash": "e3ee6e9577de32372de3666782fdc1506e620cee",
         "titre": "feat(US2.2): Recherche obligatoire avant création + objets persistants",
         "commits_inclus": [
-            "e161c06fa6a998eb1b1e310b08d339375fe5c938",
-            "13bfec87a3360af031859f394148ddfae9e16a89"
+            "The commits were squashed during the merge process"
         ],
         "description": "US2.2: Workflow de recherche avant création\n- Ajout de showCreateForm pour masquer le formulaire par défaut\n- L'utilisateur doit d'abord rechercher un objet existant\n- Bouton 'Créer un nouvel objet' affiché après la recherche\n- Amélioration de l'UX avec scroll automatique vers le formulaire\n\nFix: Conservation des objets sans propriétaires\n- Les objets restent dans la BD même sans propriétaires\n- Permet de les retrouver via recherche et de les lier à nouveau\n- Mise à jour des tests pour vérifier la persistance\n\nFrontend:\n- Variable showCreateForm pour contrôler l'affichage\n- Méthode showCreateFormSection() avec scroll automatique\n- Réinitialisation du formulaire dans toutes les méthodes\n\nBackend:\n- Suppression du code qui effaçait l'objet de la BD\n- Message adapté pour indiquer que l'objet reste disponible\n- Test mis à jour: test_delete_object_keeps_in_db_when_no_owners",
         "commentaires": []
     },
     {
         "number": 24,
-        "hash": "fe057a69ace1ecf9ec814ddaf2b1adfd180ccd59",
+        "hash": "6cc758f856f7ebd25fbbd7844a2b3424c6465ec6",
         "titre": "feat(US1.2): Masquer le menu pour utilisateurs non connectés + logo moderne et sexy",
         "commits_inclus": [
-            "585226994cbcd4681444cb4a57ca2c0f628eaf93",
-            "9682957b3587a7d4dec41b26a66e2f3b0186d89d",
-            "1305a0ab7f0aebd783d49cfea6d93b766fb884f4",
-            "bae9b6eff5b97e97f14a9a470895bfbb145d9fcd"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Cacher les liens de navigation (Dashboard, Objets, etc.) si non connecté\n- Afficher uniquement Login/Register pour les visiteurs\n- Nouveau design du logo avec gradient animé et effets de glow\n- Logo avec icône éclair ⚡ et typographie moderne\n- Animations CSS sexy (pulse, shimmer, gradient slide)\n- Mise à jour du adminGuard pour vérifier le rôle admin via AuthService\n- Protection des routes déjà en place avec authGuard et authenticatedGuard",
         "commentaires": []
     },
     {
         "number": 23,
-        "hash": "37f6eb551b82aee7e21790eb7165265a40204211",
+        "hash": "fe40d146c6cdafa3af3785cfa5052d9da5acb14b",
         "titre": "feat(US2.1): Implémentation relation many-to-many pour objets partagés",
         "commits_inclus": [
-            "37f6eb551b82aee7e21790eb7165265a40204211",
-            "5d471dd0c8c00f692727d7393a319bc156a92431",
-            "2651b8d4d1f52c570be34085057059017ee492bb",
-            "bb0c8cb2dd4fe53944c0ff6f2836acddf1bef087",
-            "736275bad7a7672ad18dd99b3b5da9063c4a0ba6",
-            "8a4660efa548dccdc6975400ba5552de9107ffe3"
+            "fe40d146c6cdafa3af3785cfa5052d9da5acb14b",
+            "c905249bb2ae505b0faf131a818fc7cfed8a71cb",
+            "037f49acd18cc975ddf9c9b77da5174712d8a309",
+            "e04f877423222473dbe68e9ee6e54468b4b5942c",
+            "b62a1fa8b3806b3d84fc1fa6f10dd28e641bb159",
+            "64271bb0d5de9a124c02268e5a04290988fdfeef"
         ],
         "description": "- Backend: Ajout table d'association user_objects pour relation many-to-many\n- Backend: Modification modèle Object (owners au lieu de owner, ajout created_by)\n- Backend: Nouveaux endpoints /objects/search, /objects/link, /objects/unlink/{id}\n- Backend: 13 tests unitaires pour fonctionnalités de partage d'objets\n- Frontend: UI de recherche d'objets existants avec liaison/déliaison\n- Frontend: Utilisation méthodes API standards (getObjects, createObject, updateObject, deleteObject)\n- Migration: Script migrate_objects_to_many_to_many.py (115 objets migrés)",
         "commentaires": []
     },
     {
         "number": 22,
-        "hash": "73a2f04e9571cc721a97fabbb8d0dabaaf94ece6",
+        "hash": "b438483d500d72cd65d0f4b052d598438ce52056",
         "titre": "feat(US5.2): Implement dark mode toggle with theme switching",
         "commits_inclus": [
-            "73a2f04e9571cc721a97fabbb8d0dabaaf94ece6",
-            "6b18c8cf17f98c96dd54dc190f26f3ff9f1e3949",
-            "35af143e078dca1a5b8733dfdab01f046e736495",
-            "2925da4e6978fde5040f9c0a84f8f130eb963610",
-            "d48d8437d04892394626435c46bcbad96d8e18f7",
-            "bbbac5449d7847c62a9340a4e7e26089a6db9fc8",
-            "af45183c1496f49e8525caef8f38cffa98c496ef",
-            "5f49a68154a9eda1ab0cb0bccb535866bc4c15f8",
-            "3f457c4e3e2370daa4e9d115558e9623bb39f68b"
+            "b438483d500d72cd65d0f4b052d598438ce52056",
+            "b438483d500d72cd65d0f4b052d598438ce52056",
+            "23f9622140e5962fe12cde62d80ba1c725d1efa1",
+            "f32cde57d4373e50ed76e9da27707d92c38e7faf",
+            "26437108315b23c75ef9243e0bc89593d33fb887",
+            "9a7d4628a009f54f9a8e8c63334e88a9c69cf579",
+            "7eb9924aa80f003dcb741e14c2792eac934f0c37",
+            "96ac5d5061be26a1c28c20a75aaf6bae87981386",
+            "0f803574db1ce5460d0fb6d25ed236481bc502db"
         ],
         "description": "- Add dark theme CSS variables in theme.scss with inverted color palette\n- Create ThemeService for theme state management with localStorage persistence\n- Add moon/sun icon toggle button in header\n- Apply smooth transitions for theme switching\n- Initialize theme from localStorage on app startup\n- All components now support dark mode seamlessly\n\nResolves US5.2",
         "commentaires": []
     },
     {
         "number": 21,
-        "hash": "4428b158c0e0a9a446e46bdeee74d47e1bc8a93d",
+        "hash": "8c256cff3eaba635d0958715f7fddc5dfbd97162",
         "titre": "feat(US4.1): Ajouter les actions rapides et stats au dashboard",
         "commits_inclus": [
-            "67b4e625fc1c21183f68d38cd87b473bc3ab1ad6",
-            "1bac28aad83c9857125299e978d103f63ecf94e3",
-            "1b03273ba1c0d0f2c2eed6fd955980079f8fad2d",
-            "f292f45c981dd6dd1f634c45e3cdee908552c699"
+            "The commits were squashed during the merge process"
         ],
         "description": "Backend:\n- Créer l'endpoint GET /dashboard/stats pour récupérer les statistiques utilisateur\n- Stats incluses: objets totaux, tâches en attente, tâches terminées, problèmes ouverts/résolus\n- Ajouter le router dashboard dans main.py\n\nFrontend:\n- Mettre à jour dashboard.component pour récupérer les vraies stats depuis l'API\n- Remplacer les stats statiques par des données dynamiques\n- Ajouter la navigation sur les boutons d'actions rapides (Objets, Maintenance, Problèmes, Communauté)\n- Ajouter getDashboardStats() dans api.service\n\nLa US4.1 est maintenant complète avec un dashboard fonctionnel et des actions rapides opérationnelles.",
         "commentaires": []
     },
     {
         "number": 20,
-        "hash": "78c23dd66935cacb3a4b22a1455fceaf599d1db6",
+        "hash": "7b218b40978e127358a39b5617dc822ad98b53e2",
         "titre": "feat(maintenance): Add iCalendar export functionality (US5.1)",
         "commits_inclus": [
-            "fbbfc0217444c351d7d3b8a698e76ff20209ac95",
-            "05a3ef05318f56d84705cfc93c401839045b97a3",
-            "f15fd751f65ba51d61b1b8a51ad1f1f5f3c44e38"
+            "The commits were squashed during the merge process"
         ],
         "description": "Backend:\n- Add icalendar dependency to requirements.txt\n- Create /maintenance/export/ical endpoint\n- Generate .ics file with maintenance tasks\n- Include event details, descriptions, alarms, and recurrence rules\n- Support all maintenance statuses (pending, completed, issue_reported)\n\nFrontend:\n- Add export button in maintenance page header\n- Implement exportMaintenanceToIcal method in ApiService\n- Add exportToIcal function in MaintenanceComponent\n- Trigger file download with proper filename\n\nFeatures:\n- Events include task name, object details, and advice descriptions\n- 24-hour reminders for pending tasks\n- Recurring events based on advice frequency\n- Completed tasks marked with completion date and status\n- Compatible with Google Calendar, Outlook, and other iCal clients",
         "commentaires": []
     },
     {
         "number": 19,
-        "hash": "6b1a6858fba711e887c197ba4452f1b35b2f0c58",
+        "hash": "2bb581ad4d947fc6ad7637677a3ac1629ce6079e",
         "titre": "feat(US1.1): Empêcher les utilisateurs connectés d'accéder à login/register",
         "commits_inclus": [
-            "6d74eb83a9d10976bc0b26e30243a8c61ab6cda3",
-            "6e762a83faedd3212f5f5edd2cbb616f8ad90323",
-            "afeccbdd7698830be9d0550fc36f5f9df85429a9"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Créer un guard authenticatedGuard qui redirige vers /dashboard si l'utilisateur est connecté\n- Appliquer le guard sur les routes /auth/login et /auth/register\n- Ajouter des tests unitaires pour le guard\n- Mettre à jour JIRA.md (US1.1 ✅ Done)\n\nLes utilisateurs connectés sont maintenant automatiquement redirigés vers le dashboard\nquand ils tentent d'accéder aux pages de login ou register.",
         "commentaires": []
     },
     {
         "number": 18,
-        "hash": "47a9773dd16c36edd10d4bf39a7c883f611e869e",
+        "hash": "9363790ed457b89e29d347b9aa3b25dc437725e6",
         "titre": "feat(US1.3): Ajout du lien Admin dans le menu pour les administrateurs",
         "commits_inclus": [
-            "33cb72e8a2a18215448fb77454d226c7f0768afc",
-            "f523d8c9fe2026f43b84153e9fa75b352adf04b6",
-            "901c775a48a4487f25e0863745631eb6749cb02b"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Ajout de la méthode isAdmin() dans AuthService pour vérifier le rôle admin\n- Affichage conditionnel du lien Admin dans le menu (app.component.html)\n- Suppression du composant admin-auth.component.ts qui ne sert plus\n- Redirection directe de /admin vers /admin/dashboard\n- Suppression de la route /admin/auth obsolète\n- Le dashboard admin est maintenant accessible uniquement via le menu si connecté en tant qu'admin\n- Mise à jour de JIRA.md avec toutes les tâches cochées\n\nCloses US1.3",
         "commentaires": []
     },
     {
         "number": 17,
-        "hash": "d438a012ebe3b2e2ba3082e5f6ca8aaf4f856e31",
+        "hash": "f101d92dde6bc4758b7b26686f25ee6832d6846d",
         "titre": "fix: Ajout du status dans MaintenanceTaskCreate pour permettre la création de...",
         "commits_inclus": [
-            "2d7b2555a15c2dcdc4e2856d845cf3451a4dc0ea",
-            "adc6aae95bfef364283bf5c8f246760231e01736",
-            "3f5a263b395d9a1a7ef247577f670135722a7b53",
-            "7bb3ffb4cb74cf95d1e3c258b88e1494f9e266ff",
-            "615b244ead0829010c280fc094434dd9847b3fb6",
-            "f86ba162c100bc1fabc739409758a7670390f497",
-            "0d3f0332e6f092d782c288a8e37d6e8c53569575",
-            "e8147c815bd7ffc1238107e9ad5c1dddcd4304f4",
-            "a74ba3c5b232d7af3a71dd60e67a1b4a2caddb28",
-            "ad1ec31a71444d59be585dccdbbff78a0714f086",
-            "8d48205249e527afeaf001328e3a2029124210a1"
+            "The commits were squashed during the merge process"
         ],
         "description": "fix: Ajout du status dans MaintenanceTaskCreate pour permettre la création de tâches avec différents statuts",
         "commentaires": []
     },
     {
         "number": 16,
-        "hash": "07191e60cede20cd9a5c10cc66ae693e16e414ca",
+        "hash": "25bb8905acb378cb977bd979326bddf6b23a85ad",
         "titre": "feat: Ajout feature sélection objet existant et demande création",
         "commits_inclus": [
-            "3ad45e7a76cbd30c55ddc39c12f88e6a25bbdaee",
-            "8403210fb126b070bf68572c03123cc2094903a9",
-            "b67d0fee258538dac937dbb412c20eac885bd748",
-            "1fe3eb63cf5582c8931a50472735ce446fafb316",
-            "3417a127c93711ba683590dfa861861b2049ed40",
-            "c6510f9405fe9c88c9e4cdca10a39310481e3dc3",
-            "0e97677d1230c989f773ab4fa5d8b9d6c187cc17",
-            "18b530e85867441a43239996638d1f0794e4e738",
-            "a2c1e2a30413ff0b6b47ce0d0b2b675e7b5dceff",
-            "ceacf282435c73f230acb16771ec2aa7f3120479",
-            "6b2f1c9ff828c138b55228fc37439b74927e3ac8",
-            "9d8a34d93d9746f2de671b2ba1064d5684220d53"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Backend:\n  * Ajout table ObjectTemplate pour stocker les objets de référence\n  * Nouveau endpoint GET /objects/templates pour lister les templates validés\n  * Nouveau endpoint POST /objects/from-template pour créer un objet depuis un template\n  * Endpoints admin pour gérer les templates (CRUD)\n  * Modification de l'approbation de demandes d'objets pour créer automatiquement un template\n  * Migration de la base de données pour ajouter object_templates et template_id\n  * Tests unitaires pour les nouvelles fonctionnalités\n\n- Frontend:\n  * Ajout des modèles ObjectTemplate et ObjectCreateFromTemplate\n  * Nouvelles méthodes dans api.service pour gérer les templates\n  * Refonte du composant objects avec 3 workflows:\n    1. Sélection d'un objet existant depuis les templates\n    2. Création d'une demande d'objet si non existant\n    3. Modification d'objets existants (conservé)\n  * Interface de recherche et sélection de templates\n  * Formulaire de complétion des infos pour objet depuis template\n  * Formulaire de demande de création d'objet pour validation admin\n  * Styles et UI améliorés pour la nouvelle expérience utilisateur\n  * Fix tsconfig.app.json pour inclure tous les fichiers .ts",
         "commentaires": []
     },
     {
         "number": 15,
-        "hash": "63775fa0cb2d2e935d7a47fcd2d4c488c9ea0263",
+        "hash": "87fa61c6f194a2b6fcdcaff7e947399ac07a0f2f",
         "titre": "feat(US1.2): Implement JWT authentication frontend integration",
         "commits_inclus": [
-            "a6045f040a011b5ebe2bf140e27f3c1788fd1507",
-            "8547f74f2f0564c4e5f1c654566ff914f39675e8",
-            "e0fccc0d402c3cd28276ceeade0aec26e369934f",
-            "4dd89e6985fd0eadf9bbbd44152e86e932374b5d",
-            "e9649c2bc76662365439806f6432a5990392ff5a"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Update AuthService to use /auth/* endpoints instead of /users/*\n  - Add BehaviorSubject for current user state management\n  - Implement getCurrentUser() method to call /auth/me\n  - Update login() to return Token instead of LoginResponse\n  - Update logout() to call backend /auth/logout endpoint\n  - Add currentUser$ observable for reactive user state\n\n- Create AuthGuard for route protection\n  - Redirect unauthenticated users to /auth/login\n  - Preserve returnUrl in query params for redirect after login\n  - Protect routes: dashboard, objects, maintenance, community, problems\n\n- Create HTTP Interceptor for JWT token\n  - Automatically add Authorization: Bearer <token> header\n  - Apply to all API requests\n\n- Update LoginComponent\n  - Add OnInit lifecycle hook\n  - Implement returnUrl handling from query params\n  - Redirect to requested page after successful login\n\n- Update AppComponent\n  - Subscribe to currentUser$ observable for reactive auth state\n  - Update logout to use observable-based logout method\n  - Close menus on route navigation\n  - Handle logout errors gracefully\n\n- Register auth interceptor in main.ts\n  - Use withInterceptors() to add authInterceptor\n\nTasks completed:\n- [x] 1.2.3 Développer le formulaire de login frontend (already existed, updated)\n- [x] 1.2.4 Implémenter la gestion du token JWT côté frontend\n- [x] 1.2.5 Ajouter les guards Angular pour les routes protégées",
         "commentaires": []
     },
     {
         "number": 14,
-        "hash": "c4424c8df28f5a4d5473ba67daa3f747d8ff25f1",
+        "hash": "491d3da9a9c2234a6f66d5b0c805c3081115781b",
         "titre": "feat: Implement admin dashboard for object request management",
         "commits_inclus": [
-            "685735df00cc42eaf710564554ca9d32ec002827",
-            "82a1a276b2a31ca155aca5a7be34571735386e67",
-            "3a6a63a52773f5d3cb8bfddad5b2f51c2088c70d",
-            "015b5f4bdf5c18d293f4ae0f66389693ce53996c",
-            "174dbd35fab44bc51da2940a5251a5b9a7bf91cd",
-            "54f7a51a6016c524fa48d656999d466673674f18",
-            "08da4d1ceb30641eb0a6fcb9c3dc5a75ea40a836",
-            "dd95ee10de68574249d21ee928c2f87b7b3210b0",
-            "cf8a223c8df7f21aab1021904eaa6f59fe4a3376",
-            "fa90f172f6f6d2647ad0ede2b113cebb22f65d2e"
+            "The commits were squashed during the merge process"
         ],
         "description": "Implement US2.1.2 & US2.1.3 - Admin interface and endpoints for object requests\n\nBackend:\n- Add ObjectRequest model with status tracking (pending/approved/rejected)\n- Implement 6 new API endpoints for object request management\n- Add admin-only endpoints with role verification\n- Create comprehensive tests (13 test cases)\n- Add migration script for object_requests table\n- Create test data script with admin user and sample requests\n\nFrontend:\n- Create AdminDashboardComponent with modern UI\n- Implement AdminAuthComponent with temporary authentication\n- Add adminGuard for route protection\n- Update routes with /admin/auth and /admin/dashboard\n- Add API service methods for admin operations\n- Create responsive design with two-column layout\n\nFeatures:\n- Users can create object requests\n- Admins can approve (creates object), reject, or delete requests\n- Admin can add notes to decisions\n- Temporary auth with code 'admin123' (to be replaced with JWT)\n- Complete workflow tracking with timestamps and reviewer info\n\nDocumentation:\n- Add comprehensive FEATURE_ADMIN.md guide\n- Update COMMANDS.md with admin endpoints examples\n- Update JIRA.md marking tasks as done\n- Create CHANGELOG with implementation details\n\nNote: Current authentication is TEMPORARY and must be replaced with JWT before production",
         "commentaires": [
-            "juste18 : ??????\n\n *By Dev4 on 2025-10-25T14:04:21*"
+            "??????\n\n *By Dev4 on 2025-10-25T14:04:21*"
         ]
     },
     {
         "number": 13,
-        "hash": "495a56c2eee04adf40b36ee3d770ea8621634d9b",
+        "hash": "9742d4dea8982dbd43b97dd4d4ee3671e7c87322",
         "titre": "feat(US1.2): Implement JWT authentication with login/logout endpoints",
         "commits_inclus": [
-            "fe1f04111355acb642d1b0ce58899c6792800144",
-            "ce3de9265a0df5b164b758e0b7dcaf06f2a61031",
-            "42419260ba54c73e7b555181f287b67f25bcc0ab"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Add JWT authentication module (auth.py) with argon2 password hashing\n- Add authentication endpoints: /auth/register, /auth/login, /auth/me, /auth/logout\n- Add authentication schemas: Token, TokenData, LoginData\n- Add comprehensive test suite (10 tests) covering:\n  - User registration (success, duplicate email/username)\n  - User login (success, invalid credentials)\n  - Token validation (/me endpoint)\n  - Logout functionality\n- Migrate from bcrypt to argon2 for better security and no length limitations\n- Update to Pydantic V2 validators (@field_validator)\n- Use timezone-aware datetime (datetime.now(UTC))\n- All 10 authentication tests passing\n\nTechnical stack:\n- JWT: python-jose\n- Password hashing: argon2 (via passlib)\n- OAuth2: FastAPI OAuth2PasswordBearer\n- Testing: pytest with TestClient",
         "commentaires": [
-            "juste18 : French ?????\n\n *By Dev4 on 2025-10-25T13:22:39*"
+            "French ?????\n\n *By Dev4 on 2025-10-25T13:22:39*"
         ]
     },
     {
@@ -414,143 +348,133 @@
         "hash": "bd72017d1679a178c1bb13dcbb5878daa752d177",
         "titre": "feat: Implémenter l'interface de consultation et résolution des problèmes (US 4.2.1)",
         "commits_inclus": [
-            "bd72017d1679a178c1bb13dcbb5878daa752d177",
-            "3c128a47df16376f9814c18220d50dee26fa2079",
-            "0ed51abb14e574321700351c5625773152be0923",
-            "93c962df54b7972cc2b9dffacba507d3d94a01e8",
-            "2540411510a2cb7a47757b6d7821fd911adc2a94",
-            "ad465d4c6a332c78b44365fb15654012c03c090c",
-            "838b23f5bc85b2c138d1a281b97b82dee59aeffe",
-            "237902b19dd2d200e65415ad8842b18289dce277",
-            "027e414d769b2e3258a321b7a4170047c480ab47",
-            "003db3c9a03fa2bf39bca80c58f65da8f96f04eb",
-            "a78beb08c9a26d735fdab5c0560e3c714bf9356d"
+            "The commits were squashed during the merge process"
         ],
         "description": "- Backend: Ajout des modèles Problem et ProblemResolution avec énumérations (status, severity)\n- Backend: Création des schémas Pydantic pour validation des données\n- Backend: Implémentation de l'API /problems avec 10 endpoints (CRUD, filtres, résolutions, upvotes)\n- Frontend: Composant ProblemsComponent avec interface complète de consultation\n- Frontend: Formulaires de création de problèmes et résolutions\n- Frontend: Système de filtres par statut, sévérité et catégorie\n- Frontend: Vue liste et vue détail avec affichage des résolutions\n- Frontend: Système d'upvote pour les résolutions\n- Frontend: Ajout de la route /problems et du lien de navigation\n- Frontend: Méthodes API service pour toutes les opérations problèmes\n- Database: Création automatique des tables problems et problem_resolutions",
         "commentaires": []
     },
     {
         "number": 11,
-        "hash": "070fbec45e2d75111e8500ecdd966512f9e2d894",
+        "hash": "59b56c109e76833f44f1f4cc1706e00ef12031c3",
         "titre": "feat(US-2.2): Implémenter la gestion des objets utilisateur",
         "commits_inclus": [
-            "070fbec45e2d75111e8500ecdd966512f9e2d894",
-            "8b0ecbd45b035023b1b2c3c2375cb01d760b9c36",
-            "c62ea856bb3135e8f7aa0ade65550331062d6f34"
+            "59b56c109e76833f44f1f4cc1706e00ef12031c3",
+            "b3348f15fdd20abd738954ba8250e9e4ac06c97b",
+            "653ed39a5d2a7d51a088d078d4c55f0a6e580740"
         ],
         "description": "- Ajout des endpoints REST pour gérer les objets d'un utilisateur :\n  * GET /users/{user_id}/objects - Liste des objets\n  * POST /users/{user_id}/objects - Créer un objet\n  * GET /users/{user_id}/objects/{object_id} - Détails d'un objet\n  * PUT /users/{user_id}/objects/{object_id} - Modifier un objet\n  * DELETE /users/{user_id}/objects/{object_id} - Supprimer un objet\n\n- Sécurité : Validation stricte des permissions (un utilisateur ne peut gérer que ses propres objets)\n\n- Tests : 19 tests unitaires couvrant tous les scénarios (succès, erreurs, permissions)\n\n- Fix : Contrainte version httpx<0.28 pour compatibilité TestClient\n\nCloses #US-2.2",
         "commentaires": []
     },
     {
         "number": 10,
-        "hash": "5e7c1fd84d076686ef708a8696c1842bc9d09372",
+        "hash": "fe870bcbaa8241caee1d4d51ea6e9a3d8f28656e",
         "titre": "feat(US5.1): Améliorer authentification avec design flat et menu utilisateur",
         "commits_inclus": [
-            "b7f6d43fda2cc32ae76ffd80879745b924edbbed"
+            "fe870bcbaa8241caee1d4d51ea6e9a3d8f28656e"
         ],
         "description": "- Pages login/register avec design split-screen et validation complète\n- Menu utilisateur dans header avec états authentifié/non-authentifié\n- Correction schéma base de données (colonnes manquantes dans users)\n- Implémentation bcrypt directe pour compatibilité\n- Traduction de tous les messages d'erreur backend en français\n- Design system complet avec composants réutilisables\n- Responsive design pour mobile, tablette et desktop",
         "commentaires": []
     },
     {
         "number": 9,
-        "hash": "014b18be70f643b290b59de8f22916b469e89c7a",
+        "hash": "6a38aa7160772a66541d24dc2edb49c9bc2f7766",
         "titre": "feat(objects): refactor object hierarchy, update schemas and add tests",
         "commits_inclus": [
-            "014b18be70f643b290b59de8f22916b469e89c7a",
-            "85dca1e12d6dc815944fff51e156494401b9eb91"
+            "6a38aa7160772a66541d24dc2edb49c9bc2f7766",
+            "aa50ff62021cc4494eb917dbae9cbc8be56660ed"
         ],
         "description": "",
         "commentaires": []
     },
     {
         "number": 8,
-        "hash": "71eb059d88c5c4f1b9fef2e826e543a80b16d1f5",
+        "hash": "e85b09ea1769aa56b1d701c33f5d9e92c81e85e3",
         "titre": "feat(backend): implement US2.3 - automatic object enrichment",
         "commits_inclus": [
-            "71eb059d88c5c4f1b9fef2e826e543a80b16d1f5"
+            "e85b09ea1769aa56b1d701c33f5d9e92c81e85e3"
         ],
         "description": "- Create enrichment script with 115 base objects covering all categories\n  - 15 heating objects (chaudières, radiateurs, pompes à chaleur)\n  - 20 kitchen objects (fours, plaques, hottes, électroménager cuisine)\n  - 25 appliances (lave-vaisselle, machines, aspirateurs, etc.)\n  - 18 bathroom objects (WC, douches, baignoires, robinetterie)\n  - 15 flooring objects (parquets, carrelages, pierre bleue, etc.)\n  - 22 other objects (jardinage, climatisation, sécurité, etc.)\n\n- Auto-enrichment on startup: creates admin user + 115 objects + maintenance advice + tags\n- Validation system ensures data consistency\n- Comprehensive logging for tracking enrichment operations\n- Idempotent: runs only on first initialization\n- 28 unit tests covering all enrichment scenarios\n\n- Update JIRA.md: mark all US2.3 tasks as done\n\nTechnical details:\n- backend/enrich_objects.py: main enrichment script\n- backend/base_objects_data.py: 115 objects data\n- backend/tests/test_enrich_objects.py: comprehensive test suite\n- backend/main.py: auto-enrichment on app startup",
         "commentaires": [
-            "juste18 : Documentation :\n\nLes docstrings sont bien présents, mais certaines fonctions pourraient bénéficier d'exemples d'utilisation\nAjouter une section \"Raises\" dans les docstrings pour documenter les exceptions possibles\nTests :\n\nBien que la couverture de test soit déjà bonne, ajouter des tests pour les cas limites (edge cases)\nTester le comportement avec des données mal formées ou incomplètes\nAjouter des tests pour auto_enrich_on_startup\nLogging :\n\nLes messages de log sont informatifs, mais il serait utile d'ajouter des identifiants uniques pour chaque session d'enrichissement\nConsidérer l'ajout d'un handler de fichier pour garder une trace persistante des enrichissements\nGestion d'erreurs :\n\nAjouter plus de détails dans les messages d'erreur\nImplémenter une meilleure stratégie de reprise en cas d'erreur pendant l'enrichissement\nPerformance :\n\nOptimiser les requêtes de base de données en utilisant le bulk insert pour les conseils\nConsidérer l'utilisation de batch_size pour traiter les objets par lots\n\n *By Dev2 on 2025-10-25T11:05:20*",
-            "juste18 : ok j'ai implémenté les trucs les plus importants!\n\n *By Dev4 on 2025-10-25T11:05:20*"
+            "Documentation :\n\nLes docstrings sont bien présents, mais certaines fonctions pourraient bénéficier d'exemples d'utilisation\nAjouter une section \"Raises\" dans les docstrings pour documenter les exceptions possibles\nTests :\n\nBien que la couverture de test soit déjà bonne, ajouter des tests pour les cas limites (edge cases)\nTester le comportement avec des données mal formées ou incomplètes\nAjouter des tests pour auto_enrich_on_startup\nLogging :\n\nLes messages de log sont informatifs, mais il serait utile d'ajouter des identifiants uniques pour chaque session d'enrichissement\nConsidérer l'ajout d'un handler de fichier pour garder une trace persistante des enrichissements\nGestion d'erreurs :\n\nAjouter plus de détails dans les messages d'erreur\nImplémenter une meilleure stratégie de reprise en cas d'erreur pendant l'enrichissement\nPerformance :\n\nOptimiser les requêtes de base de données en utilisant le bulk insert pour les conseils\nConsidérer l'utilisation de batch_size pour traiter les objets par lots\n\n *By Dev2 on 2025-10-25T11:05:20*",
+            "ok j'ai implémenté les trucs les plus importants!\n\n *By Dev4 on 2025-10-25T11:05:20*"
         ]
     },
     {
         "number": 7,
-        "hash": "32104035a9dc9db04dad9bb6965ee7864e0a2b36",
+        "hash": "c2026cd1ead6f01a5f244ebcfac166771c4d3d2b",
         "titre": "Fix/user api endpoints",
         "commits_inclus": [
-            "32104035a9dc9db04dad9bb6965ee7864e0a2b36",
-            "a7bd0e1def59e60e1fd7e26f0a936a4ac50904b4",
-            "8d50ecc3f8b5c2cf1b19ae7a30a0aaab5c4b6892"
+            "c2026cd1ead6f01a5f244ebcfac166771c4d3d2b",
+            "10007cc55a65e31c649f36a6f3339455c179bd3a",
+            "3e643a15e205da6b222363149ca2836ff1abd6fb"
         ],
         "description": "# Fix: Problèmes de hachage de mot de passe dans les tests CI\n\n## Problème\nLes tests CI échouaient avec des erreurs liées à bcrypt et passlib :\n- Erreur `module 'bcrypt' has no attribute '__about__'` lors de la détection de version\n- Erreurs 500 lors de la création d'utilisateur\n- Tests échoués pour la création et la récupération d'utilisateurs\n\n## Solution\n1. Configuration plus explicite de bcrypt dans CryptContext :\n   - Spécification de l'identifiant bcrypt ($2b$)\n   - Définition explicite des paramètres de hachage\n   - Évitement de la détection automatique de version\n\n2. Amélioration de la gestion des erreurs :\n   - Vérification de la disponibilité des schémas de hachage\n   - Validation du hash généré\n   - Messages d'erreur plus descriptifs\n\n3. Versions fixées dans requirements.txt :\n   - passlib==1.7.4\n   - bcrypt==4.0.1\n\n## Tests\nLes modifications devraient résoudre :\n- [x] test_create_user\n- [x] test_create_user_duplicate_email\n- [x] test_get_user\n- [x] test_get_users_list\n\n## Notes pour la revue\n- Pas de changement dans la logique métier\n- Focus sur la stabilité de l'environnement CI\n- Amélioration de la robustesse du hachage des mots de passe",
         "commentaires": [
-            "juste18 : allez c'est bon pour cette fois !\n\n *By Dev4 on 2025-10-25T10:09:53*"
+            "allez c'est bon pour cette fois !\n\n *By Dev4 on 2025-10-25T10:09:53*"
         ]
     },
     {
         "number": 6,
-        "hash": "f25b1ec0236dcb2832bc8cebf9a436123d1e9ab4",
+        "hash": "aeb9517e36f54d6ce96fe937145c31adb66c114b",
         "titre": "docs: enhance Copilot instructions with workflow guidelines",
         "commits_inclus": [
-            "f25b1ec0236dcb2832bc8cebf9a436123d1e9ab4"
+            "aeb9517e36f54d6ce96fe937145c31adb66c114b"
         ],
         "description": "- Add commit and push workflow instructions\n- Add requirement to mark stories as Done in JIRA after pushing\n- Ensure feature branch usage for all commits",
         "commentaires": [
-            "juste18 : dis rien aux autres hihi\n\n *By Dev4 on 2025-10-25T09:51:31*"
+            "dis rien aux autres hihi\n\n *By Dev4 on 2025-10-25T09:51:31*"
         ]
     },
     {
         "number": 5,
-        "hash": "158343412dc93ba50d73f633a156dbbbaa27fd1d",
+        "hash": "5771ba8129bc42b6a2d3f36c1b3297da3b5270d2",
         "titre": "Ajout des dépendances de test (pytest, pytest-asyncio, httpx)",
         "commits_inclus": [
-            "158343412dc93ba50d73f633a156dbbbaa27fd1d"
+            "5771ba8129bc42b6a2d3f36c1b3297da3b5270d2"
         ],
         "description": "# Add test dependencies to backend\n\n## Description\nThis MR adds necessary test dependencies to `requirements.txt` to fix the failing CI pipeline. The following packages have been added:\n\n- `pytest`: For running Python unit tests\n- `pytest-asyncio`: For testing async code (required for FastAPI tests)\n- `httpx`: For testing HTTP endpoints in FastAPI\n\n## Changes\n- Updated `backend/requirements.txt` to include test dependencies\n\n## Issue\nFixes the failing `backend-test` job in the CI pipeline where pytest was not found in the virtual environment.\n\n## Testing\nThe changes should be automatically tested by the CI pipeline, which will now be able to run the pytest commands successfully.\n\n## Related Issues\n- Fixes failing CI pipeline in the `backend-test` stage",
         "commentaires": []
     },
     {
         "number": 4,
-        "hash": "6d41c08d06dc4c07373a103e69c9c52e9902b883",
+        "hash": "710b72bc22d9534b340b828c0ab126e017d35e11",
         "titre": "Fix pipeline",
         "commits_inclus": [
-            "6d41c08d06dc4c07373a103e69c9c52e9902b883",
-            "79ee79b25249e5dbc65d3d7fbf124558d401855a"
+            "710b72bc22d9534b340b828c0ab126e017d35e11",
+            "fe5f3068ed87bf3c410b33847c0077205f8c4dbb"
         ],
         "description": "Claude a fix la pipeline",
         "commentaires": [
-            "juste18 : Nickel!\n\n *By Dev2 on 2025-10-25T09:00:02*",
-            "juste18 : Parfait!\n\n *By Dev2 on 2025-10-25T09:00:01*",
-            "juste18 : Ca sert à quoi?\n\n *By Dev2 on 2025-10-25T09:00:01*",
-            "juste18 : Pourquoi les plugins ne sont pas dans le requirements.txt?\n\n *By Dev2 on 2025-10-25T09:00:02*"
+            "Nickel!\n\n *By Dev2 on 2025-10-25T09:00:02*",
+            "Parfait!\n\n *By Dev2 on 2025-10-25T09:00:01*",
+            "Ca sert à quoi?\n\n *By Dev2 on 2025-10-25T09:00:01*",
+            "Pourquoi les plugins ne sont pas dans le requirements.txt?\n\n *By Dev2 on 2025-10-25T09:00:02*"
         ]
     },
     {
         "number": 2,
-        "hash": "d577115145213fab2734b047961e77ba50280406",
+        "hash": "edc5cc6b80ed44c600ab095ded1dbf70dccf7447",
         "titre": "Add tests to users + Removing warning from the backend",
         "commits_inclus": [
-            "1534f5dad40c174aac58647eb6e2fc07c01abcf4"
+            "81d95dc805b0280b1515dc02b606de7405244681"
         ],
         "description": "Titre : feat: Implement user registration (US1.1)\n\nDescription :\n# Description\nImplémentation de l'enregistrement des utilisateurs avec tests unitaires complets.\n\n## Changements\n- Ajout des tests unitaires pour l'enregistrement des utilisateurs\n- Correction des avertissements de dépréciation :\n  - Migration vers ConfigDict pour Pydantic\n  - Mise à jour de l'importation declarative_base de SQLAlchemy\n  - Utilisation de datetime.now(UTC) pour les timestamps\n\n## Tests\n- ✅ test_create_user : Création d'un utilisateur\n- ✅ test_create_user_duplicate_email : Gestion des doublons\n- ✅ test_create_user_invalid_email : Validation d'email\n- ✅ test_get_user : Récupération d'utilisateur\n- ✅ test_get_nonexistent_user : Gestion des erreurs 404\n- ✅ test_get_users_list : Liste des utilisateurs\n- ✅ test_create_user_missing_required_fields : Validation des champs\n\n## Comment tester\n```bash\ncd backend\npython -m pytest tests/test_users.py -v",
         "commentaires": []
     },
     {
         "number": 1,
-        "hash": "0b44769a3a856b69a9f25b82f70877e07ec7d5ab",
+        "hash": "5c7ddd08a977bf6f1f2f2016f7617be49caa80e6",
         "titre": "feat: Implement user registration (US1.1)",
         "commits_inclus": [
-            "4b66f0220450d1ca3b050520b4ce5b498ce3acbf",
-            "854a31215f167203d7f8deb916578c72d62c3976",
-            "88fec3515a67af018df0315d0a3101e371df28b6",
-            "a37ec2cd3e3e25ed702ca9a72981990433a52893"
+            "05089e09e2f93ad9ca588086b0ad7a20ddc8a810",
+            "7c3ec887c94411c0771b992c6dfe76d853fe0318",
+            "c8f6a1ce5cd909089589cefc8bf288d67ce2635e",
+            "d063da3c86b047eaa419a1cd0fdf6e74c324ec0b"
         ],
         "description": "- Add user model with password hashing\n- Implement secure registration API\n- Create registration form in frontend\n- Add form validation and error handling\n- Update dependencies",
         "commentaires": [
-            "juste18 : Critiques et problèmes relevés (prioritaires → secondaires) Backend (sécurité / bugs / qualité)\n\nIncohérences d'import et bug probable d'exécution (critique) Dans users.py on a from models import User, UserRole mais plus bas get_users et get_user utilisent models.User (variable models non importée) — appelera NameError. Corriger en utilisant la même forme partout (soit import models et models.User, soit from models import User et utiliser User partout). Fuite potentielle de données sensibles (critique) Dans schemas.py, il existe une classe User qui expose hashed_password — attention à ne pas l'utiliser comme response_model public. Dans users.py, les endpoints de listing/utilisateur utilisent response_model=schemas.User / List\\[schemas.User\\] (ou schemas.User apparaît dans les décorateurs) : cela exposerait hashed_password via l'API. Utiliser des DTOs dédiés (ex: UserResponse) qui n'exposent pas le hash. Pydantic / configuration incompatible (important) schemas.py utilise class Config: from_attributes = True — ce n'est pas la manière correcte pour Pydantic v2. En pydantic v2 il faut utiliser model_config = {\"from_attributes\": True} (ou config pour v1). Avec pydantic 2.5 (présente dans requirements) la configuration actuelle n'est pas prise en compte et la sérialisation depuis ORM peut échouer. Cryptographie / passlib (qualité) users.py définit pwd_context deux fois. Consolidation requise : une instance unique pwd_context = CryptContext(schemes=\\[\"bcrypt\"\\], deprecated=\"auto\"). L'usage de bcrypt et la vérification 72 bytes est bonne. Toutefois renvoyer l'exception de hashage dans le message d'erreur (f-string avec str(e)) peut exposer trop d'infos en prod ; loggez l'exception et renvoyez un message générique côté client. Validation du mot de passe dupliquée (design) La logique de validation est présente côté frontend et backend (bon), mais la logique est dupliquée — OK si c'est pour sécurité, mais garder la logique canonicalisée côté backend pour être sûr (et expliquer dans tests). database / démarrage (info) database.py crée l'engine avec la variable d'environnement par défaut sur localhost. En Docker la variable DATABASE_URL devrait être injectée (compose le fait). Pas bloquant mais attention aux valeurs par défaut lors de tests locaux. Absence de tests & checks (amélioration) Aucun test unitaire visible pour l'API d'inscription/validation. Ajoutez tests unitaires/integration (pytest + test DB SQLite en mémoire or testcontainers). Frontend (runtime / configuration / erreurs)\n\nMauvaise génération de config API à runtime (probable cause du front \"non connecté\") — critique generate-env.js lit uniquement .env via dotenv.config().parsed et n'utilise pas process.env. Or docker-compose.yml définit VITE_API_URL comme variable d'environnement du container, mais generate-env.js ne la lit pas. Résultat : l'URL API peut rester la valeur par défaut et le front ne cible pas le backend. Solution : faire que generate-env.js prenne d'abord process.env.VITE_API_URL puis le .env. Composant \"standalone\" déclaré aussi dans un NgModule (bug) RegisterComponent est déclaré comme standalone: true, mais auth.module.ts fait declarations: \\[RegisterComponent\\]. Angular lèvera une erreur (un composant standalone ne doit pas être déclaré). Corriger : soit rendre le composant non-standalone et le déclarer, soit ne pas le déclarer dans le module. Détection et duplication de routes (incohérence) Les routes utilisent loadComponent (standalone components). L'ajout d'un AuthModule avec forChild qui redéfinit la même route peut provoquer des incohérences. Choisissez une approche (module + components déclarés ou standalone + loadComponent). Login non implémenté / imports inutilisés login.component.ts est un placeholder (console.log). Il injecte ApiService et AuthService mais n'utilise pas encore authService. Implémenter l'appel API de connexion. Aussi ApiService importé mais non utilisé → nettoyer. Typage / environnement Angular vs Vite (conceptuel) Le projet frontend est Angular; docker-compose utilise VITE_API_URL (nom plus courant pour Vite apps). C'est acceptable si generate-env.js mappe correctement. Mais nommer la variable API_URL ou APP_API_URL est plus explicite pour Angular. Qualité générale / dépendances\n\nrequirements.txt inclut passlib==1.7.4 et bcrypt==4.0.1. Vérifier compatibilité (généralement OK). schemas.py utilise class Config style v1 Pydantic — à corriger pour v2. Sans correction, la serialization via ORM peut échouer ou renvoyer champs inattendus. Recommandations concrètes (ordre d’application) Corriger les bugs bloquants backend (high priority) Dans users.py : Supprimer la double déclaration de pwd_context et garder une seule config : pwd_context = CryptContext(schemes=\\[\"bcrypt\"\\], deprecated=\"auto\"). Harmoniser imports : soit import models et utiliser models.User partout, soit from models import User et utiliser User. Changer response_model des endpoints de lecture (GET /users, GET /users/{id}) vers List\\[schemas.UserResponse\\] et schemas.UserResponse (ou créer UserPublic) pour éviter d'exposer hashed_password. Remplacer les erreurs 500 qui renvoient str(e) par un message générique et logger l'exception. Corriger Pydantic schemas (high) Adapter schemas.py pour Pydantic v2 : Remplacer class Config: from_attributes = True par model_config = {\"from_attributes\": True} dans chaque Pydantic model qui doit mapper depuis ORM. Retirer hashed_password des schemas exposés au client (créer un schema interne si nécessaire). Fix frontend runtime config (high — probablement cause du front qui ne \"fonctionne pas\") Modifier generate-env.js pour choisir process.env.VITE_API_URL d'abord, puis .env. Exemple logique: const apiUrl = process.env.VITE_API_URL || envConfig.VITE_API_URL || '[http://localhost:8000](http://localhost:8000)'; S'assurer que npm run config (préstart) est exécuté dans le Dockerfile (déjà fait) et qu'en container la variable d'env VITE_API_URL est bien passée. Corriger la duplication standalone/module (high) Soit : Retirer RegisterComponent du AuthModule (si vous préférez standalone components + loadComponent). Ou, si vous préférez modules, supprimer standalone: true et utiliser declarations. Nettoyer les routes pour qu'il n'y ait pas de double déclaration. Améliorations et durabilité (medium) Ajouter tests unitaires minimal pour l'endpoint /users/register (pytest + test client FastAPI). Test cases: succès, email déjà existant, weak password, mismatch confirm. Ajouter linting (flake8/ruff) et pre-commit si utile. Ajouter logging structuré côté backend (logger plutôt qu'HTTPException détail direct). Remarques de sécurité Ne jamais exposer hashed_password via l'API. Vérifier aussi que les erreurs n'exposent pas de stack traces en prod. Vérifier que la politique CORS en main.py est restreinte en production (ne pas ajouter '\\*' en prod).\n\n *By Dev2 on 2025-10-25T08:59:08*",
-            "juste18 : Critiques et problèmes relevés (prioritaires → secondaires)\nBackend (sécurité / bugs / qualité)\n\nIncohérences d'import et bug probable d'exécution (critique)\nDans users.py on a from models import User, UserRole mais plus bas get_users et get_user utilisent models.User (variable models non importée) — appelera NameError. Corriger en utilisant la même forme partout (soit import models et models.User, soit from models import User et utiliser User partout).\nFuite potentielle de données sensibles (critique)\nDans schemas.py, il existe une classe User qui expose hashed_password — attention à ne pas l'utiliser comme response_model public.\nDans users.py, les endpoints de listing/utilisateur utilisent response_model=schemas.User / List[schemas.User] (ou schemas.User apparaît dans les décorateurs) : cela exposerait hashed_password via l'API. Utiliser des DTOs dédiés (ex: UserResponse) qui n'exposent pas le hash.\nPydantic / configuration incompatible (important)\nschemas.py utilise class Config: from_attributes = True — ce n'est pas la manière correcte pour Pydantic v2. En pydantic v2 il faut utiliser model_config = {\"from_attributes\": True} (ou config pour v1). Avec pydantic 2.5 (présente dans requirements) la configuration actuelle n'est pas prise en compte et la sérialisation depuis ORM peut échouer.\nCryptographie / passlib (qualité)\nusers.py définit pwd_context deux fois. Consolidation requise : une instance unique pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\").\nL'usage de bcrypt et la vérification 72 bytes est bonne. Toutefois renvoyer l'exception de hashage dans le message d'erreur (f-string avec str(e)) peut exposer trop d'infos en prod ; loggez l'exception et renvoyez un message générique côté client.\nValidation du mot de passe dupliquée (design)\nLa logique de validation est présente côté frontend et backend (bon), mais la logique est dupliquée — OK si c'est pour sécurité, mais garder la logique canonicalisée côté backend pour être sûr (et expliquer dans tests).\ndatabase / démarrage (info)\ndatabase.py crée l'engine avec la variable d'environnement par défaut sur localhost. En Docker la variable DATABASE_URL devrait être injectée (compose le fait). Pas bloquant mais attention aux valeurs par défaut lors de tests locaux.\nAbsence de tests & checks (amélioration)\nAucun test unitaire visible pour l'API d'inscription/validation. Ajoutez tests unitaires/integration (pytest + test DB SQLite en mémoire or testcontainers).\nFrontend (runtime / configuration / erreurs)\n\nMauvaise génération de config API à runtime (probable cause du front \"non connecté\") — critique\ngenerate-env.js lit uniquement .env via dotenv.config().parsed et n'utilise pas process.env. Or docker-compose.yml définit VITE_API_URL comme variable d'environnement du container, mais generate-env.js ne la lit pas. Résultat : l'URL API peut rester la valeur par défaut et le front ne cible pas le backend. Solution : faire que generate-env.js prenne d'abord process.env.VITE_API_URL puis le .env.\nComposant \"standalone\" déclaré aussi dans un NgModule (bug)\nRegisterComponent est déclaré comme standalone: true, mais auth.module.ts fait declarations: [RegisterComponent]. Angular lèvera une erreur (un composant standalone ne doit pas être déclaré). Corriger : soit rendre le composant non-standalone et le déclarer, soit ne pas le déclarer dans le module.\nDétection et duplication de routes (incohérence)\nLes routes utilisent loadComponent (standalone components). L'ajout d'un AuthModule avec forChild qui redéfinit la même route peut provoquer des incohérences. Choisissez une approche (module + components déclarés ou standalone + loadComponent).\nLogin non implémenté / imports inutilisés\nlogin.component.ts est un placeholder (console.log). Il injecte ApiService et AuthService mais n'utilise pas encore authService. Implémenter l'appel API de connexion. Aussi ApiService importé mais non utilisé → nettoyer.\nTypage / environnement Angular vs Vite (conceptuel)\nLe projet frontend est Angular; docker-compose utilise VITE_API_URL (nom plus courant pour Vite apps). C'est acceptable si generate-env.js mappe correctement. Mais nommer la variable API_URL ou APP_API_URL est plus explicite pour Angular.\nQualité générale / dépendances\n\nrequirements.txt inclut passlib==1.7.4 et bcrypt==4.0.1. Vérifier compatibilité (généralement OK).\nschemas.py utilise class Config style v1 Pydantic — à corriger pour v2. Sans correction, la serialization via ORM peut échouer ou renvoyer champs inattendus.\nRecommandations concrètes (ordre d’application)\nCorriger les bugs bloquants backend (high priority)\nDans users.py :\nSupprimer la double déclaration de pwd_context et garder une seule config : pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\").\nHarmoniser imports : soit import models et utiliser models.User partout, soit from models import User et utiliser User.\nChanger response_model des endpoints de lecture (GET /users, GET /users/{id}) vers List[schemas.UserResponse] et schemas.UserResponse (ou créer UserPublic) pour éviter d'exposer hashed_password.\nRemplacer les erreurs 500 qui renvoient str(e) par un message générique et logger l'exception.\nCorriger Pydantic schemas (high)\nAdapter schemas.py pour Pydantic v2 :\nRemplacer class Config: from_attributes = True par model_config = {\"from_attributes\": True} dans chaque Pydantic model qui doit mapper depuis ORM.\nRetirer hashed_password des schemas exposés au client (créer un schema interne si nécessaire).\nFix frontend runtime config (high — probablement cause du front qui ne \"fonctionne pas\")\nModifier generate-env.js pour choisir process.env.VITE_API_URL d'abord, puis .env. Exemple logique:\nconst apiUrl = process.env.VITE_API_URL || envConfig.VITE_API_URL || 'http://localhost:8000';\nS'assurer que npm run config (préstart) est exécuté dans le Dockerfile (déjà fait) et qu'en container la variable d'env VITE_API_URL est bien passée.\nCorriger la duplication standalone/module (high)\nSoit :\nRetirer RegisterComponent du AuthModule (si vous préférez standalone components + loadComponent).\nOu, si vous préférez modules, supprimer standalone: true et utiliser declarations.\nNettoyer les routes pour qu'il n'y ait pas de double déclaration.\nAméliorations et durabilité (medium)\nAjouter tests unitaires minimal pour l'endpoint /users/register (pytest + test client FastAPI). Test cases: succès, email déjà existant, weak password, mismatch confirm.\nAjouter linting (flake8/ruff) et pre-commit si utile.\nAjouter logging structuré côté backend (logger plutôt qu'HTTPException détail direct).\nRemarques de sécurité\nNe jamais exposer hashed_password via l'API. Vérifier aussi que les erreurs n'exposent pas de stack traces en prod.\nVérifier que la politique CORS en main.py est restreinte en production (ne pas ajouter '*' en prod).\n\n *By Dev2 on 2025-10-25T00:29:47*"
+            "Critiques et problèmes relevés (prioritaires → secondaires) Backend (sécurité / bugs / qualité)\n\nIncohérences d'import et bug probable d'exécution (critique) Dans users.py on a from models import User, UserRole mais plus bas get_users et get_user utilisent models.User (variable models non importée) — appelera NameError. Corriger en utilisant la même forme partout (soit import models et models.User, soit from models import User et utiliser User partout). Fuite potentielle de données sensibles (critique) Dans schemas.py, il existe une classe User qui expose hashed_password — attention à ne pas l'utiliser comme response_model public. Dans users.py, les endpoints de listing/utilisateur utilisent response_model=schemas.User / List\\[schemas.User\\] (ou schemas.User apparaît dans les décorateurs) : cela exposerait hashed_password via l'API. Utiliser des DTOs dédiés (ex: UserResponse) qui n'exposent pas le hash. Pydantic / configuration incompatible (important) schemas.py utilise class Config: from_attributes = True — ce n'est pas la manière correcte pour Pydantic v2. En pydantic v2 il faut utiliser model_config = {\"from_attributes\": True} (ou config pour v1). Avec pydantic 2.5 (présente dans requirements) la configuration actuelle n'est pas prise en compte et la sérialisation depuis ORM peut échouer. Cryptographie / passlib (qualité) users.py définit pwd_context deux fois. Consolidation requise : une instance unique pwd_context = CryptContext(schemes=\\[\"bcrypt\"\\], deprecated=\"auto\"). L'usage de bcrypt et la vérification 72 bytes est bonne. Toutefois renvoyer l'exception de hashage dans le message d'erreur (f-string avec str(e)) peut exposer trop d'infos en prod ; loggez l'exception et renvoyez un message générique côté client. Validation du mot de passe dupliquée (design) La logique de validation est présente côté frontend et backend (bon), mais la logique est dupliquée — OK si c'est pour sécurité, mais garder la logique canonicalisée côté backend pour être sûr (et expliquer dans tests). database / démarrage (info) database.py crée l'engine avec la variable d'environnement par défaut sur localhost. En Docker la variable DATABASE_URL devrait être injectée (compose le fait). Pas bloquant mais attention aux valeurs par défaut lors de tests locaux. Absence de tests & checks (amélioration) Aucun test unitaire visible pour l'API d'inscription/validation. Ajoutez tests unitaires/integration (pytest + test DB SQLite en mémoire or testcontainers). Frontend (runtime / configuration / erreurs)\n\nMauvaise génération de config API à runtime (probable cause du front \"non connecté\") — critique generate-env.js lit uniquement .env via dotenv.config().parsed et n'utilise pas process.env. Or docker-compose.yml définit VITE_API_URL comme variable d'environnement du container, mais generate-env.js ne la lit pas. Résultat : l'URL API peut rester la valeur par défaut et le front ne cible pas le backend. Solution : faire que generate-env.js prenne d'abord process.env.VITE_API_URL puis le .env. Composant \"standalone\" déclaré aussi dans un NgModule (bug) RegisterComponent est déclaré comme standalone: true, mais auth.module.ts fait declarations: \\[RegisterComponent\\]. Angular lèvera une erreur (un composant standalone ne doit pas être déclaré). Corriger : soit rendre le composant non-standalone et le déclarer, soit ne pas le déclarer dans le module. Détection et duplication de routes (incohérence) Les routes utilisent loadComponent (standalone components). L'ajout d'un AuthModule avec forChild qui redéfinit la même route peut provoquer des incohérences. Choisissez une approche (module + components déclarés ou standalone + loadComponent). Login non implémenté / imports inutilisés login.component.ts est un placeholder (console.log). Il injecte ApiService et AuthService mais n'utilise pas encore authService. Implémenter l'appel API de connexion. Aussi ApiService importé mais non utilisé → nettoyer. Typage / environnement Angular vs Vite (conceptuel) Le projet frontend est Angular; docker-compose utilise VITE_API_URL (nom plus courant pour Vite apps). C'est acceptable si generate-env.js mappe correctement. Mais nommer la variable API_URL ou APP_API_URL est plus explicite pour Angular. Qualité générale / dépendances\n\nrequirements.txt inclut passlib==1.7.4 et bcrypt==4.0.1. Vérifier compatibilité (généralement OK). schemas.py utilise class Config style v1 Pydantic — à corriger pour v2. Sans correction, la serialization via ORM peut échouer ou renvoyer champs inattendus. Recommandations concrètes (ordre d’application) Corriger les bugs bloquants backend (high priority) Dans users.py : Supprimer la double déclaration de pwd_context et garder une seule config : pwd_context = CryptContext(schemes=\\[\"bcrypt\"\\], deprecated=\"auto\"). Harmoniser imports : soit import models et utiliser models.User partout, soit from models import User et utiliser User. Changer response_model des endpoints de lecture (GET /users, GET /users/{id}) vers List\\[schemas.UserResponse\\] et schemas.UserResponse (ou créer UserPublic) pour éviter d'exposer hashed_password. Remplacer les erreurs 500 qui renvoient str(e) par un message générique et logger l'exception. Corriger Pydantic schemas (high) Adapter schemas.py pour Pydantic v2 : Remplacer class Config: from_attributes = True par model_config = {\"from_attributes\": True} dans chaque Pydantic model qui doit mapper depuis ORM. Retirer hashed_password des schemas exposés au client (créer un schema interne si nécessaire). Fix frontend runtime config (high — probablement cause du front qui ne \"fonctionne pas\") Modifier generate-env.js pour choisir process.env.VITE_API_URL d'abord, puis .env. Exemple logique: const apiUrl = process.env.VITE_API_URL || envConfig.VITE_API_URL || '[http://localhost:8000](http://localhost:8000)'; S'assurer que npm run config (préstart) est exécuté dans le Dockerfile (déjà fait) et qu'en container la variable d'env VITE_API_URL est bien passée. Corriger la duplication standalone/module (high) Soit : Retirer RegisterComponent du AuthModule (si vous préférez standalone components + loadComponent). Ou, si vous préférez modules, supprimer standalone: true et utiliser declarations. Nettoyer les routes pour qu'il n'y ait pas de double déclaration. Améliorations et durabilité (medium) Ajouter tests unitaires minimal pour l'endpoint /users/register (pytest + test client FastAPI). Test cases: succès, email déjà existant, weak password, mismatch confirm. Ajouter linting (flake8/ruff) et pre-commit si utile. Ajouter logging structuré côté backend (logger plutôt qu'HTTPException détail direct). Remarques de sécurité Ne jamais exposer hashed_password via l'API. Vérifier aussi que les erreurs n'exposent pas de stack traces en prod. Vérifier que la politique CORS en main.py est restreinte en production (ne pas ajouter '\\*' en prod).\n\n *By Dev2 on 2025-10-25T08:59:08*",
+            "Critiques et problèmes relevés (prioritaires → secondaires)\nBackend (sécurité / bugs / qualité)\n\nIncohérences d'import et bug probable d'exécution (critique)\nDans users.py on a from models import User, UserRole mais plus bas get_users et get_user utilisent models.User (variable models non importée) — appelera NameError. Corriger en utilisant la même forme partout (soit import models et models.User, soit from models import User et utiliser User partout).\nFuite potentielle de données sensibles (critique)\nDans schemas.py, il existe une classe User qui expose hashed_password — attention à ne pas l'utiliser comme response_model public.\nDans users.py, les endpoints de listing/utilisateur utilisent response_model=schemas.User / List[schemas.User] (ou schemas.User apparaît dans les décorateurs) : cela exposerait hashed_password via l'API. Utiliser des DTOs dédiés (ex: UserResponse) qui n'exposent pas le hash.\nPydantic / configuration incompatible (important)\nschemas.py utilise class Config: from_attributes = True — ce n'est pas la manière correcte pour Pydantic v2. En pydantic v2 il faut utiliser model_config = {\"from_attributes\": True} (ou config pour v1). Avec pydantic 2.5 (présente dans requirements) la configuration actuelle n'est pas prise en compte et la sérialisation depuis ORM peut échouer.\nCryptographie / passlib (qualité)\nusers.py définit pwd_context deux fois. Consolidation requise : une instance unique pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\").\nL'usage de bcrypt et la vérification 72 bytes est bonne. Toutefois renvoyer l'exception de hashage dans le message d'erreur (f-string avec str(e)) peut exposer trop d'infos en prod ; loggez l'exception et renvoyez un message générique côté client.\nValidation du mot de passe dupliquée (design)\nLa logique de validation est présente côté frontend et backend (bon), mais la logique est dupliquée — OK si c'est pour sécurité, mais garder la logique canonicalisée côté backend pour être sûr (et expliquer dans tests).\ndatabase / démarrage (info)\ndatabase.py crée l'engine avec la variable d'environnement par défaut sur localhost. En Docker la variable DATABASE_URL devrait être injectée (compose le fait). Pas bloquant mais attention aux valeurs par défaut lors de tests locaux.\nAbsence de tests & checks (amélioration)\nAucun test unitaire visible pour l'API d'inscription/validation. Ajoutez tests unitaires/integration (pytest + test DB SQLite en mémoire or testcontainers).\nFrontend (runtime / configuration / erreurs)\n\nMauvaise génération de config API à runtime (probable cause du front \"non connecté\") — critique\ngenerate-env.js lit uniquement .env via dotenv.config().parsed et n'utilise pas process.env. Or docker-compose.yml définit VITE_API_URL comme variable d'environnement du container, mais generate-env.js ne la lit pas. Résultat : l'URL API peut rester la valeur par défaut et le front ne cible pas le backend. Solution : faire que generate-env.js prenne d'abord process.env.VITE_API_URL puis le .env.\nComposant \"standalone\" déclaré aussi dans un NgModule (bug)\nRegisterComponent est déclaré comme standalone: true, mais auth.module.ts fait declarations: [RegisterComponent]. Angular lèvera une erreur (un composant standalone ne doit pas être déclaré). Corriger : soit rendre le composant non-standalone et le déclarer, soit ne pas le déclarer dans le module.\nDétection et duplication de routes (incohérence)\nLes routes utilisent loadComponent (standalone components). L'ajout d'un AuthModule avec forChild qui redéfinit la même route peut provoquer des incohérences. Choisissez une approche (module + components déclarés ou standalone + loadComponent).\nLogin non implémenté / imports inutilisés\nlogin.component.ts est un placeholder (console.log). Il injecte ApiService et AuthService mais n'utilise pas encore authService. Implémenter l'appel API de connexion. Aussi ApiService importé mais non utilisé → nettoyer.\nTypage / environnement Angular vs Vite (conceptuel)\nLe projet frontend est Angular; docker-compose utilise VITE_API_URL (nom plus courant pour Vite apps). C'est acceptable si generate-env.js mappe correctement. Mais nommer la variable API_URL ou APP_API_URL est plus explicite pour Angular.\nQualité générale / dépendances\n\nrequirements.txt inclut passlib==1.7.4 et bcrypt==4.0.1. Vérifier compatibilité (généralement OK).\nschemas.py utilise class Config style v1 Pydantic — à corriger pour v2. Sans correction, la serialization via ORM peut échouer ou renvoyer champs inattendus.\nRecommandations concrètes (ordre d’application)\nCorriger les bugs bloquants backend (high priority)\nDans users.py :\nSupprimer la double déclaration de pwd_context et garder une seule config : pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\").\nHarmoniser imports : soit import models et utiliser models.User partout, soit from models import User et utiliser User.\nChanger response_model des endpoints de lecture (GET /users, GET /users/{id}) vers List[schemas.UserResponse] et schemas.UserResponse (ou créer UserPublic) pour éviter d'exposer hashed_password.\nRemplacer les erreurs 500 qui renvoient str(e) par un message générique et logger l'exception.\nCorriger Pydantic schemas (high)\nAdapter schemas.py pour Pydantic v2 :\nRemplacer class Config: from_attributes = True par model_config = {\"from_attributes\": True} dans chaque Pydantic model qui doit mapper depuis ORM.\nRetirer hashed_password des schemas exposés au client (créer un schema interne si nécessaire).\nFix frontend runtime config (high — probablement cause du front qui ne \"fonctionne pas\")\nModifier generate-env.js pour choisir process.env.VITE_API_URL d'abord, puis .env. Exemple logique:\nconst apiUrl = process.env.VITE_API_URL || envConfig.VITE_API_URL || 'http://localhost:8000';\nS'assurer que npm run config (préstart) est exécuté dans le Dockerfile (déjà fait) et qu'en container la variable d'env VITE_API_URL est bien passée.\nCorriger la duplication standalone/module (high)\nSoit :\nRetirer RegisterComponent du AuthModule (si vous préférez standalone components + loadComponent).\nOu, si vous préférez modules, supprimer standalone: true et utiliser declarations.\nNettoyer les routes pour qu'il n'y ait pas de double déclaration.\nAméliorations et durabilité (medium)\nAjouter tests unitaires minimal pour l'endpoint /users/register (pytest + test client FastAPI). Test cases: succès, email déjà existant, weak password, mismatch confirm.\nAjouter linting (flake8/ruff) et pre-commit si utile.\nAjouter logging structuré côté backend (logger plutôt qu'HTTPException détail direct).\nRemarques de sécurité\nNe jamais exposer hashed_password via l'API. Vérifier aussi que les erreurs n'exposent pas de stack traces en prod.\nVérifier que la politique CORS en main.py est restreinte en production (ne pas ajouter '*' en prod).\n\n *By Dev2 on 2025-10-25T00:29:47*"
         ]
     }
 ]
