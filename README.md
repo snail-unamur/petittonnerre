@@ -1,385 +1,49 @@
-# Petit Tonnerre 🔧
+[Consulter le README initial du projet](ORIGINAL_README.md)
 
-Application de gestion intelligente et collaborative de l'entretien d'objets et appareils domestiques.
+# Rapport de projet de recherche exploratoire
 
-**Stack** : FastAPI + PostgreSQL + Angular
+## Objectif
+L'objectif de ce projet de recherche est d'analyser sur base de critères objectifs et subjectifs la qualité d'un projet de développement logiciel entièrement réalisé à l'aide d'un agent basé sur un large modèle de langage (LLM).
 
----
+## Contexte
+Ce dépôt contient le code source d'une application de gestion intelligente et collaborative de l'entretien d'objets et appareils domestiques, appelée _Petit Tonnerre_.
 
-## 🚀 Démarrage Rapide
+La spécificité de cette application est qu'elle est le fruit d'un défi lancé entre quatre développeurs, qui se sont donnés pour objectif de générer une application complète en un peu plus de 24 heures à l'aide de larges modèles de langage (LLM). Les développeurs n'ont donc théoriquement pas écrit une seule ligne de code manuellement, mais ont simplement supervisé l'outil de génération de code.
 
-**🐳 Avec Docker (recommandé) :**
+### Outils et technologies utilisés
 
-```bash
-# Première fois OU après modification de requirements.txt
-./start.sh --build
+#### Outils d'intelligence artificielle
+L'agent choisi pour ce projet est _GitHub Copilot_, configuré en mode "agent", il n'y a donc pas de distinction entre la phase de planification et la phase d'action, comme on peut trouver dans de nombreux agents plus modernes. L'agent effectue directement les modifications demandées depuis la fenêtre de _chat_, sans validation humaine entre la phase de conception et la phase d'action. Le modèle utilisé est _Claude Sonnet 4.5_.
 
-# Démarrages suivants (rapide, sans rebuild)
-./dev-start.sh
-# OU simplement
-./start.sh
-```
-
-**Quand utiliser `--build` ?**
-- ✅ Première installation
-- ✅ Après modification de `requirements.txt` (nouvelles dépendances Python)
-- ✅ Après modification du `Dockerfile`
-- ❌ **PAS nécessaire** pour les changements de code Python/TypeScript
-
-**Services disponibles :**
-- 🎨 Frontend : http://localhost:4200
-- 🔧 Backend API : http://localhost:8000/docs  
-- 🗄️ PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
-- 🛠️ Admin Dashboard : http://localhost:4200/admin/auth (code: admin123)
-- 📊 PostgreSQL : localhost:5432
-
----
-
-**OU en mode développement local :**
-
-### Backend
-
-```bash
-# 1. Setup initial
-./setup.sh
-
-# 2. Démarrer PostgreSQL + PgAdmin
-./start-docker.sh
-# OU : docker compose up -d postgres pgadmin
-
-# 3. Lancer le backend
-cd backend && source .venv/bin/activate
-uvicorn main:app --reload
-
-# 4. Créer des données de test
-python create_test_data.py
-```
-
-🌐 **API** : http://localhost:8000/docs  
-🗄️ **PgAdmin** : http://localhost:5050 (admin@petittonnerre.com / admin)  
-💡 **Le serveur "Petit Tonnerre DB" apparaît automatiquement dans PgAdmin !**
-
-
-### Frontend
-
-```bash
-# 1. Installer les dépendances
-cd frontend
-npm install
-
-# 2. Configurer l'URL du backend (optionnel)
-cp .env.example .env
-# Éditer .env pour changer VITE_API_URL si nécessaire
-
-# 3. Lancer le serveur Angular
-npm start
-```
-
-🌐 **App** : http://localhost:4200  
-📖 **Config** : Voir `frontend/ENV.md` pour la configuration
-
----
-
-## 📋 Fonctionnalités
-
-- 📦 **Gestion des objets** : Inventaire domestique (chaudière, four, sanitaires...)
-- 💡 **Conseils d'entretien** : Recommandations personnalisées par catégorie
-- ✅ **Tâches & Feedback** : Planification et suivi avec retour d'expérience
-- 👥 **Communauté** : Partage d'expériences et système de votes
-
----
-
-## 🏗️ Structure
-
-```
-petit-tonnerre/
-├── 🐳 Docker
-│   ├── docker-compose.yml       # Orchestration complète (PostgreSQL, PgAdmin, Backend, Frontend)
-│   ├── start.sh                 # Démarrer tous les services
-│   └── start-docker.sh          # Démarrer uniquement DB + PgAdmin
-│
-├── 🔧 Backend (FastAPI + PostgreSQL)
-│   ├── backend/
-│   │   ├── api/                 # Routes (users, objects, maintenance, community)
-│   │   ├── Dockerfile           # Image Docker backend
-│   │   ├── main.py              # Application FastAPI
-│   │   ├── models.py            # 7 modèles SQLAlchemy
-│   │   ├── schemas.py           # Schémas Pydantic
-│   │   ├── database.py          # Configuration PostgreSQL
-│   │   └── create_test_data.py  # Génération de données
-│   ├── setup.sh                 # Installation locale
-│   └── reset-db.sh              # Réinitialisation base de données
-│
-├── 🎨 Frontend (Angular)
-│   └── frontend/
-│       ├── Dockerfile           # Image Docker frontend
-│       ├── src/app/
-│       │   ├── core/            # Services & Models
-│       │   ├── features/        # Dashboard, Objects, Maintenance, Community
-│       │   └── shared/          # Composants réutilisables
-│       └── .env.example         # Configuration API URL
-│
-├── 🗄️  PgAdmin
-│   └── pgadmin/
-│       ├── servers.json         # Configuration serveur pré-chargé
-│       └── pgpass               # Mot de passe automatique
-│
-└── 📚 Documentation
-    ├── README.md                # Ce fichier
-    ├── COMMANDS.md              # Commandes rapides
-    └── REQUIREMENTS.md          # Spécifications
-```
-
----
-
-## 💻 Installation
-
-### Prérequis
-- **Python 3.11+** ✅ (requis pour datetime.UTC)
-- **Docker Desktop** → [Télécharger](https://www.docker.com/products/docker-desktop/)
-- Node.js 18+ (pour le frontend, optionnel)
-
-### Étapes
-
-1. **Installer Docker Desktop** et le lancer
-
-2. **Setup du projet**
-   ```bash
-   ./setup.sh
-   ```
-
-3. **Démarrer PostgreSQL**
-   ```bash
-   docker compose up -d
-   ```
-
-4. **Lancer le backend**
-   ```bash
-   cd backend
-   source .venv/bin/activate
-   uvicorn main:app --reload
-   ```
-
-5. **Tester**
-   ```bash
-   # Données de test
-   python create_test_data.py
-   
-   # Ou script de test
-   ./test_api.sh
-   ```
-
----
-
-## 🔌 API Endpoints
-
-### 👤 Users (3)
-```
-POST   /users/           Créer un utilisateur
-GET    /users/           Liste
-GET    /users/{id}       Détails
-```
-
-### �� Objects (5)
-```
-POST   /objects/         Créer
-GET    /objects/         Liste (filtre: ?user_id=1)
-GET    /objects/{id}     Détails
-PUT    /objects/{id}     Modifier
-DELETE /objects/{id}     Supprimer
-```
-
-### 🔧 Maintenance (7)
-```
-# Conseils
-POST   /maintenance/advice        Créer
-GET    /maintenance/advice        Liste (filtres: category, validated_only)
-GET    /maintenance/advice/{id}   Détails
-
-# Tâches
-POST   /maintenance/tasks         Créer
-GET    /maintenance/tasks         Liste (filtres: user_id, object_id, status)
-GET    /maintenance/tasks/{id}    Détails
-PATCH  /maintenance/tasks/{id}    Mettre à jour (feedback)
-```
-
-### 👥 Community (5)
-```
-POST   /community/contributions            Créer
-GET    /community/contributions            Liste (tri par votes)
-GET    /community/contributions/{id}       Détails
-PATCH  /community/contributions/{id}       Valider/rejeter
-POST   /community/contributions/{id}/upvote Vote
-```
-
-📖 **Documentation** : http://localhost:8000/docs
-
----
-
-## 🗄️ Accéder à PgAdmin
-
-PgAdmin est une interface web pour gérer PostgreSQL.
-
-### 1. Accéder à PgAdmin
-Ouvrir : **http://localhost:5050**
-
-**Identifiants** :
-- Email : `admin@petittonnerre.com`
-- Mot de passe : `admin`
-
-### 2. Connecter la base de données
-
-1. Clic droit sur **Servers** → **Register** → **Server**
-
-2. **Onglet General** :
-   - Name : `Petit Tonnerre DB`
-
-3. **Onglet Connection** :
-   - Host : `postgres` (nom du service Docker)
-   - Port : `5432`
-   - Database : `petittonnerre_db`
-   - Username : `petittonnerre`
-   - Password : `petittonnerre`
-   - Save password : ✅
-
-4. Cliquer **Save**
-
-Tu peux maintenant explorer les tables, exécuter des requêtes SQL, etc. !
-
-**Note** : La connexion est pré-configurée ! Le serveur "Petit Tonnerre DB" apparaît automatiquement dans la liste des serveurs.
-
----
-
-## 📊 Modèles de Données
-
-- **User** : Utilisateurs (email, username, location)
-- **Object** : Objets domestiques (6 catégories)
-- **MaintenanceAdvice** : Conseils d'entretien
-- **MaintenanceTask** : Tâches avec feedback
-- **Contribution** : Partages communautaires
-- **Tag** + **object_tags** : Tags Many-to-Many
-
-**Categories** : `heating`, `appliance`, `kitchen`, `bathroom`, `flooring`, `other`
-
----
-
-## 📝 Exemples
-
-### Créer un utilisateur et un objet
-```bash
-curl -X POST "http://localhost:8000/users/" \
-  -H "Content-Type: application/json" \
-  -d '{"email": "alice@example.com", "username": "alice", "location": "Bruxelles"}'
-
-curl -X POST "http://localhost:8000/objects/?user_id=1" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Chaudière", "category": "heating", "brand": "Vaillant"}'
-```
-
-### Planifier une tâche avec feedback
-```bash
-# Créer un conseil
-curl -X POST "http://localhost:8000/maintenance/advice" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Contrôle annuel", "description": "Vérification", "frequency_days": 365, "category": "heating"}'
-
-# Planifier
-curl -X POST "http://localhost:8000/maintenance/tasks?user_id=1" \
-  -H "Content-Type: application/json" \
-  -d '{"scheduled_date": "2025-11-01T10:00:00", "object_id": 1, "advice_id": 1}'
-
-# Feedback
-curl -X PATCH "http://localhost:8000/maintenance/tasks/1" \
-  -H "Content-Type: application/json" \
-  -d '{"status": "completed", "was_successful": true, "notes": "OK"}'
-```
-
-Plus d'exemples : [COMMANDS.md](COMMANDS.md)
-
----
-
-## 🛠️ Commandes
-
-```bash
-# Backend
-cd backend && source .venv/bin/activate
-uvicorn main:app --reload
-
-# PostgreSQL
-docker compose up -d              # Démarrer
-docker logs petit_tonnerre_db -f  # Logs
-docker compose down               # Arrêter
-docker compose down -v            # Réinitialiser (⚠️ supprime données)
-
-# Tests
-./test_api.sh
-python create_test_data.py
-```
-
-Référence complète : [COMMANDS.md](COMMANDS.md)
-
----
-
-## 🐛 Troubleshooting
-
-**Docker non installé**
-```bash
-# Télécharger : https://www.docker.com/products/docker-desktop/
-```
-
-**Port 8000 occupé**
-```bash
-lsof -i :8000
-kill -9 <PID>
-```
-
-**Erreur DB**
-```bash
-docker compose restart
-# ou
-docker compose down -v && docker compose up -d
-```
-
----
-
-## 🔄 Prochaines Étapes
-
-### Phase 1 - Frontend Angular 🔴
-```bash
-ng new frontend --routing --style=scss
-```
-Composants : Dashboard, Objets, Maintenance, Communauté
-
-### Phase 2 - Sécurité 🟡
-- Authentification JWT
-- Protection des routes
-- Rôles utilisateur
-
-### Phase 3 - Features 🟡
-- Notifications
-- Upload fichiers (manuels PDF)
-- Tests unitaires
-
-### Phase 4 - Production 🔴
-- Déploiement (Vercel + Railway)
-- CI/CD
-
----
-
-## 🛠️ Technologies
-
-**Backend** : FastAPI 0.104, SQLAlchemy 2.0, PostgreSQL 15, Pydantic 2.5  
-**Frontend** : Angular 17+ (à créer)
-
----
-
-## 📚 Ressources
-
-- [COMMANDS.md](COMMANDS.md) - Référence des commandes
-- http://localhost:8000/docs - Documentation API
-- https://fastapi.tiangolo.com/ - FastAPI
-- https://angular.io/docs - Angular
-
----
-
-**Projet créé le 24 octobre 2025**
+#### Approche et méthodologie de développement
+L'approche adoptée pour le développement de l'application comprend plusieurs étapes :
+1. Concept général ? + Structure du projet
+2. Explication du concept de l'application à l'agent et génération des spécifications fonctionnelles détaillées de l'application, divisées en _user stories_, elles-mêmes regroupées en plusieurs _epics_. (voir [REQUIREMENTS.md](REQUIREMENTS.md) et [JIRA.md](JIRA.md))
+3. Sructure du projet ?
+4. Implémentation des fonctionnalités de l'application en suivant une sorte de méthodologie _big bang_. Chaque développeur sélectionne une _epic_, tout le monde développe en même temps les fonctionnalités de sa propre _epic_ sur sa propre branche et sans se soucier de la coordination entre les développeurs. À chaque fonctionnalité terminée, le développeur crée une _pull request_ selon le processus décrit dans le point **Gestion de versions** ci-dessous. Une fois l'_epic_ achevée, le développeur sélectionne une nouvelle _epic_ et recommence le processus.
+
+#### Gestion de versions
+La gestion de versions (_commit_ et _push_) a été également entièrement confiée à l'agent. La seule action manuelle des développeurs a été de gérer le processus de création et de validation de _pull requests_, bien que la revue de code en elle-même était également automatisée via le processus suivant :
+1. Le développeur teste manuellement la fonctionnalité développée par l'agent et estime qu'elle est prête a être intégrée à la branche principale.
+2. Le développeur crée une _pull request_.
+3. Un autre développeur visite la branche et demande à l'agent (toujours le même, dans la fenêtre de _chat_ de l'IDE) d'effectuer une revue de code.
+4. Une fois la revue de code effectuée, le développeur copie le commentaire généré par l'agent et crée un commentaire sur la _pull request_.
+5. Le développeur initial de la branche fournit le commentaire de l'agent à son propre agent, toujours dans la fenêtre de _chat_ de l'IDE, et lui demande de corriger les problèmes soulevés par l'agent relecteur.
+6. Ce cycle continue jusqu'à ce que l'agent relecteur estime que les problèmes ont été corrigés, auquel cas le développeur peut fusionner la branche.
+
+## Méthodologie
+L'analyse de la qualité du projet sera effectuée via 2 axes distincts : une analyse statique via des outils d'analyse de code, et une analyse qualitative subjective 
+
+### Analyse statique
+
+### Analyse qualitative
+
+## Résultats
+
+### Analyse statique
+
+### Analyse qualitative
+
+## Discussion
+
+## Conclusion

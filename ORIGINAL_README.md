@@ -1,0 +1,385 @@
+# Petit Tonnerre 🔧
+
+Application de gestion intelligente et collaborative de l'entretien d'objets et appareils domestiques.
+
+**Stack** : FastAPI + PostgreSQL + Angular
+
+---
+
+## 🚀 Démarrage Rapide
+
+**🐳 Avec Docker (recommandé) :**
+
+```bash
+# Première fois OU après modification de requirements.txt
+./start.sh --build
+
+# Démarrages suivants (rapide, sans rebuild)
+./dev-start.sh
+# OU simplement
+./start.sh
+```
+
+**Quand utiliser `--build` ?**
+- ✅ Première installation
+- ✅ Après modification de `requirements.txt` (nouvelles dépendances Python)
+- ✅ Après modification du `Dockerfile`
+- ❌ **PAS nécessaire** pour les changements de code Python/TypeScript
+
+**Services disponibles :**
+- 🎨 Frontend : http://localhost:4200
+- 🔧 Backend API : http://localhost:8000/docs  
+- 🗄️ PgAdmin : http://localhost:5050 (admin@petittonnerre.com / admin)
+- 🛠️ Admin Dashboard : http://localhost:4200/admin/auth (code: admin123)
+- 📊 PostgreSQL : localhost:5432
+
+---
+
+**OU en mode développement local :**
+
+### Backend
+
+```bash
+# 1. Setup initial
+./setup.sh
+
+# 2. Démarrer PostgreSQL + PgAdmin
+./start-docker.sh
+# OU : docker compose up -d postgres pgadmin
+
+# 3. Lancer le backend
+cd backend && source .venv/bin/activate
+uvicorn main:app --reload
+
+# 4. Créer des données de test
+python create_test_data.py
+```
+
+🌐 **API** : http://localhost:8000/docs  
+🗄️ **PgAdmin** : http://localhost:5050 (admin@petittonnerre.com / admin)  
+💡 **Le serveur "Petit Tonnerre DB" apparaît automatiquement dans PgAdmin !**
+
+
+### Frontend
+
+```bash
+# 1. Installer les dépendances
+cd frontend
+npm install
+
+# 2. Configurer l'URL du backend (optionnel)
+cp .env.example .env
+# Éditer .env pour changer VITE_API_URL si nécessaire
+
+# 3. Lancer le serveur Angular
+npm start
+```
+
+🌐 **App** : http://localhost:4200  
+📖 **Config** : Voir `frontend/ENV.md` pour la configuration
+
+---
+
+## 📋 Fonctionnalités
+
+- 📦 **Gestion des objets** : Inventaire domestique (chaudière, four, sanitaires...)
+- 💡 **Conseils d'entretien** : Recommandations personnalisées par catégorie
+- ✅ **Tâches & Feedback** : Planification et suivi avec retour d'expérience
+- 👥 **Communauté** : Partage d'expériences et système de votes
+
+---
+
+## 🏗️ Structure
+
+```
+petit-tonnerre/
+├── 🐳 Docker
+│   ├── docker-compose.yml       # Orchestration complète (PostgreSQL, PgAdmin, Backend, Frontend)
+│   ├── start.sh                 # Démarrer tous les services
+│   └── start-docker.sh          # Démarrer uniquement DB + PgAdmin
+│
+├── 🔧 Backend (FastAPI + PostgreSQL)
+│   ├── backend/
+│   │   ├── api/                 # Routes (users, objects, maintenance, community)
+│   │   ├── Dockerfile           # Image Docker backend
+│   │   ├── main.py              # Application FastAPI
+│   │   ├── models.py            # 7 modèles SQLAlchemy
+│   │   ├── schemas.py           # Schémas Pydantic
+│   │   ├── database.py          # Configuration PostgreSQL
+│   │   └── create_test_data.py  # Génération de données
+│   ├── setup.sh                 # Installation locale
+│   └── reset-db.sh              # Réinitialisation base de données
+│
+├── 🎨 Frontend (Angular)
+│   └── frontend/
+│       ├── Dockerfile           # Image Docker frontend
+│       ├── src/app/
+│       │   ├── core/            # Services & Models
+│       │   ├── features/        # Dashboard, Objects, Maintenance, Community
+│       │   └── shared/          # Composants réutilisables
+│       └── .env.example         # Configuration API URL
+│
+├── 🗄️  PgAdmin
+│   └── pgadmin/
+│       ├── servers.json         # Configuration serveur pré-chargé
+│       └── pgpass               # Mot de passe automatique
+│
+└── 📚 Documentation
+    ├── README.md                # Ce fichier
+    ├── COMMANDS.md              # Commandes rapides
+    └── REQUIREMENTS.md          # Spécifications
+```
+
+---
+
+## 💻 Installation
+
+### Prérequis
+- **Python 3.11+** ✅ (requis pour datetime.UTC)
+- **Docker Desktop** → [Télécharger](https://www.docker.com/products/docker-desktop/)
+- Node.js 18+ (pour le frontend, optionnel)
+
+### Étapes
+
+1. **Installer Docker Desktop** et le lancer
+
+2. **Setup du projet**
+   ```bash
+   ./setup.sh
+   ```
+
+3. **Démarrer PostgreSQL**
+   ```bash
+   docker compose up -d
+   ```
+
+4. **Lancer le backend**
+   ```bash
+   cd backend
+   source .venv/bin/activate
+   uvicorn main:app --reload
+   ```
+
+5. **Tester**
+   ```bash
+   # Données de test
+   python create_test_data.py
+   
+   # Ou script de test
+   ./test_api.sh
+   ```
+
+---
+
+## 🔌 API Endpoints
+
+### 👤 Users (3)
+```
+POST   /users/           Créer un utilisateur
+GET    /users/           Liste
+GET    /users/{id}       Détails
+```
+
+### �� Objects (5)
+```
+POST   /objects/         Créer
+GET    /objects/         Liste (filtre: ?user_id=1)
+GET    /objects/{id}     Détails
+PUT    /objects/{id}     Modifier
+DELETE /objects/{id}     Supprimer
+```
+
+### 🔧 Maintenance (7)
+```
+# Conseils
+POST   /maintenance/advice        Créer
+GET    /maintenance/advice        Liste (filtres: category, validated_only)
+GET    /maintenance/advice/{id}   Détails
+
+# Tâches
+POST   /maintenance/tasks         Créer
+GET    /maintenance/tasks         Liste (filtres: user_id, object_id, status)
+GET    /maintenance/tasks/{id}    Détails
+PATCH  /maintenance/tasks/{id}    Mettre à jour (feedback)
+```
+
+### 👥 Community (5)
+```
+POST   /community/contributions            Créer
+GET    /community/contributions            Liste (tri par votes)
+GET    /community/contributions/{id}       Détails
+PATCH  /community/contributions/{id}       Valider/rejeter
+POST   /community/contributions/{id}/upvote Vote
+```
+
+📖 **Documentation** : http://localhost:8000/docs
+
+---
+
+## 🗄️ Accéder à PgAdmin
+
+PgAdmin est une interface web pour gérer PostgreSQL.
+
+### 1. Accéder à PgAdmin
+Ouvrir : **http://localhost:5050**
+
+**Identifiants** :
+- Email : `admin@petittonnerre.com`
+- Mot de passe : `admin`
+
+### 2. Connecter la base de données
+
+1. Clic droit sur **Servers** → **Register** → **Server**
+
+2. **Onglet General** :
+   - Name : `Petit Tonnerre DB`
+
+3. **Onglet Connection** :
+   - Host : `postgres` (nom du service Docker)
+   - Port : `5432`
+   - Database : `petittonnerre_db`
+   - Username : `petittonnerre`
+   - Password : `petittonnerre`
+   - Save password : ✅
+
+4. Cliquer **Save**
+
+Tu peux maintenant explorer les tables, exécuter des requêtes SQL, etc. !
+
+**Note** : La connexion est pré-configurée ! Le serveur "Petit Tonnerre DB" apparaît automatiquement dans la liste des serveurs.
+
+---
+
+## 📊 Modèles de Données
+
+- **User** : Utilisateurs (email, username, location)
+- **Object** : Objets domestiques (6 catégories)
+- **MaintenanceAdvice** : Conseils d'entretien
+- **MaintenanceTask** : Tâches avec feedback
+- **Contribution** : Partages communautaires
+- **Tag** + **object_tags** : Tags Many-to-Many
+
+**Categories** : `heating`, `appliance`, `kitchen`, `bathroom`, `flooring`, `other`
+
+---
+
+## 📝 Exemples
+
+### Créer un utilisateur et un objet
+```bash
+curl -X POST "http://localhost:8000/users/" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "alice@example.com", "username": "alice", "location": "Bruxelles"}'
+
+curl -X POST "http://localhost:8000/objects/?user_id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Chaudière", "category": "heating", "brand": "Vaillant"}'
+```
+
+### Planifier une tâche avec feedback
+```bash
+# Créer un conseil
+curl -X POST "http://localhost:8000/maintenance/advice" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Contrôle annuel", "description": "Vérification", "frequency_days": 365, "category": "heating"}'
+
+# Planifier
+curl -X POST "http://localhost:8000/maintenance/tasks?user_id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"scheduled_date": "2025-11-01T10:00:00", "object_id": 1, "advice_id": 1}'
+
+# Feedback
+curl -X PATCH "http://localhost:8000/maintenance/tasks/1" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "completed", "was_successful": true, "notes": "OK"}'
+```
+
+Plus d'exemples : [COMMANDS.md](COMMANDS.md)
+
+---
+
+## 🛠️ Commandes
+
+```bash
+# Backend
+cd backend && source .venv/bin/activate
+uvicorn main:app --reload
+
+# PostgreSQL
+docker compose up -d              # Démarrer
+docker logs petit_tonnerre_db -f  # Logs
+docker compose down               # Arrêter
+docker compose down -v            # Réinitialiser (⚠️ supprime données)
+
+# Tests
+./test_api.sh
+python create_test_data.py
+```
+
+Référence complète : [COMMANDS.md](COMMANDS.md)
+
+---
+
+## 🐛 Troubleshooting
+
+**Docker non installé**
+```bash
+# Télécharger : https://www.docker.com/products/docker-desktop/
+```
+
+**Port 8000 occupé**
+```bash
+lsof -i :8000
+kill -9 <PID>
+```
+
+**Erreur DB**
+```bash
+docker compose restart
+# ou
+docker compose down -v && docker compose up -d
+```
+
+---
+
+## 🔄 Prochaines Étapes
+
+### Phase 1 - Frontend Angular 🔴
+```bash
+ng new frontend --routing --style=scss
+```
+Composants : Dashboard, Objets, Maintenance, Communauté
+
+### Phase 2 - Sécurité 🟡
+- Authentification JWT
+- Protection des routes
+- Rôles utilisateur
+
+### Phase 3 - Features 🟡
+- Notifications
+- Upload fichiers (manuels PDF)
+- Tests unitaires
+
+### Phase 4 - Production 🔴
+- Déploiement (Vercel + Railway)
+- CI/CD
+
+---
+
+## 🛠️ Technologies
+
+**Backend** : FastAPI 0.104, SQLAlchemy 2.0, PostgreSQL 15, Pydantic 2.5  
+**Frontend** : Angular 17+ (à créer)
+
+---
+
+## 📚 Ressources
+
+- [COMMANDS.md](COMMANDS.md) - Référence des commandes
+- http://localhost:8000/docs - Documentation API
+- https://fastapi.tiangolo.com/ - FastAPI
+- https://angular.io/docs - Angular
+
+---
+
+**Projet créé le 24 octobre 2025**
