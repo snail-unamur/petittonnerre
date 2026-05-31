@@ -49,9 +49,15 @@ L'analyse qualitative repose sur un examen ciblé d'un sous-ensemble de fichiers
 
 ### Analyse qualitative
 
+### Evaluation fonctionnelle et expérience utilisateur
+D'un point de vue utilisateur, la qualité globale de l'application générée s'avère largement insuffisante. Les tests d'utilisation révèlent de nombreuses lacunes tant sur le plan technique qu'ergonomique:
+1. Une grande part des fonctionnalités sont soit non fonctionelles, soit instable (présence de nombreux bugs).
+2. L'interface utilisateur manque de cohérence. De nombreux boutons sont redondants, dupliqués, mal positionnés, ou d'utilité questionables. Les thèmes visuels ne sont pas appliqués correctement partout.
+3. L'application présente des failles de sécurité basiques (IDOR). 
+
 ## Discussion
 Comme cité plus haut, le modèle d'intelligence artificiel était utilisé en mode "agent" et non selon un paradigme de "planification-action". Cette dernière approche est pourtant notoirement connue pour sa capacité à améliorer la qualité d'excécution des modèles. À cela s'ajoute le fait que la méthode d'écriture des prompts était purement chaotique et le prompt système s'est vu pollué par les blagues des développeurs. La structure des réponses, et donc la fenêtre de contexte, s'en est trouvée dégradée qualitativement, ce qui a certainement contribué à un grand nombre d'erreurs dans le code. 
 
-De plus, l'imprécision et la qualité médiocre de ces requêtes ont directement conduit à une gestion désordonnée du dépôt GitLab. Les instructions données à l'agent ont générés des erreurs en cascade : développement direct sur la branche _main_, des revert commits effectués dans l'urgence pour annuler les mauvaises actions de l'IA, et la branche _dev_ qui est devenue la  branche principale.
+De plus, l'imprécision et la qualité médiocre de ces requêtes ont directement conduit à une gestion désordonnée du dépôt GitLab. Les instructions données à l'agent ont générés des erreurs en cascade: développement direct sur la branche _main_, des revert commits effectués dans l'urgence pour annuler les mauvaises actions de l'IA, et la branche _dev_ qui est devenue la  branche principale.
 
 ## Conclusion
