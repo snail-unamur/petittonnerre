@@ -4,8 +4,6 @@
 
 Auteurs : Justin Frémy, Olan Heinen, Guillaume Sougne, Gianni Wetzels
 
-DOI : ...
-
 Objectif : Le vibe coding permet de produire des applications rapidement, mais leur qualité est incertaine. Des analyses ont été réalisées afin de mettre en évidence différents aspects de qualité de code.
 
 ## Système étudié

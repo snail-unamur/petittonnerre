@@ -37,8 +37,10 @@ L'analyse de la qualité du projet sera effectuée via 2 axes distincts : une an
 ### Analyse statique
 La première étape de l'analyse a consisté à explorer le projet dans son ensemble : vérification du fonctionnement de l'application, présence de tests, structure générale du code.
 Nous avions initialement envisagé de mettre en parallèle les prompts utilisés avec les commits et pull requests afin d'en faire une donnée d'analyse supplémentaire. Cette piste a cependant dû être abandonnée par manque d'informations : les métadonnées des modèles d'IA utilisés étaient incomplètes, les timestamps absents, et aucun lien fiable ne pouvait être établi avec les commits.
-Le dépôt étant hébergé sur un GitLab privé, la sélection des outils d'analyse statique a été contrainte par la nécessité de trouver des solutions compatibles avec ce contexte et gratuites. Après exploration de plusieurs outils — SonarQube, CodeScene, Trivy, ainsi que des alternatives comme PMD ou Semgrep — les analyses de SonarQube et CodeScene se sont révélées les plus pertinentes. Un script de repomining basé sur PyDriller a d'abord été utilisé pour extraire les identifiants des pull requests. Sur cette base, une analyse SonarQube automatisée a été exécutée à chaque pull request afin de disposer d'une évolution temporelle des métriques de qualité.
+Le dépôt étant hébergé sur un GitLab privé, la sélection des outils d'analyse statique a été contrainte par la nécessité de trouver des solutions compatibles avec ce contexte et gratuites. Après exploration de plusieurs outils — SonarQube, CodeScene, Trivy, Hercules, ainsi que des alternatives comme PMD ou Semgrep — les analyses de SonarQube et CodeScene se sont révélées les plus pertinentes. Un script de repomining basé sur PyDriller a d'abord été utilisé pour extraire les identifiants des pull requests. Sur cette base, une analyse SonarQube automatisée a été exécutée à chaque pull request afin de disposer d'une évolution temporelle des métriques de qualité.
 Afin de rendre les données exploitables et partageables, il a été décidé d'anonymiser le projet et de le publier sur un dépôt public.
+
+L'analyse des tests présents a également été effectuée, mais la plupart des tests ne fonctionnant tout simplement pas, les résultats, tel que le coverage, n'ont pas été conservés car ils s'avéraient non pertinents.
 ### Analyse qualitative
 L'analyse qualitative repose sur un examen ciblé d'un sous-ensemble de fichiers analysés via CodeScene. L'objectif n'est pas d'être exhaustif, mais d'illustrer une limite importante de ce type d'outil : un score de code health élevé n'est pas nécessairement le signe d'un code exempt de problèmes d'implémentation, et inversement, un score faible ne signifie pas que le code est inutilisable. CodeScene étant conçu pour analyser du code produit par des développeurs humains, ses résultats ne sont pas nécessairement représentatifs de la qualité réelle d'un code généré par un agent LLM. Le détail de cette analyse est disponible en annexe.
 ## Résultats
@@ -48,5 +50,8 @@ L'analyse qualitative repose sur un examen ciblé d'un sous-ensemble de fichiers
 ### Analyse qualitative
 
 ## Discussion
+Comme cité plus haut, le modèle d'intelligence artificiel était utilisé en mode "agent" et non selon un paradigme de "planification-action". Cette dernière approche est pourtant notoirement connue pour sa capacité à améliorer la qualité d'excécution des modèles. À cela s'ajoute le fait que la méthode d'écriture des prompts était purement chaotique et le prompt système s'est vu pollué par les blagues des développeurs. La structure des réponses, et donc la fenêtre de contexte, s'en est trouvée dégradée qualitativement, ce qui a certainement contribué à un grand nombre d'erreurs dans le code. 
+
+De plus, l'imprécision et la qualité médiocre de ces requêtes ont directement conduit à une gestion désordonnée du dépôt GitLab. Les instructions données à l'agent ont générés des erreurs en cascade : développement direct sur la branche _main_, des revert commits effectués dans l'urgence pour annuler les mauvaises actions de l'IA, et la branche _dev_ qui est devenue la  branche principale.
 
 ## Conclusion
