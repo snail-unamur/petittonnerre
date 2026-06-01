@@ -52,14 +52,15 @@ L'analyse qualitative repose sur un examen ciblé d'un sous-ensemble de fichiers
 ## Résultats
 
 ### Analyse statique
+Le projet étant fait en un weekend, les métriques ont évolués très rapidement. Le nombre de lignes de code a dépassé 6000, dont certains fichiers à plus de mille lignes de code. La dette technique s'est vite accumulée avec plus d'une centaine de code smells. Les erreurs TypeScript sont également nombreuses et la concentration des modifications sur certains fichiers est très importante, comme _api.service.ts_ et _schemas.py_, montrant un problème la définition de l'architecture et les séparation des responsabilités.
 
 ### Analyse qualitative
+Comme mentionné dans [codescene_qualitative_analysis](data/codescene_qualitative_analysis.md), les outils d'analyse statique traditionnels montrent leurs limites lorsque l'on souhaite déterminer la qualité d'un projet généré par IA. Un _Code Health_ élevé ne garantit pas une architecture saine. Par exemple, le fichier _api.service.ts_ mentionné au point précédant comme problématique a tout de même obtenu un bon score sur CodeScene alors qu'il possède plus d'une centaine de lignes de code inutilisées. Certains problèmes architecturaux pourraient donc échapper aux outils utilisés.
 
-### Evaluation fonctionnelle et expérience utilisateur
 D'un point de vue utilisateur, la qualité globale de l'application générée s'avère largement insuffisante. Les tests d'utilisation révèlent de nombreuses lacunes tant sur le plan technique qu'ergonomique:
 1. Une grande part des fonctionnalités sont soit non fonctionelles, soit instable (présence de nombreux bugs).
 2. L'interface utilisateur manque de cohérence. De nombreux boutons sont redondants, dupliqués, mal positionnés, ou d'utilité questionables. Les thèmes visuels ne sont pas appliqués correctement partout.
-3. L'application présente des failles de sécurité basiques (IDOR). 
+3. L'application présente des failles de sécurité basiques (IDOR).
 
 ## Discussion
 Comme cité plus haut, le modèle d'intelligence artificiel était utilisé en mode "agent" et non selon un paradigme de "planification-action". Cette dernière approche est pourtant notoirement connue pour sa capacité à améliorer la qualité d'excécution des modèles. À cela s'ajoute le fait que la méthode d'écriture des prompts était purement chaotique et le prompt système s'est vu pollué par les blagues des développeurs. La structure des réponses, et donc la fenêtre de contexte, s'en est trouvée dégradée qualitativement, ce qui a certainement contribué à un grand nombre d'erreurs dans le code. 
