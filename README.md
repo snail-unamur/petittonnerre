@@ -31,7 +31,7 @@ La gestion de versions (_commit_ et _push_) a été également entièrement conf
 6. Ce cycle continue jusqu'à ce que l'agent relecteur estime que les problèmes ont été corrigés, auquel cas le développeur peut fusionner la branche.
 
 ## Méthodologie
-L'analyse de la qualité du projet sera effectuée via 2 axes distincts : une analyse statique via des outils d'analyse de code, et une analyse qualitative subjective 
+L'analyse de la qualité du projet sera effectuée via 2 axes distincts : une analyse statique via des outils d'analyse de code, et une analyse qualitative subjective.
 
 ### Analyse statique
 La première étape de l'analyse a consisté à explorer le projet dans son ensemble : vérification du fonctionnement de l'application, présence de tests, structure générale du code.
