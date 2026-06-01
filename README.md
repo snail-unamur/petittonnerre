@@ -16,11 +16,10 @@ La spécificité de cette application est qu'elle est le fruit d'un défi lancé
 L'agent choisi pour ce projet est _GitHub Copilot_, configuré en mode "agent", il n'y a donc pas de distinction entre la phase de planification et la phase d'action, comme on peut trouver dans de nombreux agents plus modernes. L'agent effectue directement les modifications demandées depuis la fenêtre de _chat_, sans validation humaine entre la phase de conception et la phase d'action. Le modèle utilisé est _Claude Sonnet 4.5_.
 
 #### Approche et méthodologie de développement
-L'approche adoptée pour le développement de l'application comprend plusieurs étapes :
-1. Concept général ? + Structure du projet
-2. Explication du concept de l'application à l'agent et génération des spécifications fonctionnelles détaillées de l'application, divisées en _user stories_, elles-mêmes regroupées en plusieurs _epics_. (voir [REQUIREMENTS.md](REQUIREMENTS.md) et [JIRA.md](JIRA.md))
-3. Sructure du projet ?
-4. Implémentation des fonctionnalités de l'application en suivant une sorte de méthodologie _big bang_. Chaque développeur sélectionne une _epic_, tout le monde développe en même temps les fonctionnalités de sa propre _epic_ sur sa propre branche et sans se soucier de la coordination entre les développeurs. À chaque fonctionnalité terminée, le développeur crée une _pull request_ selon le processus décrit dans le point **Gestion de versions** ci-dessous. Une fois l'_epic_ achevée, le développeur sélectionne une nouvelle _epic_ et recommence le processus.
+L'approche adoptée pour le développement de l'application comprend deux étapes :
+1. Explication du concept de l'application à l'agent et génération des spécifications fonctionnelles détaillées de l'application, divisées en _user stories_, elles-mêmes regroupées en plusieurs _epics_. (voir [REQUIREMENTS.md](REQUIREMENTS.md) et [JIRA.md](JIRA.md))
+2. Initialisation de la structure du projet par l'agent
+3. Implémentation des fonctionnalités de l'application en suivant une sorte de méthodologie _big bang_. Chaque développeur sélectionne une _epic_, tout le monde développe en même temps les fonctionnalités de sa propre _epic_ sur sa propre branche et sans se soucier de la coordination entre les développeurs. À chaque fonctionnalité terminée, le développeur crée une _pull request_ selon le processus décrit dans le point **Gestion de versions** ci-dessous. Une fois l'_epic_ achevée, le développeur sélectionne une nouvelle _epic_ et recommence le processus.
 
 #### Gestion de versions
 La gestion de versions (_commit_ et _push_) a été également entièrement confiée à l'agent. La seule action manuelle des développeurs a été de gérer le processus de création et de validation de _pull requests_, bien que la revue de code en elle-même était également automatisée via le processus suivant :
