@@ -29,9 +29,9 @@ authors:
     orcid: 'https://orcid.org/0009-0006-3576-0757'
     email: benoit.vanderose@unamur.be
 url: 'https://github.com/snail-unamur/petittonnerre'
-abstract: >-This repository provides a comprehensive dataset of the "Petit Tonnerre" application, developed using a "vibe coding" approach. The repository includes:
+abstract: 'This repository provides a comprehensive dataset of the "Petit Tonnerre" application, developed using a "vibe coding" approach. The repository includes:
 - The source code of the project.
 - Quality metrics and measurements recorded.
-- The dataset aims to evaluate the technical quality and robustness of applications produced through generative AI.
-  
+- The dataset aims to evaluate the technical quality and robustness of applications produced through generative AI.'
+
 license: CC-BY-SA-4.0
